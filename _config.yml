@@ -100,9 +100,11 @@ feed:
   content_limit_delim: ' '
 
 symbols_count_time:
-  symbols: true
-  time: true
-  total_symbols: false
-  total_time: false
+  symbols: true # 文章字数
+  time: true # 阅读时长
+  total_symbols: false # 所有文章总字数
+  total_time: false # 所有文章阅读时长
   awl: 2
   wpm: 250  # 每分钟字数
+
+
