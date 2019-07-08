@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-07-08T09:24:13.371Z</updated>
+  <updated>2019-07-08T14:29:58.634Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,46 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>blockchain</title>
+    <link href="http://yoursite.com/2019/07/08/blockchain/"/>
+    <id>http://yoursite.com/2019/07/08/blockchain/</id>
+    <published>2019-07-08T14:28:56.000Z</published>
+    <updated>2019-07-08T14:29:58.634Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="区块链" scheme="http://yoursite.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+      <category term="以太坊" scheme="http://yoursite.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"/>
+    
+    
+      <category term="杂七杂八" scheme="http://yoursite.com/tags/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>bc.md</title>
+    <link href="http://yoursite.com/2019/07/08/bc-md/"/>
+    <id>http://yoursite.com/2019/07/08/bc-md/</id>
+    <published>2019-07-08T14:22:45.000Z</published>
+    <updated>2019-07-08T14:24:49.736Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="共识机制" scheme="http://yoursite.com/categories/%E5%85%B1%E8%AF%86%E6%9C%BA%E5%88%B6/"/>
+    
+    
+      <category term="区块链" scheme="http://yoursite.com/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+      <category term="以太坊" scheme="http://yoursite.com/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"/>
+    
+  </entry>
   
   <entry>
     <title>测试博客</title>
@@ -79,30 +119,6 @@
   </entry>
   
   <entry>
-    <title>Libra 源码分析：打通Libra CLI客户端与libradb模块</title>
-    <link href="http://yoursite.com/2019/07/01/Proficient-client-and-libradb-modules/"/>
-    <id>http://yoursite.com/2019/07/01/Proficient-client-and-libradb-modules/</id>
-    <published>2019-07-01T02:23:48.000Z</published>
-    <updated>2019-07-05T08:13:55.283Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;这篇文章目的是打通Libra CLI 命令行工具与底层数据库模块libradb之间的关系 &lt;code&gt;Libra Cli&lt;/code&gt;指的是 &lt;a href=&quot;https://learnblockchain.cn/docs/libra/docs/my-first-transaction/#克隆并编译-libra-core&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Libra上的第一笔交易&lt;/a&gt; 中提到的命令行工具。 &lt;code&gt;libradb&lt;/code&gt; 指的是&lt;code&gt;storage/libradb&lt;/code&gt;模块 。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Libra" scheme="http://yoursite.com/categories/Libra/"/>
-    
-    
-      <category term="Libra源码分析" scheme="http://yoursite.com/tags/Libra%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
-    
-      <category term="libradb" scheme="http://yoursite.com/tags/libradb/"/>
-    
-      <category term="Libra CLI" scheme="http://yoursite.com/tags/Libra-CLI/"/>
-    
-  </entry>
-  
-  <entry>
     <title>libra的mempool模块解读-1</title>
     <link href="http://yoursite.com/2019/07/01/Interpretation-of-libra-mempool-module1/"/>
     <id>http://yoursite.com/2019/07/01/Interpretation-of-libra-mempool-module1/</id>
@@ -126,6 +142,30 @@
     
     
       <category term="Libra源码分析" scheme="http://yoursite.com/tags/Libra%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Libra 源码分析：打通Libra CLI客户端与libradb模块</title>
+    <link href="http://yoursite.com/2019/07/01/Proficient-client-and-libradb-modules/"/>
+    <id>http://yoursite.com/2019/07/01/Proficient-client-and-libradb-modules/</id>
+    <published>2019-07-01T02:23:48.000Z</published>
+    <updated>2019-07-05T08:13:55.283Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这篇文章目的是打通Libra CLI 命令行工具与底层数据库模块libradb之间的关系 &lt;code&gt;Libra Cli&lt;/code&gt;指的是 &lt;a href=&quot;https://learnblockchain.cn/docs/libra/docs/my-first-transaction/#克隆并编译-libra-core&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Libra上的第一笔交易&lt;/a&gt; 中提到的命令行工具。 &lt;code&gt;libradb&lt;/code&gt; 指的是&lt;code&gt;storage/libradb&lt;/code&gt;模块 。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Libra" scheme="http://yoursite.com/categories/Libra/"/>
+    
+    
+      <category term="Libra源码分析" scheme="http://yoursite.com/tags/Libra%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+      <category term="libradb" scheme="http://yoursite.com/tags/libradb/"/>
+    
+      <category term="Libra CLI" scheme="http://yoursite.com/tags/Libra-CLI/"/>
     
   </entry>
   
@@ -406,46 +446,6 @@
     
     
       <category term="以太坊" scheme="http://yoursite.com/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Nervos CKB 加密经济模型</title>
-    <link href="http://yoursite.com/2019/06/02/nervos-ckb/"/>
-    <id>http://yoursite.com/2019/06/02/nervos-ckb/</id>
-    <published>2019-06-02T15:48:34.000Z</published>
-    <updated>2019-07-05T08:13:55.340Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;Nervos CKB 加密经济模型是我到目前为止见到的比较有特色的经济模型设计。感觉不只是公链，对任何协议层的经济模型设计都有一定的借鉴意义。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Nervos" scheme="http://yoursite.com/categories/Nervos/"/>
-    
-    
-      <category term="Nervos" scheme="http://yoursite.com/tags/Nervos/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>谈谈区块链（去中心化）治理</title>
-    <link href="http://yoursite.com/2019/06/01/govern/"/>
-    <id>http://yoursite.com/2019/06/01/govern/</id>
-    <published>2019-06-01T06:23:00.000Z</published>
-    <updated>2019-07-05T08:13:55.332Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;治理，这个词在英语系国家用的很多，国内使用比较少，原意是控制、引导和操纵，指的是在特定范围内行使权威。如何在众多不同利益共同发挥作用的领域建立一致或取得认同，以便实施某项计划。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="杂文" scheme="http://yoursite.com/categories/%E6%9D%82%E6%96%87/"/>
-    
-    
-      <category term="治理" scheme="http://yoursite.com/tags/%E6%B2%BB%E7%90%86/"/>
     
   </entry>
   
