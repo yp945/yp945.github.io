@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>climbYang的记录</title>
+  <title>ClimbYang的记录</title>
   
-  <subtitle>区块链</subtitle>
+  <subtitle>blockchain</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-07-05T10:41:49.054Z</updated>
+  <updated>2019-07-08T09:24:13.371Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -18,10 +18,10 @@
   
   <entry>
     <title>测试博客</title>
-    <link href="http://yoursite.com/2019/07/04/%E6%B5%8B%E8%AF%95%E5%8D%9A%E5%AE%A2/"/>
-    <id>http://yoursite.com/2019/07/04/测试博客/</id>
+    <link href="http://yoursite.com/2019/07/04/test/"/>
+    <id>http://yoursite.com/2019/07/04/test/</id>
     <published>2019-07-04T06:13:06.000Z</published>
-    <updated>2019-07-05T10:41:49.054Z</updated>
+    <updated>2019-07-08T09:24:13.371Z</updated>
     
     <summary type="html">
     
