@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="私钥被盗，满盘皆输——Poker EOS被盗 2万多EOS事件启示。A secret between more than two is no secret. 两人以上知道的秘密就不算秘密。">
+<meta name="keywords" content="私钥">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Poker EOS被盗 2万多EOS事件启示 - 谈私钥安全">
+<meta property="og:url" content="http://yoursite.com/2019/06/14/keep-private-key/index.html">
+<meta property="og:site_name" content="ClimbYang的记录">
+<meta property="og:description" content="私钥被盗，满盘皆输——Poker EOS被盗 2万多EOS事件启示。A secret between more than two is no secret. 两人以上知道的秘密就不算秘密。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/06/%E5%9B%BE%E7%89%871.png">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/06/%E5%9B%BE%E7%89%872.png">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/06/%E5%9B%BE%E7%89%873.png">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/06/15604931352977.jpg">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/06/15604931594494.jpg">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/06/15604931789923.jpg">
+<meta property="og:updated_time" content="2019-07-05T08:13:55.335Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Poker EOS被盗 2万多EOS事件启示 - 谈私钥安全">
+<meta name="twitter:description" content="私钥被盗，满盘皆输——Poker EOS被盗 2万多EOS事件启示。A secret between more than two is no secret. 两人以上知道的秘密就不算秘密。">
+<meta name="twitter:image" content="https://img.learnblockchain.cn/2019/06/%E5%9B%BE%E7%89%871.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ClimbYang的记录" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/06/14/keep-private-key/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Poker EOS被盗 2万多EOS事件启示 - 谈私钥安全 | ClimbYang的记录</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+        <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ClimbYang的记录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">blockchain</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/14/keep-private-key/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ClimbYang">
+      <meta itemprop="description" content="记录学习编程的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ClimbYang的记录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Poker EOS被盗 2万多EOS事件启示 - 谈私钥安全
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-14 15:45:14" itemprop="dateCreated datePublished" datetime="2019-06-14T15:45:14+08:00">2019-06-14</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-05 16:13:55" itemprop="dateModified" datetime="2019-07-05T16:13:55+08:00">2019-07-05</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/区块链安全/" itemprop="url" rel="index"><span itemprop="name">区块链安全</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+              <span title="本文字数">3.1k</span>
+            </span>
+          
+
+	  
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+              <span title="阅读时长">6 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>私钥被盗，满盘皆输——Poker EOS被盗 2万多EOS事件启示。<br>A secret between more than two is no secret. 两人以上知道的秘密就不算秘密。</p>
+<a id="more"></a>
+
+
+<h2 id="事件回顾"><a href="#事件回顾" class="headerlink" title="事件回顾"></a>事件回顾</h2><p>5月24日凌晨，Poker EOS 官方中文电报群中发出通知：由于项目方账户私钥泄露，被黑客攻击。</p>
+<p><img src="https://img.learnblockchain.cn/2019/06/%E5%9B%BE%E7%89%871.png" alt="官方通知"></p>
+<p class="image-caption">官方被盗通知</p>
+
+<p>截止5月24日19点，据项目方统计，此次黑客攻击事件项目方损失共计26992.2297EOS，pokereoshome 损失13140EOS，pokereosgame损失8800EOS，poekreobonus损失200EOS，流入交易所900万PKE交易损失约4852.2297EOS。</p>
+<p><img src="https://img.learnblockchain.cn/2019/06/%E5%9B%BE%E7%89%872.png" alt="官方被盗公告"></p>
+<p class="image-caption">官方被盗公告</p>
+
+<p>项目方给出此次攻击事件发生的原因是团队私钥管理不当。其实因私钥管理不当而导致损失的事件可以说不是罕见的事了。</p>
+<p><img src="https://img.learnblockchain.cn/2019/06/%E5%9B%BE%E7%89%873.png" alt="交易所被盗金额统计图"></p>
+<p class="image-caption">交易所被盗金额统计图</p>
+
+<p>据资料汇总，从2014年起至2019年3月共发生交易所被盗事件33起，其中主要因私钥泄露导致损失的有3起：2018年 4月12日，印度加密货币交易所Coinsecure因冷存储恢复失败暴露了用于离线存储的私钥被盗438比特币，警方发现私钥在网上曝光超过12小时；2018年7月26日，KICKICO由于安全漏洞发生导致黑客成功获得了“KICK智能合约账户”的私钥，损失770美元；2015年1月9日，Bitstamp多个操作钱包遭到破坏，导致19,000比特币丢失，据称是由于该公司一名员工下载了一个恶意文件，该文件使攻击者可以访问包含wallet.dat文件的服务器以及公司热钱包的密码。</p>
+<p>除交易所被盗外，也有针对个别用户进行攻击，盗取私钥的，2018年7月发生的近千万EOS被盗事件，黑客通过盗取受害人的私钥而盗走了其价值近千万的EOS。</p>
+<p>而今年年初轰动一时的交易所Quadriga CX上亿资产被锁事件则是由于其创始人兼首席执行官的突然离世导致其中1.47亿美元的加密数字货币秘钥丢失“被上锁”。</p>
+<p>这些丢失的资产一去不复还。因为区块链的“去中心化”的特性，基于区块链技术的加密货币一旦丢失，基本是不可找回的，不可逆的，除非主网分叉。</p>
+<h2 id="私钥及其重要性"><a href="#私钥及其重要性" class="headerlink" title="私钥及其重要性"></a>私钥及其重要性</h2><p>那么什么是私钥呢？<strong>有账号就有私钥</strong>。私钥是钱包里资金所有权的证明和合约拥有权的证明，其本质是32个byte组成的数组，由256个0或者1随机组成，可以把它理解成银行卡的密码，这个密码除了自己不会有任何人知道，不过银行卡密码是可以自己设置的，而私钥是随机生成的。</p>
+<blockquote>
+<p>阅读这篇文章：<a href="https://learnblockchain.cn/2018/09/28/hdwallet/" target="_blank" rel="noopener">理解开发 HD 钱包</a> 更好的了解<strong>私钥与账号</strong>的关系。</p>
+</blockquote>
+<p><img src="https://img.learnblockchain.cn/2019/06/15604931352977.jpg" alt></p>
+<p>回到此次事件，我们来看EOS私钥。一些普通用户可能不知道在<strong>EOS的账号体系中有两种权限的私钥，即Owner 私钥和Active 私钥，并不是只有一把私钥。</strong></p>
+<p><strong>Owner 私钥是所有权</strong>，具有Active 私钥所有权限，以及具有重置 Active 私钥等最高权限。</p>
+<p><strong>Active 私钥即操作权</strong>，可以用于平时的转账、投票等满足日常的操作。</p>
+<p>Owner私钥和Active私钥的关系类似老板和员工的关系。Owner即老板，拥有最高的权限，可以做任何事情。Active即员工，相对而言权限较小。但是老板只在有重大事件时参与运营，日常的经营业务则是由员工完成的。</p>
+<p>于是，平时最常露面的是员工（Active），主要用来做平时的转账、投票等日常的操作。老板（Owner）并不经常出现，只有当员工（Active）发生重大问题，才会需要他出面。</p>
+<p>对于Owner私钥和Active私钥的使用与保管，EOS官方推荐用户平时只使用 Active 私钥，把 Owner 私钥离线保存，只在有重大安全问题时用到 Owner 私钥。</p>
+<p>这就意味着会有两种操作模式：<strong>单私钥模式和双私钥模式</strong>。</p>
+<p>单私钥模式即Owner 和 Active 使用同一把私钥，这样来说相对简单，只需备份一把私钥。</p>
+<p>双私钥模式即 Owner和Active使用不同的私钥，相对单私钥模式而言，这种模式多了一道保险，安全性能更高。</p>
+<p>有的用户不知道EOS账号体系有两种权限，主要原因是钱包多采用单私钥模式，自然地这说明了大多钱包的私钥操作模式实际上是不够安全的。</p>
+<p>而区块链应用中用来保障用户资产安全的就是公钥和私钥。公钥与私钥是成对出现的，公钥加密，私钥解密。公钥是公开的，它相当于是银行卡号，这样就不难理解私钥才是我们自己能够真正保障我们信息、资产安全的那道“防线”，失私钥者，失“天下”。</p>
+<h2 id="私钥是如何被盗的"><a href="#私钥是如何被盗的" class="headerlink" title="私钥是如何被盗的"></a>私钥是如何被盗的</h2><p>私钥被盗的原由有许多种，在私钥映射、创建、使用时都有可能因操作不当导致私钥被盗。</p>
+<p><img src="https://img.learnblockchain.cn/2019/06/15604931594494.jpg" alt></p>
+<p><strong>私钥映射时：</strong></p>
+<ol>
+<li>使用了不安全的映射工具。</li>
+</ol>
+<p>使用不安全的映射工具，导致映射使用的公私钥是由工具开发者(实际是攻击者)控制的，当 EOS 主网上线后，攻击者随即 updateauth 更新公私钥。或者映射工具在网络传输时没有使用 SSL 加密，攻击者通过中间人的方式替换了映射使用的公私钥。</p>
+<p><strong>私钥创建时：</strong></p>
+<ol>
+<li><p>让陌生人帮助注册账号</p>
+<p> 由于注册账号需要已经存在的账号帮忙抵押内存，这使黑客有机可乘。黑客利用最常见的钓鱼手法——帮忙注册账号盗取用户私钥。我们前面已经说过私钥其实有两把，设置双私钥模式会增强安全性，但让他人帮忙注册账号，就意味着Owner和Active权限都将可能掌握在他人手中，这就丧失了其本该有的安全性。</p>
+</li>
+<li><p>用户使用空助记词或较弱的助记词组合生成的私钥</p>
+<p> 助记词是私钥的另外一种表现形式，由于私钥随机产生，识记较为困难，为了更好地记忆复杂的私钥，用户可以使用助记词，通过助记词导入钱包。如果用户使用空助记词或是强度较弱的助记词产生的秘钥，很容易遭受“彩虹”攻击。</p>
+</li>
+<li><p>使用不安全的第三方私钥创建工具</p>
+<p> 用户使用不安全的第三方私钥创建工具，例如安全保护不够强的钱包，连网在线创建私钥的网站等。</p>
+</li>
+</ol>
+<p><strong>私钥使用时：</strong></p>
+<ol>
+<li><p>使用了不安全的 EOS 超级节点投票工具</p>
+<p> 使用了不安全的 EOS 超级节点投票工具，使得工具开发者(实为攻击者)可窃取EOS 私钥。</p>
+</li>
+<li><p>用户存储私钥的媒介不安全</p>
+<p> 用户存储私钥的方式不安全，例如存储在邮箱、备忘录等，可能存在弱口令被攻击者登录，从而被窃取私钥。</p>
+</li>
+<li><p>在复制粘贴私钥时，被恶意软件窃取</p>
+<p> 用户在手机或电脑上复制粘贴私钥时，被某些恶意软件监听，导致被窃取。</p>
+</li>
+</ol>
+<h2 id="防范措施"><a href="#防范措施" class="headerlink" title="防范措施"></a>防范措施</h2><p><img src="https://img.learnblockchain.cn/2019/06/15604931789923.jpg" alt></p>
+<p>针对私钥安全防范，我们给出以下建议：</p>
+<ol>
+<li><p>使用安全性有保证的映射工具、私钥创建工具和超级节点投票工具。</p>
+</li>
+<li><p>切忌让陌生人帮自己注册账号。若不得以需要让他人帮忙注册，一定要使用受信任的进程或接口。在注册好后，对Owner和Active私钥做仔细检查，以防万一。</p>
+</li>
+<li><p>务必备份好Owner 助记词、Active 助记词。特别注意，不管是Owner 助记词，还是Active 助记词，都需要按顺序记下并保护好。一旦有人得到了你的助记词, 那就等同于掌控了你的钱包，不需要任何密码就可以转移你的资产。</p>
+</li>
+<li><p>不管是私钥还是助记词最好抄写在一张纸上，不要截屏或记录在手机上，也不要通过任何渠道将助记词信息传播给他人（比如截图等等），这是非常危险的行为。</p>
+</li>
+<li><p>避免在使用时进行私钥的复制、粘贴</p>
+</li>
+<li><p>不要随意点开来源不明的链接，下载来源不明的文件。</p>
+</li>
+</ol>
+<h2 id="引用及资料数据来源："><a href="#引用及资料数据来源：" class="headerlink" title="引用及资料数据来源："></a>引用及资料数据来源：</h2><ol>
+<li>小牛币读 <a href="https://www.hongniuw.com/article/detail/9075" target="_blank" rel="noopener">《史上最全交易所被盗事件大盘点》</a></li>
+<li>IMOS <a href="https://www.jianshu.com/p/43c515f2b416" target="_blank" rel="noopener">《EOS被盗事件频起，这里有一份安全攻略供你食用》</a></li>
+<li>ITleaks<a href="https://blog.csdn.net/itleaks/article/details/81060573" target="_blank" rel="noopener">《近千万EOS被盗事件回顾，大家请保护好自己的EOS私钥》</a></li>
+</ol>
+<p>本文来自 <strong>深入浅出区块链社区合作伙伴</strong>：专注于区块链生态安全的<a href="https://www.lianantech.com" target="_blank" rel="noopener">Beosin 成都链安</a> </p>
+<p><a href="https://learnblockchain.cn/" target="_blank" rel="noopener">深入浅出区块链</a> - 打造高质量区块链技术博客，学区块链都来这里，关注<a href="https://www.zhihu.com/people/xiong-li-bing/activities" target="_blank" rel="noopener">知乎</a>、<a href="https://weibo.com/517623789" target="_blank" rel="noopener">微博</a> 掌握区块链技术动态。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/私钥/" rel="tag"># 私钥</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/13/EYBlockchain/" rel="next" title="利用 EYBlockchain 在以太坊上创建隐私币">
+                <i class="fa fa-chevron-left"></i> 利用 EYBlockchain 在以太坊上创建隐私币
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/15/eth-history1/" rel="prev" title="【译】以太坊发展简史">
+                【译】以太坊发展简史 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ClimbYang</p>
+              <div class="site-description motion-element" itemprop="description">记录学习编程的点滴</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">74</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/yp945" title="GitHub &rarr; https://github.com/yp945" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:pan107104@outlook.com" title="E-Mail &rarr; mailto:pan107104@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#事件回顾"><span class="nav-number">1.</span> <span class="nav-text">事件回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#私钥及其重要性"><span class="nav-number">2.</span> <span class="nav-text">私钥及其重要性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#私钥是如何被盗的"><span class="nav-number">3.</span> <span class="nav-text">私钥是如何被盗的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防范措施"><span class="nav-number">4.</span> <span class="nav-text">防范措施</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引用及资料数据来源："><span class="nav-number">5.</span> <span class="nav-text">引用及资料数据来源：</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ClimbYang</span>
+
+  
+
+  
+</div>
+
+<div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过
+</span>
+</div>
+
+
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

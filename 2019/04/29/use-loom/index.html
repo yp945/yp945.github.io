@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前两天写了一篇 用Truffle开发一个链上记事本 ，很多人讲，这样写一条笔记成本该多高呀，这篇我们看看如何把链上记事本智能合约迁移到Loom SDK 搭建的以太坊侧链，在下一篇会介绍如何来用loom.js重写这个DApp。">
+<meta name="keywords" content="Loom,智能合约">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用Loom SDK 搭建的以太坊侧链并部署智能合约">
+<meta property="og:url" content="http://yoursite.com/2019/04/29/use-loom/index.html">
+<meta property="og:site_name" content="ClimbYang的记录">
+<meta property="og:description" content="前两天写了一篇 用Truffle开发一个链上记事本 ，很多人讲，这样写一条笔记成本该多高呀，这篇我们看看如何把链上记事本智能合约迁移到Loom SDK 搭建的以太坊侧链，在下一篇会介绍如何来用loom.js重写这个DApp。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/15565495038560.jpg">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/15566148507301.jpg!/scale/45%">
+<meta property="og:updated_time" content="2019-07-05T08:13:55.354Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用Loom SDK 搭建的以太坊侧链并部署智能合约">
+<meta name="twitter:description" content="前两天写了一篇 用Truffle开发一个链上记事本 ，很多人讲，这样写一条笔记成本该多高呀，这篇我们看看如何把链上记事本智能合约迁移到Loom SDK 搭建的以太坊侧链，在下一篇会介绍如何来用loom.js重写这个DApp。">
+<meta name="twitter:image" content="https://img.learnblockchain.cn/2019/15565495038560.jpg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ClimbYang的记录" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/04/29/use-loom/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>用Loom SDK 搭建的以太坊侧链并部署智能合约 | ClimbYang的记录</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+        <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ClimbYang的记录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">blockchain</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/29/use-loom/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ClimbYang">
+      <meta itemprop="description" content="记录学习编程的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ClimbYang的记录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">用Loom SDK 搭建的以太坊侧链并部署智能合约
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-29 20:41:20" itemprop="dateCreated datePublished" datetime="2019-04-29T20:41:20+08:00">2019-04-29</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-05 16:13:55" itemprop="dateModified" datetime="2019-07-05T16:13:55+08:00">2019-07-05</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/扩容技术/" itemprop="url" rel="index"><span itemprop="name">扩容技术</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/扩容技术/Loom/" itemprop="url" rel="index"><span itemprop="name">Loom</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+              <span title="本文字数">7.3k</span>
+            </span>
+          
+
+	  
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+              <span title="阅读时长">15 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前两天写了一篇 <a href="https://learnblockchain.cn/2019/03/30/dapp_noteOnChain/" target="_blank" rel="noopener">用Truffle开发一个链上记事本</a> ，很多人讲，这样写一条笔记成本该多高呀，这篇我们看看如何把链上记事本智能合约迁移到Loom SDK 搭建的以太坊侧链，在下一篇会介绍如何来<a href="https://learnblockchain.cn/2019/05/06/use-loom-for-dapp/" target="_blank" rel="noopener">用loom.js重写这个DApp</a>。</p>
+<a id="more"></a>
+
+<h2 id="关于-Loom"><a href="#关于-Loom" class="headerlink" title="关于 Loom"></a>关于 Loom</h2><p>Loom （或者称 Loom Network） 是一支探索区块链二层扩容方面技术的团队，他们在尝试构建可用于游戏等领域的二层网络（Layer2）平台，目前两个开发的两个重要产品是 <strong>Loom PlasmaChain</strong> 及 <strong>Loom SDK</strong>。</p>
+<h3 id="Loom-PlasmaChain"><a href="#Loom-PlasmaChain" class="headerlink" title="Loom PlasmaChain"></a>Loom PlasmaChain</h3><p><strong>Loom PlasmaChain</strong> 是一条实现了 <strong><a href="https://learnblockchain.cn/2018/11/16/plasma-cash/" target="_blank" rel="noopener">Plasma Cash 框架模型</a></strong>的高性能 DPoS 侧链（提供1–3秒的交易确认时间）。</p>
+<p>这条侧链带来的特点是显而易见的，它可以获得由<a href="https://learnblockchain.cn/2017/11/20/whatiseth/" target="_blank" rel="noopener">以太坊</a>底层网络的安全背书，让我们使用在以太坊上发布的Token（包含 ERC20和 ERC721支持），又可以享受 DPos 共识带来的高性能。</p>
+<blockquote>
+<p>以太坊交易确认至少是15秒以上，并且需要消耗一笔 <a href="https://learnblockchain.cn/2019/06/11/gas-mean/" target="_blank" rel="noopener">Gas</a> 费用，当然因此牺牲了一些去中心化。</p>
+</blockquote>
+<p>这张图可以表明 PlasmaChain 与 以太坊的关系，它未来会链接多条侧链，据官方搞 PlasmaChain 集成排名前100的<a href="https://learnblockchain.cn/2018/01/12/create_token/" target="_blank" rel="noopener">ERC20</a>代币，其中包含6种稳定币。</p>
+<span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="https://img.learnblockchain.cn/2019/15565495038560.jpg" class="full-image" alt="PlasmaChain 二层网络图" title="图片来源于 Loom 官网 SDK 介绍"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
+
+<h3 id="Loom-SDK（工具集）"><a href="#Loom-SDK（工具集）" class="headerlink" title="Loom SDK（工具集）"></a>Loom SDK（工具集）</h3><p><strong>Loom SDK</strong> 则让开发者快速构建自己的区块链(DApp侧链)，同时也提供了一些工具开发部署应用，它包含内容有：</p>
+<ul>
+<li><p>一个可执行的 <code>loom</code> 命令行工具， 用于创建一条自己的应用链。</p>
+<blockquote>
+<p>  有时狭义的Loom SDK就是单指这个工具</p>
+</blockquote>
+</li>
+<li><p>一些其他工具，如用来在主链和侧链之间转移资产的工具：plasma-cli  gateway-cli。</p>
+</li>
+<li><p>用来部署合约及开发DApp 的 JavaScript SDK， 包含 <code>Loom [Truffle](https://learnblockchain.cn/docs/truffle/) Provider</code> 及 <code>loom-js</code>， 这篇文章后面会介绍他的使用。</p>
+</li>
+<li><p>用来部署合约及开发DApp 的 Go SDK。</p>
+</li>
+<li><p>以及开发游戏相关的 SDK： Cosos SDK、Unity SDK。</p>
+</li>
+</ul>
+<p>本篇文章重点就是要介绍如何使用 Loom SDK 创建一条自己的链并部署应用。</p>
+<h2 id="Loom-安装-amp-启动区块链"><a href="#Loom-安装-amp-启动区块链" class="headerlink" title="Loom 安装 &amp; 启动区块链"></a>Loom 安装 &amp; 启动区块链</h2><h3 id="loom-安装"><a href="#loom-安装" class="headerlink" title="loom 安装"></a><code>loom</code> 安装</h3><p><code>loom</code> 命令行工具安装很简单，直接下载可执行文件，在控制台输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://private.delegatecall.com/loom/osx/stable/loom</span><br><span class="line">chmod +x loom</span><br></pre></td></tr></table></figure>
+
+<p>大家可以把 <code>loom</code> 加入到环境变量里，方便后面使用。</p>
+<blockquote>
+<p>我使用的系统是 Mac OS， 如果你使用 Linux， 则 wget 后面的 url 是 <code>https://private.delegatecall.com/loom/linux/stable/loom</code> ，Window 暂时不支持，可以选择虚拟机。</p>
+</blockquote>
+<h3 id="初始化链"><a href="#初始化链" class="headerlink" title="初始化链"></a>初始化链</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir loom-chain  <span class="comment"># 为侧链创建一个目录</span></span><br><span class="line"><span class="built_in">cd</span> loom-chain</span><br><span class="line">loom init</span><br></pre></td></tr></table></figure>
+
+<p>初始化命令会生成<code>genesis.json</code> 和 <code>chaindata</code>目录，<code>genesis.json</code> 是这条侧链的创世纪块配置，<code>chaindata</code>目录用户保存区块数据。</p>
+<h2 id="运行区块链"><a href="#运行区块链" class="headerlink" title="运行区块链"></a>运行区块链</h2><p>使用以下的命令可以启动刚刚初始化的DApp侧链：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loom run</span><br></pre></td></tr></table></figure>
+
+<p>输出像下面这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">I[29046-04-29|20:46:50.356] Loading IAVL Store                           module=loom</span><br><span class="line">I[29046-04-29|20:46:50.362] Using simple log event dispatcher</span><br><span class="line">I[29046-04-29|20:46:50.368] Deployed contract                            vm=plugin location=coin:1.0.0 name=coin address=default:0xe288d6eec7150D6a22FDE33F0AA2d81E06591C4d</span><br><span class="line">Init DPOS Params &amp;dpos.DPOSInitRequest&#123;Params:(*dpos.Params)(0xc000e44dc0), Validators:[]*types.Validator&#123;(*types.Validator)(0xc000e46dc0)&#125;, XXX_NoUnkeyedLiteral:struct &#123;&#125;&#123;&#125;, XXX_unrecognized:[]uint8(nil), XXX_sizecache:0&#125;</span><br><span class="line">I[29046-04-29|20:46:50.369] Deployed contract                            vm=plugin location=dpos:1.0.0 name=dpos address=default:0x01D10029c253fA02D76188b84b5846ab3D19510D</span><br><span class="line">E[29046-04-29|20:46:50.374] Couldn&apos;t connect to any seeds                module=p2p</span><br><span class="line">I[29046-04-29|20:46:50.374] Starting RPC HTTP server on [::]:46658       module=query-server</span><br><span class="line">I[29046-04-29|20:46:50.374] Starting RPC HTTP server on 127.0.0.1:9999   module=query-server</span><br></pre></td></tr></table></figure>
+
+<p>启动的侧链运行在端口<code>46658</code>上， 可以通过区块链浏览器 <code>https://blockexplorer.loomx.io/?rpc=http://127.0.0.1:46658</code> , 查看这条测试链的出块数据，如图：<br><img src="https://img.learnblockchain.cn/2019/15566148507301.jpg!/scale/45%" alt="区块浏览器"></p>
+<blockquote>
+<p><code>https://blockexplorer.loomx.io/</code> 是<code>Plasma Chain</code>的区块链浏览器，在区块浏览器浏览器的下方可以选择链接的RPC 服务器，选择本地的IP及端口。</p>
+</blockquote>
+<p>现在链已经准备好了，接下来就是开发及部署DApp了，我们依然使用 Truffle 进行开发，不熟悉可参考： <a href="https://learnblockchain.cn/docs/truffle/" target="_blank" rel="noopener">Truffle 官方开发文档-中文</a></p>
+<h2 id="在侧链上开发和部署智能合约"><a href="#在侧链上开发和部署智能合约" class="headerlink" title="在侧链上开发和部署智能合约"></a>在侧链上开发和部署智能合约</h2><p>在<a href="https://learnblockchain.cn/2019/03/30/dapp_noteOnChain/" target="_blank" rel="noopener">用Truffle开发一个链上记事本</a>文章里，以及介绍了如何开发这个DApp 这里不再重复介绍。</p>
+<p>这个链上记事本的源码在<a href="https://github.com/xilibi2003/note_dapp" target="_blank" rel="noopener">GitHub</a> ， 进行下面的操作之前，需要 git clone 到本地：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; git <span class="built_in">clone</span> git@github.com:xilibi2003/note_dapp.git</span><br><span class="line">&gt; npm install  <span class="comment"># 安装相应的依赖</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Truffle-配置侧链网络"><a href="#Truffle-配置侧链网络" class="headerlink" title="Truffle 配置侧链网络"></a>Truffle 配置侧链网络</h3><p>原来的代码里，Truffle 连接的是以太坊网络，因此需要修改 <code>truffle.js</code> 添加刚刚创建的侧链网络，和我们之前介绍的 使用 <code>truffle-hdwallet-provider</code> 连接 <code>Infura</code> 网络原理类似，连接侧链网络也需要提供一个<code>Provider</code>，它是 <a href="https://loomx.io/developers/docs/zh-CN/web3js-loom-provider-truffle.html#%E4%B8%8B%E8%BD%BD%E5%B9%B6%E9%85%8D%E7%BD%AE-loom-truffle-provider" target="_blank" rel="noopener">Loom Truffle Provider</a>， 修改配置之前先安装它：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install loom-truffle-provider --save</span><br></pre></td></tr></table></figure>
+
+<p>然后修改配置文件 <code>truffle.js</code>，（这有有一份 <a href="https://learnblockchain.cn/docs/truffle/reference/configuration.html" target="_blank" rel="noopener">Truffle 配置</a> 文档），参考配置如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; readFileSync &#125; = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="keyword">const</span> LoomTruffleProvider = <span class="built_in">require</span>(<span class="string">'loom-truffle-provider'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> chainId    = <span class="string">'default'</span></span><br><span class="line"><span class="keyword">const</span> writeUrl   = <span class="string">'http://127.0.0.1:46658/rpc'</span></span><br><span class="line"><span class="keyword">const</span> readUrl    = <span class="string">'http://127.0.0.1:46658/query'</span></span><br><span class="line"><span class="keyword">const</span> privateKey = readFileSync(<span class="string">'./priv_key'</span>, <span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> loomTruffleProvider = <span class="keyword">new</span> LoomTruffleProvider(chainId, writeUrl, readUrl, privateKey)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  networks: &#123;</span><br><span class="line">    loom_dapp_chain: &#123;</span><br><span class="line">      provider: loomTruffleProvider,</span><br><span class="line">      network_id: <span class="string">'*'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在配置里，我们新加入一个网络 <code>loom_dapp_chain</code> ，这个网络有 LoomTruffleProvider 提供，<code>http://127.0.0.1:46658/</code> 是 使用 <code>loom run</code> 启动侧链节点提供的RPC 服务， 细心的同学应该已经发现了 <code>priv_key</code>， 它是用来部署合约到侧链上账号的私钥文件，下面就来创建它。</p>
+<blockquote>
+<p>配置链接到其他的侧链，可以参考<a href="https://loomx.io/developers/docs/zh-CN/testnet-plasma.html" target="_blank" rel="noopener">PlasmaChain 测试网</a></p>
+</blockquote>
+<h3 id="创建测链账号"><a href="#创建测链账号" class="headerlink" title="创建测链账号"></a>创建测链账号</h3><p><code>loom</code> 工具提供了选项来创建账号，在项目<code>note_dapp</code>目录下，执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ loom genkey -k priv_key -a pub_key</span><br></pre></td></tr></table></figure>
+
+<p>输出结果像下面（当然大家的账号和我的会不一样）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">local address: 0x8b7A68cFf3725ca1b682XLb575bC891e381138ef8</span><br><span class="line">local address base64: i3poz/NyXKG2gv5XW8iR44ETjvg=</span><br></pre></td></tr></table></figure>
+
+<p>这个命令会在当前文件夹加生成私钥和公钥文件： <code>priv_key</code> 和 <code>pub_key</code> ， <code>priv_key</code> 文件里包含后面用来把合同部署到侧链的私钥。</p>
+<h3 id="部署到DApp侧链"><a href="#部署到DApp侧链" class="headerlink" title="部署到DApp侧链"></a>部署到DApp侧链</h3><p>执行部署时（需要先确定链当前在运行），使用 –network 指定网络，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">truffle migrate --network loom_dapp_chain</span><br></pre></td></tr></table></figure>
+
+<p>输出的结构像下面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">Compiling ./contracts/Migrations.sol...</span><br><span class="line">Compiling ./contracts/NoteContract.sol...</span><br><span class="line">Writing artifacts to ./build/contracts</span><br><span class="line"></span><br><span class="line">Starting migrations...</span><br><span class="line">======================</span><br><span class="line">&gt; Network name:    &apos;loom_dapp_chain&apos;</span><br><span class="line">&gt; Network id:      13654820909954</span><br><span class="line">&gt; Block [gas](https://learnblockchain.cn/2019/06/11/gas-mean/) limit: 0</span><br><span class="line"></span><br><span class="line">.......</span><br><span class="line"></span><br><span class="line">2_deploy_contract.js</span><br><span class="line">====================</span><br><span class="line"></span><br><span class="line">   Deploying &apos;NoteContract&apos;</span><br><span class="line">   ------------------------</span><br><span class="line">   &gt; transaction hash:    0x88a6131cb89fcf...d72d3f92ceb2e</span><br><span class="line">   &gt; Blocks: 0            Seconds: 0</span><br><span class="line">   &gt; contract address:    0x0611Afc2fac9B72f5a75E1BC330Ba4c5da103217</span><br><span class="line">   &gt; account:             0x8b7A68cFf3725ca1b682XLb575bC891e381138ef8</span><br><span class="line">   &gt; balance:             0</span><br><span class="line">   &gt; gas used:            0</span><br><span class="line">   &gt; gas price:           0 gwei</span><br><span class="line">   &gt; value sent:          0 ETH</span><br><span class="line">   &gt; total cost:          0 ETH</span><br><span class="line"></span><br><span class="line">   &gt; Saving migration to chain.</span><br><span class="line">   &gt; Saving artifacts</span><br><span class="line">   -------------------------------------</span><br><span class="line">   &gt; Total cost:                   0 ETH</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Summary</span><br><span class="line">=======</span><br><span class="line">&gt; Total deployments:   2</span><br><span class="line">&gt; Final cost:          0 ETH</span><br></pre></td></tr></table></figure>
+
+<p>从这个输出会列出部署的网络名、网络id、交易hash、合约地址等信息，用样部署动作也在 <code>build</code> 目录下生成对应的文件<code>contracts/NoteContract.json</code>。</p>
+<h2 id="与侧链上的智能合约进行交互"><a href="#与侧链上的智能合约进行交互" class="headerlink" title="与侧链上的智能合约进行交互"></a>与侧链上的智能合约进行交互</h2><p>Truffle 提供了一个控制台 <a href="https://learnblockchain.cn/docs/truffle/getting-started/using-truffle-develop-and-the-console.html#" target="_blank" rel="noopener">truffle console</a> </p>
+<h3 id="启动控制台"><a href="#启动控制台" class="headerlink" title="启动控制台"></a>启动控制台</h3><p>首先通过 <code>--network</code> 选项指定连接到DApp侧链<code>loom_dapp_chain</code>， 进入控制台，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">truffle console --network loom_dapp_chain</span><br></pre></td></tr></table></figure>
+
+<p>进入控制台后，控制台提示文字是这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">truffle(loom_dapp_chain)&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们就可以在这个控制台内执行交互命令。</p>
+<h3 id="获取合约实例"><a href="#获取合约实例" class="headerlink" title="获取合约实例"></a>获取合约实例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">truffle(loom_dapp_chain)&gt; <span class="built_in">let</span> instance = await NoteContract.deployed()</span><br><span class="line">truffle(loom_dapp_chain)&gt; instance</span><br></pre></td></tr></table></figure>
+
+<p>查看 <code>instance</code> ，会输出 instance 实例的详情，使用的Provider, 包含哪些方法，ABI 描述等， 结果像下面：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">TruffleContract &#123;</span><br><span class="line">...</span><br><span class="line">web3:</span><br><span class="line">      Web3 &#123;</span><br><span class="line">        class_defaults:</span><br><span class="line">      &#123; <span class="attr">from</span>: <span class="string">'0x8b7A68cFf3725ca1b682XLb575bC891e381138ef8'</span>,</span><br><span class="line">        gas: <span class="number">6721975</span>,</span><br><span class="line">        gasPrice: <span class="number">20000000000</span> &#125;,</span><br><span class="line">currentProvider:</span><br><span class="line">      TruffleLoomProvider &#123;</span><br><span class="line">        _engine: [LoomProvider],</span><br><span class="line">        send: [<span class="built_in">Function</span>],</span><br><span class="line">        _alreadyWrapped: <span class="literal">true</span> &#125;,</span><br><span class="line">     network_id: <span class="string">'13654820909954'</span> &#125;,</span><br><span class="line">  methods:</span><br><span class="line">   &#123; <span class="string">'notes(address,uint256)'</span>:</span><br><span class="line">      &#123; ... &#125;,</span><br><span class="line">     <span class="string">'addNote(string)'</span>:</span><br><span class="line">      &#123;... &#125;,</span><br><span class="line">     <span class="string">'getNotesLen(address)'</span>:</span><br><span class="line">      &#123;...&#125;,</span><br><span class="line">     <span class="string">'modifyNote(address,uint256,string)'</span>:</span><br><span class="line">      &#123; ... &#125;,</span><br><span class="line">  abi:</span><br><span class="line">   [...]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="通过合约实例调用合约函数"><a href="#通过合约实例调用合约函数" class="headerlink" title="通过合约实例调用合约函数"></a>通过合约实例调用合约函数</h3><p>调用合约添加一条笔记：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">truffle(loom_dapp_chain)&gt; instance.addNote(<span class="string">"abc"</span>);</span><br></pre></td></tr></table></figure>
+
+<p>获取当前账号（后面查看笔记数量函数需要使用账号作为参数，因此先获取下账号）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">truffle(loom_dapp_chain)&gt; let accounts = await web3.eth.getAccounts()</span><br><span class="line">truffle(loom_dapp_chain)&gt; accounts[0]</span><br></pre></td></tr></table></figure>
+
+<p>这时控制台会打印出账号地址：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">‘0x8b7A68cFf3725ca1b682XLb575bC891e381138ef8’</span><br></pre></td></tr></table></figure>
+
+<p>查看这个下这个账号的笔记条数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">truffle(loom_dapp_chain)&gt; let noteNum = await instance.getNotesLen(&quot;0x8b7A68cFf3725ca1b682XLb575bC891e381138ef8&quot;)</span><br><span class="line">truffle(loom_dapp_chain)&gt; noteNum.toNumber()</span><br><span class="line"># 输出结果</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p>调用其他的方法类似，不一一讲解，可以参考<a href="https://learnblockchain.cn/docs/truffle/getting-started/interacting-with-your-contracts.html" target="_blank" rel="noopener">Truffle 文档 - 与合约交互</a></p>
+<p>下一篇将继续介绍在DApp 中怎么和合约进行交互。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ol>
+<li><a href="https://loomx.io/" target="_blank" rel="noopener">loom 官网</a></li>
+<li><a href="https://medium.com/loom-network/plasmachain-integrates-with-top-100-erc20-tokens-enabling-lightning-fast-layer-2-stablecoin-fb9c99e879d4" target="_blank" rel="noopener">PlasmaChain与排名前100的ERC20代币集成，通过多币种支持实现闪电级的第2层稳定币支付</a></li>
+<li><a href="https://plasma.io/" target="_blank" rel="noopener">https://plasma.io/</a></li>
+<li><a href="https://loomx.io/developers/docs/zh-CN/intro-loom-sdk.html" target="_blank" rel="noopener">Loom SDK 介绍</a></li>
+<li><a href="https://learnblockchain.cn/docs/truffle/" target="_blank" rel="noopener">Truffle 官方文档-中文版</a> </li>
+</ol>
+<p>加入<a href="https://learnblockchain.cn/images/zsxq.png" target="_blank" rel="noopener">知识星球</a>，和一群优秀的区块链从业者一起学习。<br><a href="https://learnblockchain.cn/" target="_blank" rel="noopener">深入浅出区块链</a> - 打造高质量区块链技术博客，学区块链都来这里，关注<a href="https://www.zhihu.com/people/xiong-li-bing/activities" target="_blank" rel="noopener">知乎</a>、<a href="https://weibo.com/517623789" target="_blank" rel="noopener">微博</a>。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/Loom/" rel="tag"># Loom</a>
+          
+            <a href="/tags/智能合约/" rel="tag"># 智能合约</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/24/bucket-tree/" rel="next" title="深入理解 Bucket Tree">
+                <i class="fa fa-chevron-left"></i> 深入理解 Bucket Tree
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/30/bloom_filter/" rel="prev" title="白话布隆过滤器（Bloom Filter）">
+                白话布隆过滤器（Bloom Filter） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ClimbYang</p>
+              <div class="site-description motion-element" itemprop="description">记录学习编程的点滴</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">74</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/yp945" title="GitHub &rarr; https://github.com/yp945" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:pan107104@outlook.com" title="E-Mail &rarr; mailto:pan107104@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于-Loom"><span class="nav-number">1.</span> <span class="nav-text">关于 Loom</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Loom-PlasmaChain"><span class="nav-number">1.1.</span> <span class="nav-text">Loom PlasmaChain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Loom-SDK（工具集）"><span class="nav-number">1.2.</span> <span class="nav-text">Loom SDK（工具集）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Loom-安装-amp-启动区块链"><span class="nav-number">2.</span> <span class="nav-text">Loom 安装 &amp; 启动区块链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#loom-安装"><span class="nav-number">2.1.</span> <span class="nav-text">loom 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化链"><span class="nav-number">2.2.</span> <span class="nav-text">初始化链</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行区块链"><span class="nav-number">3.</span> <span class="nav-text">运行区块链</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在侧链上开发和部署智能合约"><span class="nav-number">4.</span> <span class="nav-text">在侧链上开发和部署智能合约</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Truffle-配置侧链网络"><span class="nav-number">4.1.</span> <span class="nav-text">Truffle 配置侧链网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建测链账号"><span class="nav-number">4.2.</span> <span class="nav-text">创建测链账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署到DApp侧链"><span class="nav-number">4.3.</span> <span class="nav-text">部署到DApp侧链</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与侧链上的智能合约进行交互"><span class="nav-number">5.</span> <span class="nav-text">与侧链上的智能合约进行交互</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启动控制台"><span class="nav-number">5.1.</span> <span class="nav-text">启动控制台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取合约实例"><span class="nav-number">5.2.</span> <span class="nav-text">获取合约实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过合约实例调用合约函数"><span class="nav-number">5.3.</span> <span class="nav-text">通过合约实例调用合约函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">6.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ClimbYang</span>
+
+  
+
+  
+</div>
+
+<div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过
+</span>
+</div>
+
+
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

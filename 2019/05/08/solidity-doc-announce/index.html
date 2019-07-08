@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="热烈祝贺 Solidity 最新 0.5.8 中文文档发布， 这不单是一份 Solidity 速查手册，更是一份深入以太坊智能合约开发宝典。">
+<meta name="keywords" content="Solidity,文档">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Solidity 最新 0.5.8 中文文档发布">
+<meta property="og:url" content="http://yoursite.com/2019/05/08/solidity-doc-announce/index.html">
+<meta property="og:site_name" content="ClimbYang的记录">
+<meta property="og:description" content="热烈祝贺 Solidity 最新 0.5.8 中文文档发布， 这不单是一份 Solidity 速查手册，更是一份深入以太坊智能合约开发宝典。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-05T08:13:55.348Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Solidity 最新 0.5.8 中文文档发布">
+<meta name="twitter:description" content="热烈祝贺 Solidity 最新 0.5.8 中文文档发布， 这不单是一份 Solidity 速查手册，更是一份深入以太坊智能合约开发宝典。">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ClimbYang的记录" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/05/08/solidity-doc-announce/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Solidity 最新 0.5.8 中文文档发布 | ClimbYang的记录</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+        <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ClimbYang的记录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">blockchain</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/08/solidity-doc-announce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ClimbYang">
+      <meta itemprop="description" content="记录学习编程的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ClimbYang的记录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Solidity 最新 0.5.8 中文文档发布
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-08 17:25:14" itemprop="dateCreated datePublished" datetime="2019-05-08T17:25:14+08:00">2019-05-08</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-05 16:13:55" itemprop="dateModified" datetime="2019-07-05T16:13:55+08:00">2019-07-05</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/以太坊/" itemprop="url" rel="index"><span itemprop="name">以太坊</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/以太坊/Solidity/" itemprop="url" rel="index"><span itemprop="name">Solidity</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+              <span title="本文字数">3.7k</span>
+            </span>
+          
+
+	  
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+              <span title="阅读时长">7 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>热烈祝贺 <a href="https://learnblockchain.cn/docs/solidity/" target="_blank" rel="noopener">Solidity 最新 0.5.8 中文文档</a>发布， 这不单是一份 Solidity 速查手册，更是一份深入以太坊智能合约开发宝典。</p>
+<a id="more"></a>
+
+<h2 id="翻译说明"><a href="#翻译说明" class="headerlink" title="翻译说明"></a>翻译说明</h2><p><a href="https://learnblockchain.cn/docs/solidity/" target="_blank" rel="noopener">Solidity 最新 0.5.8 中文文档</a> 根据当前 <a href="https://solidity.readthedocs.io/" target="_blank" rel="noopener">最新官方版本v0.5.8</a> 进行翻译，本翻译最初 <a href="http://hiblock.one/" target="_blank" rel="noopener">HiBlock</a> 社区发起，后经过 <a href="https://learnblockchain.cn/" target="_blank" rel="noopener">深入浅出区块链社区</a> 社区成员根据最新版本补充翻译。</p>
+<p>大部分的译者，都是国内顶尖的<a href="https://learnblockchain.cn/2017/11/20/whatiseth/" target="_blank" rel="noopener">以太坊</a>开发和研究人员，部分译者如下：</p>
+<ul>
+<li><a href="https://github.com/riversyang" target="_blank" rel="noopener">杨镇</a> 《深入以太坊智能合约开发》作者，《精通以太坊》译者</li>
+<li><a href="https://github.com/bobjiang" target="_blank" rel="noopener">姜信宝</a> HiBlock 区块链社区发起人 ，</li>
+<li><a href="https://github.com/xilibi2003" target="_blank" rel="noopener">Tiny熊</a> 《精通以太坊智能合约开发》作者，<a href="https://learnblockchain.cn" target="_blank" rel="noopener">深入浅出区块链技术博客</a>发起人</li>
+<li><a href="https://github.com/gitferry" target="_blank" rel="noopener">盖方宇</a> 哥伦比亚大学电子工程系博士，专注扩容研究</li>
+<li><a href="https://github.com/ysqi" target="_blank" rel="noopener">虞是乎</a> 磨链发起人</li>
+<li><a href="https://github.com/hongbinzuo" target="_blank" rel="noopener">左洪斌</a>《Scrum精髓(敏捷转型指南)》译者</li>
+</ul>
+<p>感谢所有的译者贡献，献花~ 献花~</p>
+<p>这份文档无疑是最新质量最好的<a href="https://learnblockchain.cn/docs/solidity/" target="_blank" rel="noopener">中文文档</a>，本文仅仅是部分摘要和目录， 完整文档请前往 <a href="https://learnblockchain.cn/docs/solidity/" target="_blank" rel="noopener">https://learnblockchain.cn/docs/solidity/</a> 。</p>
+<p>翻译工作是一个持续的过程（这份文档目前也还有部分未完成），我们热情邀请热爱区块链技术的小伙伴一起参与，欢迎加入我们Group： <a href="https://github.com/lbc-team" target="_blank" rel="noopener">https://github.com/lbc-team</a> 。</p>
+<p>本中文文档大部分情况下，英中直译，但有时为了更好的理解也会使用意译，如需转载请联系Tiny熊（微信：xlbxiong）.</p>
+<h2 id="Solidity-语言简介-及-文档目录"><a href="#Solidity-语言简介-及-文档目录" class="headerlink" title="Solidity 语言简介 及 文档目录"></a>Solidity 语言简介 及 文档目录</h2><p>Solidity 是一门面向合约的、为实现智能合约而创建的高级编程语言。这门语言受到了 C++，Python 和 Javascript 语言的影响，设计的目的是能在<a href="https://learnblockchain.cn/2019/04/09/easy-evm/" target="_blank" rel="noopener">以太坊虚拟机</a>（EVM）]上运行。</p>
+<p>要理解智能合约及虚拟机是怎么运行，推荐这两篇非常好的文章 <a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" target="_blank" rel="noopener">完全理解以太坊智能合约</a> 及 <a href="https://learnblockchain.cn/2019/04/09/easy-evm/" target="_blank" rel="noopener">深入浅出以太坊虚拟机</a> </p>
+<p><a href="https://learnblockchain.cn/docs/solidity/" target="_blank" rel="noopener">Solidity</a> 是静态类型语言，支持继承、库和复杂的用户定义类型等特性， 以下是完整目录。</p>
+<h3 id="文档目录"><a href="#文档目录" class="headerlink" title="文档目录"></a>文档目录</h3><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html" target="_blank" rel="noopener">入门智能合约</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#simple-smart-contract" target="_blank" rel="noopener">简单的智能合约</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#id3" target="_blank" rel="noopener">存储合约（把一个数据保存到链上）</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#subcurrency" target="_blank" rel="noopener">子货币合约（Subcurrency）示例</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#blockchain-basics" target="_blank" rel="noopener">区块链基础</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#index-4" target="_blank" rel="noopener">交易/事务</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#index-5" target="_blank" rel="noopener">区块</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#index-6" target="_blank" rel="noopener">以太坊虚拟机</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#id11" target="_blank" rel="noopener">概述</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#index-7" target="_blank" rel="noopener">账户</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#index-8" target="_blank" rel="noopener">交易</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#gas" target="_blank" rel="noopener">Gas</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#index-10" target="_blank" rel="noopener">存储，内存和栈</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#index-11" target="_blank" rel="noopener">指令集</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#index-12" target="_blank" rel="noopener">消息调用</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#index-13" target="_blank" rel="noopener">委托调用/代码调用和库</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#index-14" target="_blank" rel="noopener">日志</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#index-15" target="_blank" rel="noopener">合约创建</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/introduction-to-smart-contracts.html#index-16" target="_blank" rel="noopener">失效和自毁</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html" target="_blank" rel="noopener">安装Solidity编译器</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#id1" target="_blank" rel="noopener">版本</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#remix" target="_blank" rel="noopener">Remix</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#npm-node-js" target="_blank" rel="noopener">npm / Node.js</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#docker" target="_blank" rel="noopener">Docker</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#id4" target="_blank" rel="noopener">二进制包</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#building-from-source" target="_blank" rel="noopener">从源代码编译</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#id6" target="_blank" rel="noopener">克隆代码库</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#macos" target="_blank" rel="noopener">先决条件 - macOS</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#windows" target="_blank" rel="noopener">先决条件 - Windows</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#id8" target="_blank" rel="noopener">外部依赖</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#id9" target="_blank" rel="noopener">命令行构建</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#id10" target="_blank" rel="noopener">CMake参数</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#smt-solvers" target="_blank" rel="noopener">SMT Solvers</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#id11" target="_blank" rel="noopener">版本号字符串详解</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/installing-solidity.html#id12" target="_blank" rel="noopener">版本信息详情</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/solidity-by-example.html" target="_blank" rel="noopener">根据例子学习Solidity</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/voting.html" target="_blank" rel="noopener">投票合约</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/voting.html#id2" target="_blank" rel="noopener">可能的优化</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/blind-auction.html" target="_blank" rel="noopener">秘密竞价（盲拍）合约</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/blind-auction.html#simple-auction" target="_blank" rel="noopener">简单的公开拍卖</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/blind-auction.html#id3" target="_blank" rel="noopener">秘密竞拍（盲拍）</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/safe-remote.html" target="_blank" rel="noopener">安全的远程购买合约</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html" target="_blank" rel="noopener">微支付通道合约</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id3" target="_blank" rel="noopener">创建及验证签名</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id4" target="_blank" rel="noopener">创建签名</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id5" target="_blank" rel="noopener">哪些内容需要签名</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id6" target="_blank" rel="noopener">打包参数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#solidity" target="_blank" rel="noopener">在Solidity中还原消息签名者</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id7" target="_blank" rel="noopener">提取签名参数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#hash" target="_blank" rel="noopener">计算信息的Hash</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#receiverpays" target="_blank" rel="noopener">ReceiverPays 完整合约代码</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id9" target="_blank" rel="noopener">编写一个简单的支付通道</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id10" target="_blank" rel="noopener">什么是支付通道？</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id11" target="_blank" rel="noopener">打开支付通道</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id12" target="_blank" rel="noopener">进行支付</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id13" target="_blank" rel="noopener">关闭状态通道</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id14" target="_blank" rel="noopener">通道有效期</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id15" target="_blank" rel="noopener">完整合约代码</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/micropayment.html#id16" target="_blank" rel="noopener">验证支付</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/examples/modular.html" target="_blank" rel="noopener">库合约使用</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/solidity-in-depth.html" target="_blank" rel="noopener">深入理解Solidity</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/layout-of-source-files.html" target="_blank" rel="noopener">Solidity 源文件结构</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/layout-of-source-files.html#pragmas" target="_blank" rel="noopener">Pragmas</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/layout-of-source-files.html#version-pragma" target="_blank" rel="noopener">版本标识</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/layout-of-source-files.html#experimental-pragma" target="_blank" rel="noopener">标注实验性功能</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/layout-of-source-files.html#import" target="_blank" rel="noopener">导入其他源文件</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/layout-of-source-files.html#id5" target="_blank" rel="noopener">语法与语义</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/layout-of-source-files.html#id6" target="_blank" rel="noopener">路径</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/layout-of-source-files.html#import-compiler" target="_blank" rel="noopener">在实际的编译器中使用</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/layout-of-source-files.html#index-4" target="_blank" rel="noopener">注释</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/structure-of-a-contract.html" target="_blank" rel="noopener">合约结构</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/structure-of-a-contract.html#structure-state-variables" target="_blank" rel="noopener">状态变量</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/structure-of-a-contract.html#structure-functions" target="_blank" rel="noopener">函数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/structure-of-a-contract.html#modifier" target="_blank" rel="noopener">函数 修饰器modifier</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/structure-of-a-contract.html#event" target="_blank" rel="noopener">事件 Event</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/structure-of-a-contract.html#structure-struct-types" target="_blank" rel="noopener">结构体</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/structure-of-a-contract.html#structure-enum-types" target="_blank" rel="noopener">枚举类型</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html" target="_blank" rel="noopener">类型</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#value-types" target="_blank" rel="noopener">值类型</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#index-2" target="_blank" rel="noopener">布尔类型</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#index-3" target="_blank" rel="noopener">整型</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#index-4" target="_blank" rel="noopener">定长浮点型</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#address" target="_blank" rel="noopener">地址类型 Address</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#contract-types" target="_blank" rel="noopener">合约类型</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#index-7" target="_blank" rel="noopener">定长字节数组</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#id17" target="_blank" rel="noopener">变长字节数组</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#address-literals" target="_blank" rel="noopener">地址字面常量</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#rational-literals" target="_blank" rel="noopener">有理数和整数字面常量</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#string-literals" target="_blank" rel="noopener">字符串字面常量及类型</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#index-11" target="_blank" rel="noopener">十六进制字面常量</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#enums" target="_blank" rel="noopener">枚举类型</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#function-types" target="_blank" rel="noopener">函数类型</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#reference-types" target="_blank" rel="noopener">引用类型</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#data-location" target="_blank" rel="noopener">数据位置</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#arrays" target="_blank" rel="noopener">数组</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#structs" target="_blank" rel="noopener">结构体</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#mapping-types" target="_blank" rel="noopener">映射</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#lvalues" target="_blank" rel="noopener">涉及 LValues 的运算符</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#delete" target="_blank" rel="noopener">delete</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#types-conversion-elementary-types" target="_blank" rel="noopener">基本类型之间的转换</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#id38" target="_blank" rel="noopener">隐式转换</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#id39" target="_blank" rel="noopener">显式转换</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#types-conversion-literals" target="_blank" rel="noopener">字面常量与基本类型的转换</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#id41" target="_blank" rel="noopener">整型</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#id42" target="_blank" rel="noopener">定长字节数组</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#id43" target="_blank" rel="noopener">地址类型</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/types.html#type-deduction" target="_blank" rel="noopener">类型推断(已弃用)</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/units-and-global-variables.html" target="_blank" rel="noopener">单位和全局变量</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/units-and-global-variables.html#ether" target="_blank" rel="noopener">以太币Ether 单位</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/units-and-global-variables.html#index-1" target="_blank" rel="noopener">时间单位</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/units-and-global-variables.html#id3" target="_blank" rel="noopener">特殊变量和函数</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/units-and-global-variables.html#index-2" target="_blank" rel="noopener">区块和交易属性</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/units-and-global-variables.html#abi" target="_blank" rel="noopener">ABI 编码函数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/units-and-global-variables.html#index-4" target="_blank" rel="noopener">错误处理</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/units-and-global-variables.html#index-5" target="_blank" rel="noopener">数学和密码学函数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/units-and-global-variables.html#address-related" target="_blank" rel="noopener">地址相关</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/units-and-global-variables.html#index-7" target="_blank" rel="noopener">合约相关</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/units-and-global-variables.html#meta-type" target="_blank" rel="noopener">类型信息</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html" target="_blank" rel="noopener">表达式和控制结构</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#index-0" target="_blank" rel="noopener">输入参数和输出参数</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#id3" target="_blank" rel="noopener">输入参数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#id4" target="_blank" rel="noopener">输出参数</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#index-1" target="_blank" rel="noopener">控制结构</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#function-calls" target="_blank" rel="noopener">函数调用</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#internal-function-calls" target="_blank" rel="noopener">内部函数调用</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#external-function-calls" target="_blank" rel="noopener">外部函数调用</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#id9" target="_blank" rel="noopener">具名调用和匿名函数参数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#id10" target="_blank" rel="noopener">省略函数参数名称</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#new" target="_blank" rel="noopener">通过 new  创建合约</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#index-4" target="_blank" rel="noopener">赋值</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#index-5" target="_blank" rel="noopener">解构赋值和返回多值</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#id13" target="_blank" rel="noopener">数组和结构体的复杂性</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#default-value" target="_blank" rel="noopener">作用域和声明</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/control-structures.html#assert-require-revert-and-exceptions" target="_blank" rel="noopener">错误处理：Assert, Require, Revert and Exceptions</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html" target="_blank" rel="noopener">合约</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#index-1" target="_blank" rel="noopener">创建合约</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#getter" target="_blank" rel="noopener">可见性和 getter 函数</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#getter-functions" target="_blank" rel="noopener">Getter 函数</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#modifier" target="_blank" rel="noopener">函数 修饰器modifier</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#constant" target="_blank" rel="noopener">Constant 状态变量</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#functions" target="_blank" rel="noopener">函数</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#function-parameters-return-variables" target="_blank" rel="noopener">函数参数及返回值</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#view" target="_blank" rel="noopener">View 函数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#pure" target="_blank" rel="noopener">Pure 函数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#fallback" target="_blank" rel="noopener">Fallback 回退函数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#overload-function" target="_blank" rel="noopener">函数重载</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#events" target="_blank" rel="noopener">事件</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#index-14" target="_blank" rel="noopener">日志的底层接口</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#id13" target="_blank" rel="noopener">其它学习事件机制的资源</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#index-15" target="_blank" rel="noopener">继承</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#constructor" target="_blank" rel="noopener">构造器</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#index-17" target="_blank" rel="noopener">基类构造函数的参数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#multi-inheritance" target="_blank" rel="noopener">多重继承与线性化</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#id20" target="_blank" rel="noopener">继承有相同名字的不同类型成员</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#abstract-contract" target="_blank" rel="noopener">抽象合约</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#interfaces" target="_blank" rel="noopener">接口</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#libraries" target="_blank" rel="noopener">库</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#id24" target="_blank" rel="noopener">库的调用保护</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contracts.html#using-for" target="_blank" rel="noopener">Using For</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html" target="_blank" rel="noopener">Solidity汇编</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#inline-assembly" target="_blank" rel="noopener">内联汇编</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id2" target="_blank" rel="noopener">例子</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id3" target="_blank" rel="noopener">语法</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id4" target="_blank" rel="noopener">操作码</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id5" target="_blank" rel="noopener">字面常量</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id6" target="_blank" rel="noopener">函数风格</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id7" target="_blank" rel="noopener">访问外部变量和函数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id8" target="_blank" rel="noopener">标签</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id9" target="_blank" rel="noopener">汇编局部变量声明</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id10" target="_blank" rel="noopener">赋值</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#if" target="_blank" rel="noopener">If</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#switch" target="_blank" rel="noopener">Switch</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id11" target="_blank" rel="noopener">循环</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id12" target="_blank" rel="noopener">函数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id13" target="_blank" rel="noopener">注意事项</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id14" target="_blank" rel="noopener">Solidity 惯例</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id15" target="_blank" rel="noopener">独立汇编</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/assembly.html#id16" target="_blank" rel="noopener">汇编语法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html" target="_blank" rel="noopener">杂项</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#storage" target="_blank" rel="noopener">存储storage 中的状态变量储存结构</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#memory" target="_blank" rel="noopener">内存memory 中的存储结构</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#index-2" target="_blank" rel="noopener">调用数据存储结构</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#index-3" target="_blank" rel="noopener">内部机制 - 清理变量</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#index-4" target="_blank" rel="noopener">内部机制 - 优化器</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#index-5" target="_blank" rel="noopener">源代码映射</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#id6" target="_blank" rel="noopener">技巧和窍门</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#id7" target="_blank" rel="noopener">速查表</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#order" target="_blank" rel="noopener">操作符优先级</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#index-7" target="_blank" rel="noopener">全局变量</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#index-8" target="_blank" rel="noopener">函数可见性说明符</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#index-9" target="_blank" rel="noopener">修改器</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#id12" target="_blank" rel="noopener">保留字</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/miscellaneous.html#id13" target="_blank" rel="noopener">语法表</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html" target="_blank" rel="noopener">Solidity v0.5.0 重大更新</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#id2" target="_blank" rel="noopener">语义变化</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#id3" target="_blank" rel="noopener">语义及语法更改</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#id4" target="_blank" rel="noopener">准确性要求</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#id5" target="_blank" rel="noopener">弃用元素</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#json" target="_blank" rel="noopener">弃用命令行及 JSON 接口</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#id6" target="_blank" rel="noopener">构造函数变更</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#id7" target="_blank" rel="noopener">弃用函数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#id8" target="_blank" rel="noopener">弃用类型转换</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#id9" target="_blank" rel="noopener">弃用字面量及后缀</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#id10" target="_blank" rel="noopener">弃用变量</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#id11" target="_blank" rel="noopener">弃用语法</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#interoperability" target="_blank" rel="noopener">和老合约进行交互</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/050-breaking-changes.html#id13" target="_blank" rel="noopener">举例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/natspec-format.html" target="_blank" rel="noopener">注释描述规范</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/natspec-format.html#header-doc-example" target="_blank" rel="noopener">文档举例</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/natspec-format.html#header-tags" target="_blank" rel="noopener">标签</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/natspec-format.html#dynamic-expressions" target="_blank" rel="noopener">Dynamic expressions</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/natspec-format.html#inheritance-notes" target="_blank" rel="noopener">Inheritance Notes</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/natspec-format.html#header-output" target="_blank" rel="noopener">文档输出</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/natspec-format.html#header-user-doc" target="_blank" rel="noopener">用户文档</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/natspec-format.html#header-developer-doc" target="_blank" rel="noopener">开发者文档</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html" target="_blank" rel="noopener">安全考量</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#id2" target="_blank" rel="noopener">陷阱</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#id3" target="_blank" rel="noopener">私有信息和随机性</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#re-entance" target="_blank" rel="noopener">重入</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#gas" target="_blank" rel="noopener">gas 限制和循环</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#ether" target="_blank" rel="noopener">发送和接收 以太币Ether</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#id5" target="_blank" rel="noopener">调用栈深度</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#tx-origin" target="_blank" rel="noopener">tx.origin问题</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#underflow-overflow" target="_blank" rel="noopener">整型溢出问题</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#id7" target="_blank" rel="noopener">细枝末节</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#id8" target="_blank" rel="noopener">推荐做法</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#id9" target="_blank" rel="noopener">认真对待警告</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#id10" target="_blank" rel="noopener">限定 以太币Ether 的数量</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#id11" target="_blank" rel="noopener">保持合约简练且模块化</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#checks-effects-interactions" target="_blank" rel="noopener">使用“检查-生效-交互”（Checks-Effects-Interactions）模式</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#fail-safe" target="_blank" rel="noopener">包含故障-安全（Fail-Safe）模式</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/security-considerations.html#id12" target="_blank" rel="noopener">形式化验证</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/resources.html" target="_blank" rel="noopener">资源</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/resources.html#id2" target="_blank" rel="noopener">常用资源</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/resources.html#solidity-ide" target="_blank" rel="noopener">Solidity IDE及编辑器</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/resources.html#id6" target="_blank" rel="noopener">Solidity 工具</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/resources.html#id7" target="_blank" rel="noopener">第三方 Solidity 解析器</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/using-the-compiler.html" target="_blank" rel="noopener">使用编译器</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/using-the-compiler.html#commandline-compiler" target="_blank" rel="noopener">使用命令行编译器</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/using-the-compiler.html#json" target="_blank" rel="noopener">编译器输入输出JSON描述</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/using-the-compiler.html#id3" target="_blank" rel="noopener">输入说明</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/using-the-compiler.html#id4" target="_blank" rel="noopener">输出说明</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/using-the-compiler.html#id5" target="_blank" rel="noopener">错误类型</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/metadata.html" target="_blank" rel="noopener">合约的元数据</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/metadata.html#id2" target="_blank" rel="noopener">元数据哈希字节码的编码</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/metadata.html#natspec" target="_blank" rel="noopener">自动化接口生成和 以太坊标准说明格式natspec 的使用方法</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/metadata.html#id4" target="_blank" rel="noopener">源代码验证的使用方法</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html" target="_blank" rel="noopener">应用二进制接口Application Binary Interface(ABI) 说明</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html#id2" target="_blank" rel="noopener">基本设计</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html#function-selector" target="_blank" rel="noopener">函数选择器Function Selector</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html#id3" target="_blank" rel="noopener">参数编码</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html#id4" target="_blank" rel="noopener">类型</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html#id5" target="_blank" rel="noopener">编码的形式化说明</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html#id6" target="_blank" rel="noopener">函数选择器Function Selector 和参数编码</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html#id7" target="_blank" rel="noopener">例子</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html#id8" target="_blank" rel="noopener">动态类型的使用</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html#id9" target="_blank" rel="noopener">事件</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html#json" target="_blank" rel="noopener">JSON</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html#tuple" target="_blank" rel="noopener">处理 元组tuple 类型</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/abi-spec.html#abi-packed-mode" target="_blank" rel="noopener">非标准打包模式</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/yul.html" target="_blank" rel="noopener">Yul</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/yul.html#id2" target="_blank" rel="noopener">Yul 语言说明</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/yul.html#id3" target="_blank" rel="noopener">语法层面的限制</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/yul.html#id4" target="_blank" rel="noopener">作用域规则</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/yul.html#id5" target="_blank" rel="noopener">形式规范</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/yul.html#id6" target="_blank" rel="noopener">类型转换函数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/yul.html#id7" target="_blank" rel="noopener">低级函数</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/yul.html#id8" target="_blank" rel="noopener">后端</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/yul.html#evm" target="_blank" rel="noopener">后端: EVM</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/yul.html#evm-1-5" target="_blank" rel="noopener">后端: “EVM 1.5”</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/yul.html#ewasm" target="_blank" rel="noopener">后端: eWASM</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/yul.html#id9" target="_blank" rel="noopener">Yul 对象说明</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html" target="_blank" rel="noopener">编程风格指南</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id2" target="_blank" rel="noopener">概述</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id3" target="_blank" rel="noopener">代码结构</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id4" target="_blank" rel="noopener">缩进</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id5" target="_blank" rel="noopener">制表符或空格</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id6" target="_blank" rel="noopener">空行</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#maximum-line-length" target="_blank" rel="noopener">代码行的最大长度</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id8" target="_blank" rel="noopener">源文件编码格式</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#imports" target="_blank" rel="noopener">Imports 规范</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id9" target="_blank" rel="noopener">函数顺序</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id10" target="_blank" rel="noopener">表达式中的空格</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id11" target="_blank" rel="noopener">控制结构</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id12" target="_blank" rel="noopener">函数声明</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id13" target="_blank" rel="noopener">映射</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id14" target="_blank" rel="noopener">变量声明</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id15" target="_blank" rel="noopener">其他建议</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id16" target="_blank" rel="noopener">命名规范</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id17" target="_blank" rel="noopener">命名方式</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id18" target="_blank" rel="noopener">应避免的名称</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id19" target="_blank" rel="noopener">合约和库名称</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id20" target="_blank" rel="noopener">结构体名称</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id21" target="_blank" rel="noopener">事件名称</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id22" target="_blank" rel="noopener">函数名称</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id23" target="_blank" rel="noopener">函数参数命名</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id24" target="_blank" rel="noopener">局部变量和状态变量名称</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id25" target="_blank" rel="noopener">常量命名</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id26" target="_blank" rel="noopener">修饰符命名</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id27" target="_blank" rel="noopener">枚举变量命名</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#id28" target="_blank" rel="noopener">避免命名冲突</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/style-guide.html#natspec" target="_blank" rel="noopener">描述注释 NatSpec</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/common-patterns.html" target="_blank" rel="noopener">通用模式</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/common-patterns.html#withdrawal-pattern" target="_blank" rel="noopener">从合约中提款</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/common-patterns.html#index-1" target="_blank" rel="noopener">限制访问</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/common-patterns.html#index-3" target="_blank" rel="noopener">状态机</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/common-patterns.html#id5" target="_blank" rel="noopener">示例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/bugs.html" target="_blank" rel="noopener">已知bug列表</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contributing.html" target="_blank" rel="noopener">贡献方式</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/contributing.html#id2" target="_blank" rel="noopener">怎样报告问题</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contributing.html#pull-request" target="_blank" rel="noopener">Pull Request 的工作流</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contributing.html#id4" target="_blank" rel="noopener">运行编译器测试</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/contributing.html#id5" target="_blank" rel="noopener">编写和运行语法测试</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contributing.html#afl-fuzzer" target="_blank" rel="noopener">通过 AFL 运行 Fuzzer</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/contributing.html#whiskers" target="_blank" rel="noopener">Whiskers 模板系统</a></li>
+</ul>
+</li>
+<li><a href="https://learnblockchain.cn/docs/solidity/lll.html" target="_blank" rel="noopener">LLL</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/frequently-asked-questions.html" target="_blank" rel="noopener">常见问题</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/frequently-asked-questions.html#id2" target="_blank" rel="noopener">基本问题</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/frequently-asked-questions.html#id12" target="_blank" rel="noopener">高级问题</a><ul>
+<li><a href="https://learnblockchain.cn/docs/solidity/frequently-asked-questions.html#id13" target="_blank" rel="noopener">怎样才能在合约中获取一个随机数？（实施一份自动回款的博彩合约）</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/frequently-asked-questions.html#non-constant" target="_blank" rel="noopener">从另一份合约中的 non-constant 函数获取返回值</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/frequently-asked-questions.html#id16" target="_blank" rel="noopener">让合约在首次被挖出时就开始做些事情</a></li>
+<li><a href="https://learnblockchain.cn/docs/solidity/frequently-asked-questions.html#id17" target="_blank" rel="noopener">怎样才能创建二维数组？</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a href="https://learnblockchain.cn/" target="_blank" rel="noopener">深入浅出区块链</a> - 系统学习区块链，学区块链都在这里，打造最好的区块链技术博客。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/Solidity/" rel="tag"># Solidity</a>
+          
+            <a href="/tags/文档/" rel="tag"># 文档</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/08/binance-btc-security/" rel="next" title="币安交易所比特币被窃漏洞分析">
+                <i class="fa fa-chevron-left"></i> 币安交易所比特币被窃漏洞分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/14/eosdice-random1/" rel="prev" title="EOS DApp 随机数漏洞分析1 - EOSDice 随机数被预测">
+                EOS DApp 随机数漏洞分析1 - EOSDice 随机数被预测 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ClimbYang</p>
+              <div class="site-description motion-element" itemprop="description">记录学习编程的点滴</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">74</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/yp945" title="GitHub &rarr; https://github.com/yp945" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:pan107104@outlook.com" title="E-Mail &rarr; mailto:pan107104@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#翻译说明"><span class="nav-number">1.</span> <span class="nav-text">翻译说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solidity-语言简介-及-文档目录"><span class="nav-number">2.</span> <span class="nav-text">Solidity 语言简介 及 文档目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文档目录"><span class="nav-number">2.1.</span> <span class="nav-text">文档目录</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ClimbYang</span>
+
+  
+
+  
+</div>
+
+<div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过
+</span>
+</div>
+
+
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

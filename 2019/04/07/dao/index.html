@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="虽然 The DAO 攻击发生在2016年，但解除攻击的方案依然值得学习。">
+<meta name="keywords" content="攻击,DAO,安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="以太坊DAO攻击解决方案代码解析">
+<meta property="og:url" content="http://yoursite.com/2019/04/07/dao/index.html">
+<meta property="og:site_name" content="ClimbYang的记录">
+<meta property="og:description" content="虽然 The DAO 攻击发生在2016年，但解除攻击的方案依然值得学习。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-05T08:13:55.293Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="以太坊DAO攻击解决方案代码解析">
+<meta name="twitter:description" content="虽然 The DAO 攻击发生在2016年，但解除攻击的方案依然值得学习。">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ClimbYang的记录" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/04/07/dao/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>以太坊DAO攻击解决方案代码解析 | ClimbYang的记录</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+        <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ClimbYang的记录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">blockchain</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/07/dao/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ClimbYang">
+      <meta itemprop="description" content="记录学习编程的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ClimbYang的记录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">以太坊DAO攻击解决方案代码解析
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-07 19:41:25" itemprop="dateCreated datePublished" datetime="2019-04-07T19:41:25+08:00">2019-04-07</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-05 16:13:55" itemprop="dateModified" datetime="2019-07-05T16:13:55+08:00">2019-07-05</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/以太坊/" itemprop="url" rel="index"><span itemprop="name">以太坊</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+              <span title="本文字数">8.4k</span>
+            </span>
+          
+
+	  
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+              <span title="阅读时长">17 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>虽然 The DAO 攻击发生在2016年，但解除攻击的方案依然值得学习。</p>
+<a id="more"></a>
+
+<p>区块链本是去中心化架构，在<a href="https://learnblockchain.cn/2017/11/20/whatiseth/" target="_blank" rel="noopener">以太坊</a>首次遭遇严重黑客攻击智能合约事件时，采用的解决方案却破坏了去中心化理念。</p>
+<p>这里不讨论其是否违背区块链精神，本文重点介绍解决方案的技术实施细节。方案中涉及网络隔离技术和矿工共识投票技术。且只是从软件上处理，未破坏共识协议。解决方案的成功实施，为区块链分叉提供了实操经验，值得公链开发者学习。</p>
+<h2 id="什么是-The-DAO-攻击"><a href="#什么是-The-DAO-攻击" class="headerlink" title="什么是 The DAO 攻击"></a>什么是 The DAO 攻击</h2><p>简单地讲，在2016年4月30日开始，一个名为“The DAO”的初创团队，在以太坊上通过<a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" target="_blank" rel="noopener">智能合约</a>进行ICO众筹。28天时间，筹得1.5亿美元，成为历史上最大的众筹项目。</p>
+<p>THE DAO创始人之一Stephan TualTual在6月12日宣布，他们发现了软件中存在的“递归调用漏洞”问题。 不幸的是，在程序员修复这一漏洞及其他问题的期间，一个不知名的黑客开始利用这一途径收集THE DAO代币销售中所得的以太币。6月18日，黑客成功挖到超过360万个以太币，并投入到一个DAO子组织中，这个组织和THE DAO有着同样的结构。</p>
+<p>THE DAO持有近15%的以太币总数，因此THE DAO这次的问题对以太坊网络及其加密币都产生了负面影响。 </p>
+<p>6月17日，以太坊基金会的Vitalik Buterin更新一项重要报告，他表示，DAO正在遭到攻击，不过他已经研究出了解决方案：</p>
+<p>现在提出了软件分叉解决方案，通过这种软件分叉，任何调用代码或委托调用的交易——借助代码hash0x7278d050619a624f84f51987149ddb439cdaadfba5966f7cfaea7ad44340a4ba（也就是DAO和子DAO）来减少账户余额——都会视为无效…… </p>
+<p>最终因为社交的不同意见，最终以太坊分裂出支持继续维持原状的以太经典 ETC，同意软件分叉解决方案的在以太坊当前网络实施。</p>
+<blockquote>
+<p>以上内容整理自文章<a href="http://chainb.com/?P=Cont&id=1290" target="_blank" rel="noopener">The DAO 攻击</a>。</p>
+</blockquote>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>因为投资者已经将以太币投入了 The DAO 合约或者其子合约中，在攻击后无法立刻撤回。<br>需要让投资者快速撤回投资，且能封锁黑客转移资产。</p>
+<p>V神公布的解决方案是，在程序中植入转移合约以太币代码，让矿工选择是否支持分叉。在分叉点到达时则将 The DAO 和其子合约中的以太币转移到一个新的安全的可取款合约中。全部转移后，原投资者则可以直接从取款合约中快速的拿回以太币。取款合约在讨论方案时，已经部署到主网。合约地址是<a href="https://[etherscan](https://learnblockchain.cn/docs/etherscan/).io/address/0xbf4ed7b27f1d666546e30d74d50d173d20bca754" target="_blank" rel="noopener">0xbf4ed7b27f1d666546e30d74d50d173d20bca754</a>。</p>
+<p>取款合约代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// Deployed on mainnet at 0xbf4ed7b27f1d666546e30d74d50d173d20bca754</span><br><span class="line"></span><br><span class="line">contract DAO &#123;</span><br><span class="line">    function balanceOf(address addr) returns (uint);</span><br><span class="line">    function transferFrom(address from, address to, uint balance) returns (bool);</span><br><span class="line">    uint public totalSupply;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">contract WithdrawDAO &#123;</span><br><span class="line">    DAO constant public mainDAO = DAO(0xbb9bc244d798123fde783fcc1c72d3bb8c189413);</span><br><span class="line">    address public trustee = 0xda4a4626d3e16e094de3225a751aab7128e96526;</span><br><span class="line"></span><br><span class="line">    function withdraw()&#123;</span><br><span class="line">        uint balance = mainDAO.balanceOf(msg.sender);</span><br><span class="line"></span><br><span class="line">        if (!mainDAO.transferFrom(msg.sender, this, balance) || !msg.sender.send(balance))</span><br><span class="line">            throw;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function trusteeWithdraw() &#123;</span><br><span class="line">        trustee.send((this.balance + mainDAO.balanceOf(this)) - mainDAO.totalSupply());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同时，为照顾两个阵营，软件提供硬分叉开关，选择权则交给社区。支持分叉的矿工会在X区块到X+9区块出块时，在区块<code>extradata</code>字段中写入<code>0x64616f2d686172642d666f726b</code>（“dao-hard-fork”的十六进制数）。从分叉点开始，如果连续10个区块均有硬分叉投票，则表示硬分叉成功。</p>
+<h2 id="矿工投票与区块头校验"><a href="#矿工投票与区块头校验" class="headerlink" title="矿工投票与区块头校验"></a>矿工投票与区块头校验</h2><p>首先，选择权交给社区。因此是否同意硬分叉，可通过参数进行选择。但是在当前版本中，社区已完成硬分叉，所以已移除开关类代码。</p>
+<p>当前，主网已默认配置支持DAO分叉，并设定了开始硬分叉高度 1920000，代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// params/config.go:38</span></span><br><span class="line">MainnetChainConfig = &amp;ChainConfig&#123; </span><br><span class="line">		DAOForkBlock:        big.NewInt(<span class="number">1920000</span>),</span><br><span class="line">		DAOForkSupport:      <span class="literal">true</span>, </span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果矿工支持分叉，则需要在从高度 192000 到 192009，在区块头 <code>extradata</code> 写入指定信息 0x64616f2d686172642d666f726b ，以表示支持硬分叉。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//params/dao.go:28</span></span><br><span class="line"><span class="keyword">var</span> DAOForkBlockExtra = common.FromHex(<span class="string">"0x64616f2d686172642d666f726b"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// params/dao.go:32</span></span><br><span class="line"><span class="keyword">var</span> DAOForkExtraRange = big.NewInt(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+
+<p>支持硬分叉时矿工写入固定的投票信息：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// miner/worker.go:857</span></span><br><span class="line"><span class="keyword">if</span> daoBlock := w.config.DAOForkBlock; daoBlock != <span class="literal">nil</span> &#123; </span><br><span class="line">    <span class="comment">// 检查是否区块是否仍然属于分叉处理期间：[DAOForkBlock,DAOForkBlock+10)</span></span><br><span class="line">    limit := <span class="built_in">new</span>(big.Int).Add(daoBlock, params.DAOForkExtraRange)</span><br><span class="line">    <span class="keyword">if</span> header.Number.Cmp(daoBlock) &gt;= <span class="number">0</span> &amp;&amp; header.Number.Cmp(limit) &lt; <span class="number">0</span> &#123;</span><br><span class="line">        <span class="comment">// 如果支持分叉，则覆盖Extra，写入保留的投票信息</span></span><br><span class="line">        <span class="keyword">if</span> w.config.DAOForkSupport &#123;</span><br><span class="line">        header.Extra = common.CopyBytes(params.DAOForkBlockExtra)</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> bytes.Equal(header.Extra, params.DAOForkBlockExtra) &#123;</span><br><span class="line">            <span class="comment">// 如果矿工反对，则不能让其使用保留信息，覆盖它。</span></span><br><span class="line">        header.Extra = []<span class="keyword">byte</span>&#123;&#125;  </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>需要连续10个区块的原因是为了防止矿工使用保留信息污染非分叉块和方便轻节点安全同步数据。<br>同时，所有节点在校验区块头时，必须安全地校验特殊字段信息，校验区块是否属于正确的分叉上。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// consensus/ethash/consensus.go:294 </span></span><br><span class="line"><span class="keyword">if</span> err := misc.VerifyDAOHeaderExtraData(chain.Config(), header); err != <span class="literal">nil</span> &#123; <span class="comment">//❶</span></span><br><span class="line">	<span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// consensus/misc/dao.go:47 </span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">VerifyDAOHeaderExtraData</span><span class="params">(config *params.ChainConfig, header *types.Header)</span> <span class="title">error</span></span> &#123; </span><br><span class="line">	<span class="keyword">if</span> config.DAOForkBlock == <span class="literal">nil</span> &#123;<span class="comment">//❷</span></span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	limit := <span class="built_in">new</span>(big.Int).Add(config.DAOForkBlock, params.DAOForkExtraRange) <span class="comment">//❸</span></span><br><span class="line">	<span class="keyword">if</span> header.Number.Cmp(config.DAOForkBlock) &lt; <span class="number">0</span> || header.Number.Cmp(limit) &gt;= <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> config.DAOForkSupport &#123;</span><br><span class="line">		<span class="keyword">if</span> !bytes.Equal(header.Extra, params.DAOForkBlockExtra) &#123; <span class="comment">//❹</span></span><br><span class="line">			<span class="keyword">return</span> ErrBadProDAOExtra</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> bytes.Equal(header.Extra, params.DAOForkBlockExtra) &#123;<span class="comment">//❺</span></span><br><span class="line">			<span class="keyword">return</span> ErrBadNoDAOExtra</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// All ok, header has the same extra-data we expect</span></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>❶ 在校验区块头时增加 DAO 区块头识别校验。</li>
+<li>❷ 如果节点未设置分叉点，则不校验。</li>
+<li>❸ 确保只需在 DAO 分叉点的10个区块上校验。</li>
+<li>❹ 如果节点允许分叉，则要求区块头 Extra 必须符合要求。</li>
+<li>❺ 当然，如果节点不允许分叉，则也不能在区块头中加入非分叉链的 Extra 特殊信息。</li>
+</ul>
+<p>这种 <code>config.DAOForkBlock</code> 开关，类似于互联网公司产品新功能灰度上线的功能开关。在区块链上，可以先实现功能代码逻辑。至于何时启用，则可以在社区、开发者讨论后，确定最终的开启时间。当然区块链上区块高度等价于时间戳，比如 DAO 分叉点 1920000 也是讨论后敲定。</p>
+<h3 id="如何分离网络？"><a href="#如何分离网络？" class="headerlink" title="如何分离网络？"></a>如何分离网络？</h3><p>如果分叉后不能快速地分离网络，会导致节点出现奇奇怪怪的问题。长远来说，为针对以后可能出现的分叉，应设计一种通用解决方案，已降低代码噪音。否则，你会发现代码中到处充斥着一些各种梗。但时间又非常紧急，这次的 The DAO 分叉处理是通过特定代码拦截实现。</p>
+<p>在我看来，区块链项目不同于其他传统软件，一旦发现严重BUG是非常致命的。在上线后的代码修改，应保持尽可能少和充分测试。非常同意 the dao 的代码处理方式。不必为以后可能的分叉，而做出觉得“很棒”的功能，务实地解决问题才是正道。</p>
+<p>不应该让节点同时成为两个阵营的中继点，应分离出两个网络，以让其互不干预。The DAO 硬分叉的处理方式是:节点连接握手后，向对方请求分叉区块头信息。在15秒必须响应，否则断开连接。</p>
+<p>代码实现是在<code>eth/handler.go</code>文件中，在消息层进行拦截处理。节点握手后，开始15秒倒计时，一旦倒计时结束，则断开连接。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// eth/handler.go:300</span></span><br><span class="line">	p.forkDrop = time.AfterFunc(daoChallengeTimeout, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		p.Log().Debug(<span class="string">"Timed out DAO fork-check, dropping"</span>)</span><br><span class="line">		pm.removePeer(p.id)</span><br><span class="line">	&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>在倒计时前，需要向对方索要区块头信息，以进行分叉校验。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// eth/handler.go:297</span></span><br><span class="line">	<span class="keyword">if</span> err := p.RequestHeadersByNumber(daoBlock.Uint64(), <span class="number">1</span>, <span class="number">0</span>, <span class="literal">false</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line"><span class="string">``</span><span class="string">` </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">此时，对方在接收到请求时，如果存在此区块头则返回，否则忽略。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span><span class="keyword">go</span></span><br><span class="line"><span class="comment">// eth/handler.go:348</span></span><br><span class="line">	<span class="keyword">case</span> msg.Code == GetBlockHeadersMsg:  </span><br><span class="line">		<span class="keyword">var</span> query getBlockHeadersData</span><br><span class="line">		<span class="keyword">if</span> err := msg.Decode(&amp;query); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> errResp(ErrDecode, <span class="string">"%v: %v"</span>, msg, err)</span><br><span class="line">		&#125;</span><br><span class="line">		hashMode := query.Origin.Hash != (common.Hash&#123;&#125;)</span><br><span class="line">		first := <span class="literal">true</span></span><br><span class="line">		maxNonCanonical := <span class="keyword">uint64</span>(<span class="number">100</span>) </span><br><span class="line">		<span class="keyword">var</span> (</span><br><span class="line">			bytes   common.StorageSize</span><br><span class="line">			headers []*types.Header</span><br><span class="line">			unknown <span class="keyword">bool</span></span><br><span class="line">		)</span><br><span class="line">		<span class="comment">//省略一部分 ...</span></span><br><span class="line">		<span class="keyword">return</span> p.SendBlockHeaders(headers)</span><br></pre></td></tr></table></figure>
+
+<p>这样，有几种情况出现。根据不同情况分别处理：</p>
+<ol>
+<li>有返回区块头：</li>
+</ol>
+<p>如果返回的区块头不一致，则校验不通过，等待倒计时结束。如果区块头一致，则根据前面提到的校验分叉区块方式检查。校验失败，此直接断开连接，说明已经属于不同分叉。校验通过，则关闭倒计时，完成校验。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// eth/handler.go:465</span></span><br><span class="line"><span class="keyword">if</span> p.forkDrop != <span class="literal">nil</span> &amp;&amp; pm.chainconfig.DAOForkBlock.Cmp(headers[<span class="number">0</span>].Number) == <span class="number">0</span> &#123; </span><br><span class="line">				p.forkDrop.Stop()</span><br><span class="line">				p.forkDrop = <span class="literal">nil</span></span><br><span class="line"> </span><br><span class="line">				<span class="keyword">if</span> err := misc.VerifyDAOHeaderExtraData(pm.chainconfig, headers[<span class="number">0</span>]); err != <span class="literal">nil</span> &#123;</span><br><span class="line">					p.Log().Debug(<span class="string">"Verified to be on the other side of the DAO fork, dropping"</span>)</span><br><span class="line">					<span class="keyword">return</span> err</span><br><span class="line">				&#125;</span><br><span class="line">				p.Log().Debug(<span class="string">"Verified to be on the same side of the DAO fork"</span>)</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">			&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>没有返回区块头：</li>
+</ol>
+<p>如果自己也没有到达分叉高度，则不校验，假定双方在同一个网络。但我自己已经到达分叉高度，则考虑对方的TD是否高于我的分叉块。如果是，则包容，暂时认为属于同一网络。否则，则校验失败。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// eth/handler.go:442 </span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">len</span>(headers) == <span class="number">0</span> &amp;&amp; p.forkDrop != <span class="literal">nil</span> &#123; </span><br><span class="line">	verifyDAO := <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> daoHeader := pm.blockchain.GetHeaderByNumber(pm.chainconfig.DAOForkBlock.Uint64()); daoHeader != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> _, td := p.Head(); td.Cmp(pm.blockchain.GetTd(daoHeader.Hash(), daoHeader.Number.Uint64())) &gt;= <span class="number">0</span> &#123;</span><br><span class="line">			verifyDAO = <span class="literal">false</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line">	<span class="keyword">if</span> verifyDAO &#123;</span><br><span class="line">		p.Log().Debug(<span class="string">"Seems to be on the same side of the DAO fork"</span>)</span><br><span class="line">		p.forkDrop.Stop()</span><br><span class="line">		p.forkDrop = <span class="literal">nil</span></span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="转移资产"><a href="#转移资产" class="headerlink" title="转移资产"></a>转移资产</h3><p>上述所做的一切均为安全、稳定的硬分叉，隔离两个网络。硬分叉的目的是，以人为介入的方式拦截攻击者资产。一旦到达分叉点，则立即激活资产转移操作。首先，矿工在挖到分叉点时，需执行转移操作：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// miner/worker.go:877</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(w *worker)</span> <span class="title">commitNewWork</span><span class="params">(interrupt *<span class="keyword">int32</span>, noempty <span class="keyword">bool</span>, timestamp <span class="keyword">int64</span>)</span></span> &#123;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line"><span class="comment">// Create the current work task and check any fork transitions needed</span></span><br><span class="line">	env := w.current</span><br><span class="line">	<span class="keyword">if</span> w.config.DAOForkSupport &amp;&amp; w.config.DAOForkBlock != <span class="literal">nil</span> &amp;&amp; w.config.DAOForkBlock.Cmp(header.Number) == <span class="number">0</span> &#123;</span><br><span class="line">		misc.ApplyDAOHardFork(env.state)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其次，任何节点在接收区块，进行本地处理校验时同样需要在分叉点执行：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// core/state_processor.go:66</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *StateProcessor)</span> <span class="title">Process</span><span class="params">(block *types.Block, statedb *state.StateDB, cfg vm.Config)</span> <span class="params">(types.Receipts, []*types.Log, <span class="keyword">uint64</span>, error)</span></span> &#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">	<span class="comment">// Mutate the block and state according to any hard-fork specs</span></span><br><span class="line">	<span class="keyword">if</span> p.config.DAOForkSupport &amp;&amp; p.config.DAOForkBlock != <span class="literal">nil</span> &amp;&amp; p.config.DAOForkBlock.Cmp(block.Number()) == <span class="number">0</span> &#123;</span><br><span class="line">		misc.ApplyDAOHardFork(statedb)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>转移资金也是通过取款合约处理。将The DAO 合约包括子合约的资金，全部转移到新合约中。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ApplyDAOHardFork</span><span class="params">(statedb *state.StateDB)</span></span> &#123;</span><br><span class="line">	<span class="comment">// Retrieve the contract to refund balances into</span></span><br><span class="line">	<span class="keyword">if</span> !statedb.Exist(params.DAORefundContract) &#123;</span><br><span class="line">		statedb.CreateAccount(params.DAORefundContract)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Move every DAO account and extra-balance account funds into the refund contract</span></span><br><span class="line">	<span class="keyword">for</span> _, addr := <span class="keyword">range</span> params.DAODrainList() &#123;</span><br><span class="line">		statedb.AddBalance(params.DAORefundContract, statedb.GetBalance(addr))</span><br><span class="line">		statedb.SetBalance(addr, <span class="built_in">new</span>(big.Int))</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此，合约资金已全部强制转移到新合约。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="http://eips.ethereum.org/EIPS/eip-779" target="_blank" rel="noopener">EIP 779: Hardfork Meta: DAO Fork</a></li>
+<li><a href="https://blog.slock.it/hard-fork-specification-24b889e70703" target="_blank" rel="noopener">Hard Fork Specification</a></li>
+<li><a href="https://github.com/ethereum/go-ethereum/pull/2814" target="_blank" rel="noopener">PR#2814-finalize the DAO fork</a></li>
+</ol>
+<p><a href="https://learnblockchain.cn/" target="_blank" rel="noopener">深入浅出区块链</a> - 系统学习区块链，学区块链都在这里，打造最好的区块链技术博客。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/攻击/" rel="tag"># 攻击</a>
+          
+            <a href="/tags/DAO/" rel="tag"># DAO</a>
+          
+            <a href="/tags/安全/" rel="tag"># 安全</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/04/eth-wallet-dev-5/" rel="next" title="如何开发一款以太坊安卓钱包系列5 - 发送转账交易">
+                <i class="fa fa-chevron-left"></i> 如何开发一款以太坊安卓钱包系列5 - 发送转账交易
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/08/genesis/" rel="prev" title="以太坊创世区块与链配置载入分析">
+                以太坊创世区块与链配置载入分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ClimbYang</p>
+              <div class="site-description motion-element" itemprop="description">记录学习编程的点滴</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">74</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/yp945" title="GitHub &rarr; https://github.com/yp945" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:pan107104@outlook.com" title="E-Mail &rarr; mailto:pan107104@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-The-DAO-攻击"><span class="nav-number">1.</span> <span class="nav-text">什么是 The DAO 攻击</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方案"><span class="nav-number">2.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矿工投票与区块头校验"><span class="nav-number">3.</span> <span class="nav-text">矿工投票与区块头校验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何分离网络？"><span class="nav-number">3.1.</span> <span class="nav-text">如何分离网络？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转移资产"><span class="nav-number">3.2.</span> <span class="nav-text">转移资产</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ClimbYang</span>
+
+  
+
+  
+</div>
+
+<div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过
+</span>
+</div>
+
+
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="这是如何开发以太坊安卓钱包系列第5篇，利用钱包对交易进行本地签名，然后发送到以太坊网络。">
+<meta name="keywords" content="钱包,以太坊,Web3j">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何开发一款以太坊安卓钱包系列5 - 发送转账交易">
+<meta property="og:url" content="http://yoursite.com/2019/04/04/eth-wallet-dev-5/index.html">
+<meta property="og:site_name" content="ClimbYang的记录">
+<meta property="og:description" content="这是如何开发以太坊安卓钱包系列第5篇，利用钱包对交易进行本地签名，然后发送到以太坊网络。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/15543662438500.jpg!wl/scale/40%">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/15543883352378.jpg!wl/scale/40%">
+<meta property="og:updated_time" content="2019-07-05T08:13:55.313Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何开发一款以太坊安卓钱包系列5 - 发送转账交易">
+<meta name="twitter:description" content="这是如何开发以太坊安卓钱包系列第5篇，利用钱包对交易进行本地签名，然后发送到以太坊网络。">
+<meta name="twitter:image" content="https://img.learnblockchain.cn/2019/15543662438500.jpg!wl/scale/40%">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ClimbYang的记录" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/04/04/eth-wallet-dev-5/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>如何开发一款以太坊安卓钱包系列5 - 发送转账交易 | ClimbYang的记录</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+        <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ClimbYang的记录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">blockchain</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/04/eth-wallet-dev-5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ClimbYang">
+      <meta itemprop="description" content="记录学习编程的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ClimbYang的记录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">如何开发一款以太坊安卓钱包系列5 - 发送转账交易
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-04 14:34:14" itemprop="dateCreated datePublished" datetime="2019-04-04T14:34:14+08:00">2019-04-04</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-05 16:13:55" itemprop="dateModified" datetime="2019-07-05T16:13:55+08:00">2019-07-05</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/以太坊/" itemprop="url" rel="index"><span itemprop="name">以太坊</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/以太坊/钱包/" itemprop="url" rel="index"><span itemprop="name">钱包</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+              <span title="本文字数">7.7k</span>
+            </span>
+          
+
+	  
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+              <span title="阅读时长">15 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这是如何<a href="https://learnblockchain.cn/2019/04/11/wallet-dev-guide/" target="_blank" rel="noopener">开发以太坊安卓钱包系列</a>第5篇，利用钱包对交易进行本地签名，然后发送到以太坊网络。</p>
+<a id="more"></a>
+
+<h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p>发送一个交易， 逻辑上会包含三个步骤：</p>
+<ol>
+<li>构造交易对象；</li>
+<li>对交易进行签名；</li>
+<li>把签名后的交易序列化后发送到网络节点。</li>
+</ol>
+<p>第 2 3步，web3j 提供的API 几句代码就可以解决，关键第 1 步构造交易对象，我们来逐步分解。</p>
+<h2 id="一个交易长什么样"><a href="#一个交易长什么样" class="headerlink" title="一个交易长什么样"></a>一个交易长什么样</h2><p>一个交易的结构如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RawTransaction</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String to;</span><br><span class="line">    <span class="keyword">private</span> BigInteger value;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> BigInteger gasLimit;    </span><br><span class="line">    <span class="keyword">private</span> BigInteger gasPrice;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> BigInteger nonce;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String data;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>发起交易的时候，就是需要填充<strong>每一个字段</strong>，构建这样一个交易结构，每个字段含义如下：</p>
+<ul>
+<li><code>to</code> : 用户要转账的目标地址；</li>
+<li><code>value</code>: 转账的金额；</li>
+<li><code>gasLimit</code>: 表示用户愿意为交易准备的（计算和存储空间）工作量；</li>
+<li><code>gasPrice</code>: 交易发起者愿意支付的<strong>单位工作量</strong>费用，矿工在选择交易的时候，是按照<code>gasPrice</code>进行排序，先服务高出价者，因此如果出价过低会导致交易迟迟不能打包确认，出价过高则费用较大；</li>
+</ul>
+<blockquote>
+<p>Gas是<a href="https://learnblockchain.cn/2017/11/20/whatiseth/" target="_blank" rel="noopener">以太坊</a>的工作计费机制，是交易者给矿工打包的一笔<strong>预算</strong>，预算= gasLimit * gasPrice， 可以类比为请货车的运费：公里数 * 每公里单价。</p>
+</blockquote>
+<ul>
+<li><p><code>nonce</code>: 交易序列号， 它可以用来防止重放攻击，如果没有nonce的活，同一笔交易就可以多次广播。同样的道理，如果遇到一个交易很久没有打包，可以使用相同的交易nonce序列号， 用更高的gasPrice 重发这笔交易；</p>
+</li>
+<li><p><code>data</code>: 交易的附加的消息，对于代币Token转账，则data就是调用函数的ABI编码数据，参考：<a href="https://learnblockchain.cn/2018/08/09/understand-abi/" target="_blank" rel="noopener">如何理解以太坊ABI</a></p>
+</li>
+</ul>
+<blockquote>
+<p>这个结构中没有<code>from</code>地址 ，是因为在对交易用私钥签名后，可以推倒出用户地址。</p>
+</blockquote>
+<h2 id="交易界面"><a href="#交易界面" class="headerlink" title="交易界面"></a>交易界面</h2><p>用户在App界面通过以下界面来发起一个交易：<br><img src="https://img.learnblockchain.cn/2019/15543662438500.jpg!wl/scale/40%" alt="发起一个交易"></p>
+<p>这个界面对应的<a href="https://github.com/xilibi2003/Upchain-wallet" target="_blank" rel="noopener">代码</a>是<code>SendActivity.java</code>，构造交易目标地址和金额可以直接从界面获得。</p>
+<h2 id="设置-Gas"><a href="#设置-Gas" class="headerlink" title="设置 Gas"></a>设置 Gas</h2><p>如果 <a href="https://learnblockchain.cn/2019/06/11/gas-mean/" target="_blank" rel="noopener">Gas</a> 设置丢给用户，从体验上说有点说不过去，因此我们给用户一些推荐值。</p>
+<h3 id="Gas-Price"><a href="#Gas-Price" class="headerlink" title="Gas Price"></a>Gas Price</h3><p>先说说gas price， <strong>gas price</strong> 是一个竞争值， 一个矿工能做的工作量基本是固定的，因此他总是会挑给价最高的，如果一个时间段内，提交的交易数量很多，价格也会随之水涨船高，如果交易少，价格就会下降。</p>
+<p>那么设置一个合理的价格就显得很重要，怎么恰到好处设置一个不至于浪费又不用等待长时间的gas price呢？</p>
+<p>幸运的是web3 提供了一个接口获取最近区块的gas price，因此可以这个作为推荐值。</p>
+<blockquote>
+<p>也有一些第三方提供的预测gas price的接口，如：<a href="https://www.etherchain.org/tools/gasPriceOracle" target="_blank" rel="noopener">gasPriceOracle</a> 、 <a href="https://ethgasstation.info/json/ethgasAPI.json" target="_blank" rel="noopener">ethgasAPI</a>、 <a href="https://etherscan.io/gastracker" target="_blank" rel="noopener">etherscan gastracker</a>，大家可自行选择。</p>
+</blockquote>
+<p>获取Gas设置，<a href="https://github.com/xilibi2003/Upchain-wallet" target="_blank" rel="noopener">代码</a>中提供了一个专门的类<code>FetchGasSettingsInteract</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FetchGasSettingsInteract</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> MutableLiveData&lt;BigInteger&gt; gasPrice = <span class="keyword">new</span> MutableLiveData&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> BigInteger cachedGasPrice;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FetchGasSettingsInteract</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        gasSettingsDisposable = Observable.interval(<span class="number">0</span>, <span class="number">60</span>, TimeUnit.SECONDS)</span></span></span><br><span class="line"><span class="function">                .<span class="title">doOnNext</span><span class="params">(l -&gt;fetchGasPriceByWeb3()</span></span></span><br><span class="line"><span class="function">                ).<span class="title">subscribe</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">fetchGasPriceByWeb3</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Web3j web3j = Web3j.build(rpcServerUrl));</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            EthGasPrice price = web3j.ethGasPrice().send();</span><br><span class="line">            <span class="keyword">if</span> (price.getGasPrice().compareTo(BalanceUtils.gweiToWei(BigDecimal.ONE)) &gt;= <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                cachedGasPrice = price.getGasPrice();</span><br><span class="line">                gasPrice.postValue(cachedGasPrice);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">            <span class="comment">// silently</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> MutableLiveData&lt;BigInteger&gt; <span class="title">gasPriceUpdate</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> gasPrice;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>FetchGasSettingsInteract 类中<code>gasPrice</code>是一个可以订阅的<code>LiveData</code>数据，<code>fetchGasPriceByWeb3</code>函数用于获取价格，在构造函数中使用了Observable.interval来开启一个间隔一分钟的循环任务，即每分钟去取一下最新的价格。</p>
+<h3 id="Gas-Limit"><a href="#Gas-Limit" class="headerlink" title="Gas Limit"></a>Gas Limit</h3><p>Gas Limit用来确定工作量，不像Gas Price 谁时间的变化而浮动，工作量任务确定后，这个值就是固定的，如一个转账到普通的交易，工作量中是<code>21000</code>。</p>
+<p>对于<a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" target="_blank" rel="noopener">智能合约</a>交易，gasLimit则根据执行的任务而变化，如果设定的不够，会发生<em>out-of-gas</em> 错误，交易就不会打包上链，如果设定的过高，多余的就会退回交易发起者，这也是为什么我把这个费用称为预算的原因。</p>
+<p>有些人会认为直接设置高一点的值，反正会退回，但如果合约执行出错，就会吃掉所有的gas，对于<a href="https://learnblockchain.cn/2018/01/12/create_token/" target="_blank" rel="noopener">ERC20</a>转账，一般推荐设置的值为<code>90000</code>， 如果是运行非标准的智能合约，如使用DAPP，可以使用<code>ethEstimateGas</code> 函数进行预测。</p>
+<blockquote>
+<p>在钱包中运行DAPP，也是钱包的一项重要功能，我会在<a href="https://xiaozhuanlan.com/blockchaincore" target="_blank" rel="noopener">小专栏</a>进行介绍。</p>
+</blockquote>
+<p>这里使用推荐默认值，在FetchGasSettingsInteract加入方法：</p>
+<figure class="highlight java"><figcaption><span>FetchGasSettingsInteract.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> Single&lt;GasSettings&gt; <span class="title">fetch</span><span class="params">(ConfirmationType type)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Single.fromCallable( () -&gt; &#123;</span><br><span class="line">        BigInteger gasLimit;</span><br><span class="line">        <span class="keyword">if</span> (type == ConfirmationType.ETH) &#123;</span><br><span class="line">            gasLimit = <span class="keyword">new</span> BigInteger(<span class="number">21000</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type == ConfirmationType.ERC20) &#123;</span><br><span class="line">            gasLimit = <span class="keyword">new</span> BigInteger(<span class="number">21000</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;   </span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> GasSettings(cachedGasPrice, gasLimit);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为了避免 SendActivity（UI） 与数据的耦合使用了<code>ConfirmationViewModel</code>， <code>ConfirmationViewModel</code> 中保留了一个 <code>FetchGasSettingsInteract</code> 对象，界面提供推荐的gas的代码逻辑调用流程是这样：</p>
+<pre class="mermaid" style="text-align: center;">
+            sequenceDiagram
+            Title: 获取Gas 过程
+SendActivity->ConfirmationViewModel: prepare
+ConfirmationViewModel->>FetchGasSettingsInteract: gasPriceUpdate
+loop 获取最新价格
+    FetchGasSettingsInteract->>FetchGasSettingsInteract: fetchGasPriceByWeb3
+end
+
+FetchGasSettingsInteract-->>ConfirmationViewModel: onGasPrice
+ConfirmationViewModel->>FetchGasSettingsInteract: fetch
+FetchGasSettingsInteract->>FetchGasSettingsInteract: fetch
+FetchGasSettingsInteract-->>ConfirmationViewModel: onGasSettings
+ConfirmationViewModel-->>SendActivity: onGasSettings
+          </pre>
+
+
+<p>其中虚线部分是数据订阅回调，在SendActivity拿到GasSettings就可以进行展示。</p>
+<p>代码调用代码逻辑，大家最好把代码<a href="https://github.com/xilibi2003/Upchain-wallet" target="_blank" rel="noopener">https://github.com/xilibi2003/Upchain-wallet</a> 克隆到本地跟一下。</p>
+<h2 id="确认交易数据"><a href="#确认交易数据" class="headerlink" title="确认交易数据"></a>确认交易数据</h2><p>用户在没有填写收款地址、发送金额以及调整好Gas（可选），在发送交易之前，一般需要用户再次确认下交易详情，使用下面这个对话框：</p>
+<p><img src="https://img.learnblockchain.cn/2019/15543883352378.jpg!wl/scale/40%" alt="确认交易详情图"></p>
+<p>代码中使用的一个自定义的ConfirmTransactionView来展示这个信息，UI部分的代码就不贴了。</p>
+<p>在用户确认无误之后，点击确认，用户输入<strong>密码</strong>之后，就可以正式发起交易了。</p>
+<h2 id="获取nonce"><a href="#获取nonce" class="headerlink" title="获取nonce"></a>获取nonce</h2><p>细心的同学可能会发现，现在构造交易结构还差<code>nonce</code>，web3j提供了相应的API，获取的逻辑在EthereumNetworkRepository类中，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Single&lt;BigInteger&gt; <span class="title">getLastTransactionNonce</span><span class="params">(Web3j web3j, String walletAddress)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Single.fromCallable(() -&gt; &#123;</span><br><span class="line">        EthGetTransactionCount ethGetTransactionCount = web3j</span><br><span class="line">                .ethGetTransactionCount(walletAddress, DefaultBlockParameterName.PENDING)</span><br><span class="line">                .send();</span><br><span class="line">        <span class="keyword">return</span> ethGetTransactionCount.getTransactionCount();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="发起交易"><a href="#发起交易" class="headerlink" title="发起交易"></a>发起交易</h2><p>完整的交易流程调用序列图如下：</p>
+<pre class="mermaid" style="text-align: center;">
+            sequenceDiagram
+            Title: 用户发起交易调用
+Note left of SendActivity: 用户点击发送
+SendActivity->ConfirmationViewModel: createTransaction
+ConfirmationViewModel->>CreateTransactionInteract: createEthTransaction
+CreateTransactionInteract->>EthereumNetworkRepository: getLastTransactionNonce
+CreateTransactionInteract->>CreateTransactionInteract: createRawTransaction
+CreateTransactionInteract->>CreateTransactionInteract: signMessage
+CreateTransactionInteract->>CreateTransactionInteract: ethSendRawTransaction
+CreateTransactionInteract-->>ConfirmationViewModel: onCreateTransaction
+ConfirmationViewModel-->>SendActivity:onTransaction
+          </pre>
+
+
+
+<p>交易主要在<code>createEthTransaction</code>函数完成，逻辑有：</p>
+<ol>
+<li>获取交易nonce</li>
+<li>使用nonce, gasPrice, gasLimit, to, amount 构造一个原始交易</li>
+<li>使用 密码 + keystore 对原始交易进行签名</li>
+<li>发送交易， 把txHash 封装为一个可回调的数据</li>
+</ol>
+<p><code>createEthTransaction</code>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Single&lt;String&gt;  <span class="title">createEthTransaction</span><span class="params">(ETHWallet from,  String to,</span></span></span><br><span class="line"><span class="function"><span class="params">    BigInteger amount,</span></span></span><br><span class="line"><span class="function"><span class="params">    BigInteger gasPrice, BigInteger gasLimit,</span></span></span><br><span class="line"><span class="function"><span class="params">    String password)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Web3j web3j = Web3j.build(rpcServerUrl));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> networkRepository.getLastTransactionNonce(web3j, from.address)</span><br><span class="line">            .flatMap(nonce -&gt; Single.fromCallable( () -&gt; &#123;</span><br><span class="line"></span><br><span class="line">        Credentials credentials = WalletUtils.loadCredentials(password,  keystorePath);</span><br><span class="line">        RawTransaction rawTransaction = RawTransaction.createEtherTransaction(nonce, gasPrice, gasLimit, to, amount);</span><br><span class="line">        <span class="keyword">byte</span>[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);</span><br><span class="line"></span><br><span class="line">        String hexValue = Numeric.toHexString(signedMessage);</span><br><span class="line">        EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ethSendTransaction.getTransactionHash();</span><br><span class="line"></span><br><span class="line">    &#125; ).subscribeOn(Schedulers.computation())</span><br><span class="line">                    .observeOn(AndroidSchedulers.mainThread()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Token-转账交易"><a href="#Token-转账交易" class="headerlink" title="Token 转账交易"></a>Token 转账交易</h3><p>Token 转账交易部分，请订阅我的<a href="https://xiaozhuanlan.com/blockchaincore" target="_blank" rel="noopener">小专栏</a>。</p>
+<div style="display: none">
+
+<p>对于Token 转账交易，有两点需要注意：</p>
+<ol>
+<li>交易的目标地址（即交易字段的<code>to</code>字段）其实不是用户填写的收款人钱包地址，目标地址是Token 合约地址。</li>
+<li>需要把对转账函数transfer的调用转化为交易的附加数据<code>data</code>。</li>
+</ol>
+<p>转化为交易的附加数据的方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">createTokenTransferData</span><span class="params">(String to, BigInteger tokenAmount)</span> </span>&#123;</span><br><span class="line">    List&lt;Type&gt; params = Arrays.&lt;Type&gt;asList(<span class="keyword">new</span> Address(to), <span class="keyword">new</span> Uint256(tokenAmount));</span><br><span class="line"></span><br><span class="line">    List&lt;TypeReference&lt;?&gt;&gt; returnTypes = Arrays.&lt;TypeReference&lt;?&gt;&gt;asList(<span class="keyword">new</span> TypeReference&lt;Bool&gt;() &#123;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    Function function = <span class="keyword">new</span> Function(<span class="string">"transfer"</span>, params, returnTypes);</span><br><span class="line">    <span class="keyword">return</span> FunctionEncoder.encode(function);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ERC20转账函数<code>createERC20Transfer</code> 有一点点不同：得到调用函数附加数据之后，在构造交易对象时，加入附加数据，部分代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String callFuncData = createTokenTransferData(to, amount);</span><br><span class="line">rawTransaction = RawTransaction.createTransaction(</span><br><span class="line">                    nonce, gasPrice, gasLimit, contractAddress, callFuncData);</span><br></pre></td></tr></table></figure>
+
+
+</div>
+
+
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a href="https://github.com/web3j" target="_blank" rel="noopener">web3j</a> </p>
+<p>微信：xlbxiong 备注：钱包， 加入钱包开发的微信群。</p>
+<p>加入<a href="https://learnblockchain.cn/images/zsxq.png" target="_blank" rel="noopener">知识星球</a>，和一群优秀的区块链开发者一起学习。<br><a href="https://learnblockchain.cn/" target="_blank" rel="noopener">深入浅出区块链</a> - 系统学习区块链，学区块链都在这里，打造最好的区块链技术博客。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/钱包/" rel="tag"># 钱包</a>
+          
+            <a href="/tags/以太坊/" rel="tag"># 以太坊</a>
+          
+            <a href="/tags/Web3j/" rel="tag"># Web3j</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/30/dapp_noteOnChain/" rel="next" title="DApp教程：用Truffle 开发一个链上记事本">
+                <i class="fa fa-chevron-left"></i> DApp教程：用Truffle 开发一个链上记事本
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/07/dao/" rel="prev" title="以太坊DAO攻击解决方案代码解析">
+                以太坊DAO攻击解决方案代码解析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ClimbYang</p>
+              <div class="site-description motion-element" itemprop="description">记录学习编程的点滴</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">74</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/yp945" title="GitHub &rarr; https://github.com/yp945" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:pan107104@outlook.com" title="E-Mail &rarr; mailto:pan107104@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#预备知识"><span class="nav-number">1.</span> <span class="nav-text">预备知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个交易长什么样"><span class="nav-number">2.</span> <span class="nav-text">一个交易长什么样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交易界面"><span class="nav-number">3.</span> <span class="nav-text">交易界面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置-Gas"><span class="nav-number">4.</span> <span class="nav-text">设置 Gas</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Gas-Price"><span class="nav-number">4.1.</span> <span class="nav-text">Gas Price</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gas-Limit"><span class="nav-number">4.2.</span> <span class="nav-text">Gas Limit</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#确认交易数据"><span class="nav-number">5.</span> <span class="nav-text">确认交易数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取nonce"><span class="nav-number">6.</span> <span class="nav-text">获取nonce</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发起交易"><span class="nav-number">7.</span> <span class="nav-text">发起交易</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Token-转账交易"><span class="nav-number">7.1.</span> <span class="nav-text">Token 转账交易</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">8.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ClimbYang</span>
+
+  
+
+  
+</div>
+
+<div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过
+</span>
+</div>
+
+
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

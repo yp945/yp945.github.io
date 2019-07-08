@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="我是先河系统CTO杨尉，欢迎大加关注的的Github: waynewyang，本文是filecoin技术架构分析系列文章第十章源码分析之支撑包分析(2)。">
+<meta name="keywords" content="FileCoin,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="filecoin技术架构分析十：filecoin源码分析之支撑包分析(2)">
+<meta property="og:url" content="http://yoursite.com/2019/03/07/filecoin-code-analysis-10/index.html">
+<meta property="og:site_name" content="ClimbYang的记录">
+<meta property="og:description" content="我是先河系统CTO杨尉，欢迎大加关注的的Github: waynewyang，本文是filecoin技术架构分析系列文章第十章源码分析之支撑包分析(2)。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-05T08:13:55.318Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="filecoin技术架构分析十：filecoin源码分析之支撑包分析(2)">
+<meta name="twitter:description" content="我是先河系统CTO杨尉，欢迎大加关注的的Github: waynewyang，本文是filecoin技术架构分析系列文章第十章源码分析之支撑包分析(2)。">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ClimbYang的记录" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/03/07/filecoin-code-analysis-10/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>filecoin技术架构分析十：filecoin源码分析之支撑包分析(2) | ClimbYang的记录</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+        <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ClimbYang的记录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">blockchain</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/07/filecoin-code-analysis-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ClimbYang">
+      <meta itemprop="description" content="记录学习编程的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ClimbYang的记录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">filecoin技术架构分析十：filecoin源码分析之支撑包分析(2)
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-07 16:35:33" itemprop="dateCreated datePublished" datetime="2019-03-07T16:35:33+08:00">2019-03-07</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-05 16:13:55" itemprop="dateModified" datetime="2019-07-05T16:13:55+08:00">2019-07-05</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/FileCoin/" itemprop="url" rel="index"><span itemprop="name">FileCoin</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+              <span title="本文字数">13k</span>
+            </span>
+          
+
+	  
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+              <span title="阅读时长">25 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我是先河系统CTO杨尉，欢迎大加关注的的Github: <a href="https://github.com/waynewyang" target="_blank" rel="noopener">waynewyang</a>，本文是<a href="https://learnblockchain.cn/2019/03/11/filecoin-code-analysis-0/" target="_blank" rel="noopener">filecoin技术架构分析系列文章</a>第十章源码分析之支撑包分析(2)。</p>
+<a id="more"></a>
+
+
+<blockquote>
+<p>本章续上一章的支撑包介绍，主要为便于后面章节的源码理解</p>
+</blockquote>
+<h2 id="repo"><a href="#repo" class="headerlink" title="repo"></a>repo</h2><ul>
+<li>提供功能<ul>
+<li>实例化fs资源或者mem资源</li>
+<li>提供读取、设置API地址方法</li>
+<li>提供存储已被校验区块的方法</li>
+<li>提供阶段密封数据存储方法 </li>
+<li>提供密封完成数据存储方法 </li>
+<li>提供读取配置方法</li>
+<li>提供通用数据存储方法 </li>
+<li>提供交易数据存储方法</li>
+<li>提供钱包信息存储方法</li>
+<li>提供存储密钥方法</li>
+<li>提供快照配置存储方法</li>
+<li>提供版本号读取方法</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">▼ package</span><br><span class="line">    repo</span><br><span class="line"></span><br><span class="line">▶ imports</span><br><span class="line"></span><br><span class="line">▼ constants</span><br><span class="line">    // 当前为１，可以cat ~/.filecoin/version确认</span><br><span class="line">   +Version : uint</span><br><span class="line"></span><br><span class="line">▼+Datastore : interface</span><br><span class="line">    [embedded]</span><br><span class="line">    // 包含datastore的read、write、batch</span><br><span class="line">   +datastore.Batching</span><br><span class="line"></span><br><span class="line">    // Repo接口分别由fsrepo及memrepo实现</span><br><span class="line">▼+Repo : interface</span><br><span class="line">    [methods]</span><br><span class="line">    // 读取API地址</span><br><span class="line">   +APIAddr() : string, error</span><br><span class="line">    // 存储已被校验过的区块数据</span><br><span class="line">   +ChainDatastore() : Datastore</span><br><span class="line">    // 关闭</span><br><span class="line">   +Close() : error</span><br><span class="line">    // 读取配置，对应上一章中的config</span><br><span class="line">   +Config() : *config.Config</span><br><span class="line">    // 存储通用数据</span><br><span class="line">   +Datastore() : Datastore</span><br><span class="line">    // 交易数据存储</span><br><span class="line">   +DealsDatastore() : Datastore</span><br><span class="line">    // 存储密钥相关</span><br><span class="line">   +Keystore() : keystore.Keystore</span><br><span class="line">    // 存储倒数第二个配置</span><br><span class="line">   +ReplaceConfig(cfg *config.Config) : error</span><br><span class="line">    // 存储密封扇区</span><br><span class="line">   +SealedDir() : string</span><br><span class="line">    // 设置API地址</span><br><span class="line">   +SetAPIAddr(string) : error</span><br><span class="line">    // 存储分段密封扇区</span><br><span class="line">   +StagingDir() : string</span><br><span class="line">    // 读取版本号</span><br><span class="line">   +Version() : uint</span><br><span class="line">    // 存储钱包信息</span><br><span class="line">   +WalletDatastore() : Datastore</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">location: repo/fsrepo.go</span><br><span class="line"></span><br><span class="line">▼ package</span><br><span class="line">    repo</span><br><span class="line"></span><br><span class="line">▼ constants</span><br><span class="line">    // api文件</span><br><span class="line">   +APIFile</span><br><span class="line">    // chain目录:chain</span><br><span class="line">   -chainDatastorePrefix</span><br><span class="line">    // 配置文件名称，对应上一章中的config</span><br><span class="line">   -configFilename</span><br><span class="line">    // 交易目录：deals</span><br><span class="line">   -dealsDatastorePrefix</span><br><span class="line">    // 资源目录锁文件：repo.lock</span><br><span class="line">   -lockFile</span><br><span class="line">    // 快照文件前缀名　snapshot</span><br><span class="line">   -snapshotFilenamePrefix</span><br><span class="line">    // 快照目录;配置快照</span><br><span class="line">   -snapshotStorePrefix</span><br><span class="line">    // 临时配置文件名称</span><br><span class="line">   -tempConfigFilename</span><br><span class="line">    // version文件名称</span><br><span class="line">   -versionFilename</span><br><span class="line">    // 钱包目录名称wallet</span><br><span class="line">   -walletDatastorePrefix</span><br><span class="line"></span><br><span class="line">▼ variables</span><br><span class="line">   -log</span><br><span class="line"></span><br><span class="line">▼+FSRepo : struct</span><br><span class="line">    [fields]</span><br><span class="line">   -cfg : *config.Config</span><br><span class="line">   -chainDs : Datastore</span><br><span class="line">   -dealsDs : Datastore</span><br><span class="line">   -ds : Datastore</span><br><span class="line">   -keystore : keystore.Keystore</span><br><span class="line">   -lk : sync.RWMutex</span><br><span class="line">   -lockfile : io.Closer</span><br><span class="line">    // 资源目录路径</span><br><span class="line">   -path : string</span><br><span class="line">    // 资源目录版本</span><br><span class="line">   -version : uint</span><br><span class="line">   -walletDs : Datastore</span><br><span class="line">    [methods]</span><br><span class="line">   +APIAddr() : string, error</span><br><span class="line">   +ChainDatastore() : Datastore</span><br><span class="line">   +Close() : error</span><br><span class="line">   +Config() : *config.Config</span><br><span class="line">   +Datastore() : Datastore</span><br><span class="line">   +DealsDatastore() : Datastore</span><br><span class="line">   +Keystore() : keystore.Keystore</span><br><span class="line">   +ReplaceConfig(cfg *config.Config) : error</span><br><span class="line">   +SealedDir() : string</span><br><span class="line">   +SetAPIAddr(maddr string) : error</span><br><span class="line">    // 快照存储</span><br><span class="line">   +SnapshotConfig(cfg *config.Config) : error</span><br><span class="line">   +StagingDir() : string</span><br><span class="line">   +Version() : uint</span><br><span class="line">   +WalletDatastore() : Datastore</span><br><span class="line">   -loadConfig() : error</span><br><span class="line">   -loadFromDisk() : error</span><br><span class="line">   -loadVersion() : uint, error</span><br><span class="line">   -openChainDatastore() : error</span><br><span class="line">   -openDatastore() : error</span><br><span class="line">   -openDealsDatastore() : error</span><br><span class="line">   -openKeystore() : error</span><br><span class="line">   -openWalletDatastore() : error</span><br><span class="line">   -removeAPIFile() : error</span><br><span class="line">   -removeFile(path string) : error</span><br><span class="line">    [functions]</span><br><span class="line">    // 打开已被初始化过的资源目录</span><br><span class="line">   +OpenFSRepo(p string) : *FSRepo, error</span><br><span class="line"></span><br><span class="line">▼+NoRepoError : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +Path : string</span><br><span class="line">    [methods]</span><br><span class="line">   +Error() : string</span><br><span class="line"></span><br><span class="line">▼ functions</span><br><span class="line">    // 从文件中读取api file</span><br><span class="line">   +APIAddrFromFile(apiFilePath string) : string, error</span><br><span class="line">    // 初始化资源目录</span><br><span class="line">   +InitFSRepo(p string, cfg *config.Config) : error</span><br><span class="line">   -checkWritable(dir string) : error</span><br><span class="line">   -fileExists(file string) : bool</span><br><span class="line">   -genSnapshotFileName() : string</span><br><span class="line">   -initConfig(p string, cfg *config.Config) : error</span><br><span class="line">   -initVersion(p string, version uint) : error</span><br><span class="line">   -isInitialized(p string) : bool, error</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">▼ package</span><br><span class="line">    repo</span><br><span class="line"></span><br><span class="line">▼ imports</span><br><span class="line"></span><br><span class="line">▼+MemRepo : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +C : *config.Config</span><br><span class="line">   +Chain : Datastore</span><br><span class="line">   +D : Datastore</span><br><span class="line">   +DealsDs : Datastore</span><br><span class="line">   +Ks : keystore.Keystore</span><br><span class="line">   +W : Datastore</span><br><span class="line">   -apiAddress : string</span><br><span class="line">   -lk : sync.RWMutex</span><br><span class="line">   -sealedDir : string</span><br><span class="line">   -stagingDir : string</span><br><span class="line">   -version : uint</span><br><span class="line">    [methods]</span><br><span class="line">   +APIAddr() : string, error</span><br><span class="line">   +ChainDatastore() : Datastore</span><br><span class="line">   +CleanupSectorDirs()</span><br><span class="line">   +Close() : error</span><br><span class="line">   +Config() : *config.Config</span><br><span class="line">   +Datastore() : Datastore</span><br><span class="line">   +DealsDatastore() : Datastore</span><br><span class="line">   +Keystore() : keystore.Keystore</span><br><span class="line">   +ReplaceConfig(cfg *config.Config) : error</span><br><span class="line">   +SealedDir() : string</span><br><span class="line">   +SetAPIAddr(addr string) : error</span><br><span class="line">   +StagingDir() : string</span><br><span class="line">   +Version() : uint</span><br><span class="line">   +WalletDatastore() : Datastore</span><br><span class="line">    [functions]</span><br><span class="line">    // 实例化内存资源接口,会调用NewInMemoryRepoWithSectorDirectories</span><br><span class="line">   +NewInMemoryRepo() : *MemRepo</span><br><span class="line">    // 实例化内存资源接口，指定阶段密封和最终密封目录</span><br><span class="line">   +NewInMemoryRepoWithSectorDirectories(staging, sealedDir string) : *MemRepo</span><br></pre></td></tr></table></figure>
+
+<h2 id="proofs和sectorbuilder"><a href="#proofs和sectorbuilder" class="headerlink" title="proofs和sectorbuilder"></a>proofs和sectorbuilder</h2><ul>
+<li>proofs提供功能<ul>
+<li>校验时空证明的方法</li>
+<li>校验密封证明的方法</li>
+<li>更细节的注释见如下代码笔者增加的注释</li>
+<li>rustverifier实现具体的方法</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">location: proofs/types.go</span><br><span class="line"></span><br><span class="line">▼ package</span><br><span class="line">    proofs</span><br><span class="line"></span><br><span class="line">▼ constants</span><br><span class="line">    // merkle根长度</span><br><span class="line">   +CommitmentBytesLen : uint</span><br><span class="line">    // 时空证明挑战参数长度:32bytes</span><br><span class="line">   +PoStChallengeSeedBytesLen : uint</span><br><span class="line">    // 密封复制证明长度：384bytes</span><br><span class="line">   +SealBytesLen : uint</span><br><span class="line">    // 时空证明长度：192bytes</span><br><span class="line">   +SnarkBytesLen : uint</span><br><span class="line"></span><br><span class="line">    // 原始数据的merkle根，由PoRep输出</span><br><span class="line"> +CommD : []byte</span><br><span class="line"></span><br><span class="line">    // 副本数据的merkle根，由PoRep输出</span><br><span class="line"> +CommR : []byte</span><br><span class="line"></span><br><span class="line">    // 中间层的merkle根，由PoRep输出</span><br><span class="line"> +CommRStar : []byte</span><br><span class="line"></span><br><span class="line">    // 挑战随机参数,32bytes,256bits,PoSt的输入</span><br><span class="line"> +PoStChallengeSeed : []byte</span><br><span class="line"></span><br><span class="line">    // 时空证明输出，192bytes</span><br><span class="line"> +PoStProof : []byte</span><br><span class="line"></span><br><span class="line">    // 密封复制证明,384bytes</span><br><span class="line"> +SealProof : []byte</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">location: proofs/interface.go</span><br><span class="line"></span><br><span class="line">▼ package</span><br><span class="line">    proofs</span><br><span class="line"></span><br><span class="line">▼ constants</span><br><span class="line">   +Live</span><br><span class="line">   +Test</span><br><span class="line"></span><br><span class="line"> +SectorStoreType : int</span><br><span class="line"></span><br><span class="line">    // 校验时空证明校验请求</span><br><span class="line">▼+VerifyPoSTRequest : struct</span><br><span class="line">    [fields]</span><br><span class="line">    // 挑战参数</span><br><span class="line">   +ChallengeSeed : PoStChallengeSeed</span><br><span class="line">   +CommRs : []CommR</span><br><span class="line">   +Faults : []uint64</span><br><span class="line">   +Proof : PoStProof</span><br><span class="line">   +StoreType : SectorStoreType</span><br><span class="line"></span><br><span class="line">▼+VerifyPoSTResponse : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +IsValid : bool</span><br><span class="line"></span><br><span class="line">    // 向特定矿工&amp;特定扇区发起密封校验请求</span><br><span class="line">▼+VerifySealRequest : struct</span><br><span class="line">    [fields]</span><br><span class="line">    // 来自于密封的返回参数</span><br><span class="line">   +CommD : CommD</span><br><span class="line">   +CommR : CommR</span><br><span class="line">   +CommRStar : CommRStar</span><br><span class="line">   +Proof : SealProof</span><br><span class="line">    // 矿工标识</span><br><span class="line">   +ProverID : [31]byte</span><br><span class="line">    // 扇区ID</span><br><span class="line">   +SectorID : [31]byte</span><br><span class="line">    // 用于控制密封校验效率</span><br><span class="line">   +StoreType : SectorStoreType</span><br><span class="line"></span><br><span class="line">▼+VerifySealResponse : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +IsValid : bool</span><br><span class="line"></span><br><span class="line">▼+Verifier : interface</span><br><span class="line">    [methods]</span><br><span class="line">    // 校验时空证明</span><br><span class="line">   +VerifyPoST(VerifyPoSTRequest) : VerifyPoSTResponse, error</span><br><span class="line">    // 校验密封证明</span><br><span class="line">   +VerifySeal(VerifySealRequest) : VerifySealResponse, error</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">location: proofs/rustverifier.go</span><br><span class="line"></span><br><span class="line">▼ package</span><br><span class="line">    proofs</span><br><span class="line"></span><br><span class="line">▶ imports</span><br><span class="line"></span><br><span class="line">▼ variables</span><br><span class="line">   -log</span><br><span class="line"></span><br><span class="line">    // RustVerifier 实现VerifyPoST与VerifySeal接口</span><br><span class="line">▼+RustVerifier : struct</span><br><span class="line">    [methods]</span><br><span class="line">   +VerifyPoST(req VerifyPoSTRequest) : VerifyPoSTResponse, error</span><br><span class="line">   +VerifySeal(req VerifySealRequest) : VerifySealResponse, error</span><br><span class="line"></span><br><span class="line">▼ functions</span><br><span class="line">   +CSectorStoreType(cfg SectorStoreType) : *C.ConfiguredStore, error</span><br><span class="line">   -cUint64s(src []uint64) : *C.uint64_t, C.size_t</span><br><span class="line">   -elapsed(what string) : func()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>sectorbuilder <ul>
+<li>提供向unsealed扇区写入pieces的方法</li>
+<li>提供生成时空证明的方法</li>
+<li>提供从特定扇区读取特定pieces的方法</li>
+<li>提供密封完成通知的方法</li>
+<li>提供批量密封所有未完成的分段扇区</li>
+<li>与rust-fil-proof交互，更深入的逻辑需要参见rust</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">location: proofs/sectorbuilder/interface.go</span><br><span class="line"></span><br><span class="line">package sectorbuilder</span><br><span class="line"></span><br><span class="line">▶ imports</span><br><span class="line"></span><br><span class="line">    // 生成生成时空证明请求</span><br><span class="line">▼+GeneratePoSTRequest : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +ChallengeSeed : proofs.PoStChallengeSeed</span><br><span class="line">   +CommRs : []proofs.CommR</span><br><span class="line"></span><br><span class="line">    // 生成生成时空证明响应</span><br><span class="line">▼+GeneratePoSTResponse : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +Faults : []uint64</span><br><span class="line">   +Proof : proofs.PoStProof</span><br><span class="line"></span><br><span class="line">▼+PieceInfo : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +Ref : cid.Cid</span><br><span class="line">   +Size : uint64</span><br><span class="line"></span><br><span class="line">    // 密封元数据</span><br><span class="line">▼+SealedSectorMetadata : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +CommD : proofs.CommD</span><br><span class="line">    // 副本哈希后续将被删除</span><br><span class="line">   +CommR : proofs.CommR</span><br><span class="line">   +CommRStar : proofs.CommRStar</span><br><span class="line">    // Pieces后续将被删除</span><br><span class="line">   +Pieces : []*PieceInfo</span><br><span class="line">   +Proof : proofs.SealProof</span><br><span class="line">   +SectorID : uint64</span><br><span class="line"></span><br><span class="line">    // 密封结果</span><br><span class="line">▼+SectorSealResult : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +SealingErr : error</span><br><span class="line">   +SealingResult : *SealedSectorMetadata</span><br><span class="line">   +SectorID : uint64</span><br><span class="line"></span><br><span class="line">    // SectorBuilder提供相关功能</span><br><span class="line">    // 1 写入、密封pieces至扇区</span><br><span class="line">    // 2 unseal、读取pieces</span><br><span class="line">▼+SectorBuilder : interface</span><br><span class="line">    [methods]</span><br><span class="line">    // 向unsealed扇区写入pieces</span><br><span class="line">   +AddPiece(ctx context.Context, pi *PieceInfo) : uint64, error</span><br><span class="line">   +Close() : error</span><br><span class="line">    // 生成时空证明</span><br><span class="line">   +GeneratePoST(GeneratePoSTRequest) : GeneratePoSTResponse, error</span><br><span class="line">   +GetMaxUserBytesPerStagedSector() : uint64, error</span><br><span class="line">    // 从扇区中读取特定pieces</span><br><span class="line">   +ReadPieceFromSealedSector(pieceCid cid.Cid) : io.Reader, error</span><br><span class="line">    // 密封所有未完成的分段扇区</span><br><span class="line">   +SealAllStagedSectors(ctx context.Context) : error</span><br><span class="line">    // 密封完成的通知</span><br><span class="line">   +SectorSealResults() : chan SectorSealResult</span><br><span class="line"></span><br><span class="line">▼ functions</span><br><span class="line">   -init()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">location: proofs/sectorbuilder/poller.go</span><br><span class="line"></span><br><span class="line">// 当pieces加入后，会进行FFI调用，定时执行密封</span><br><span class="line">const SealedSectorPollingInterval = 1 * time.Second</span><br></pre></td></tr></table></figure>
+
+<h2 id="type"><a href="#type" class="headerlink" title="type"></a>type</h2><p>如下对一些主要结构进行简析</p>
+<ul>
+<li><p>AttoFIL(10*-18 FIL)</p>
+<ul>
+<li>提供AttoFIL的算数运算方法</li>
+<li>提供AttoFIL的逻辑运算方法</li>
+</ul>
+</li>
+<li><p>Block </p>
+<ul>
+<li>区块结构</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">▼+Block : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +Height : Uint64</span><br><span class="line">   +MessageReceipts : []*MessageReceipt</span><br><span class="line">   +Messages : []*SignedMessage</span><br><span class="line">   +Miner : address.Address</span><br><span class="line">   +Nonce : Uint64</span><br><span class="line">   +ParentWeight : Uint64</span><br><span class="line">   +Parents : SortedCidSet</span><br><span class="line">   +Proof : proofs.PoStProof</span><br><span class="line">   +StateRoot : cid.Cid</span><br><span class="line">   +Ticket : Signature</span><br><span class="line">   -cachedBytes : []byte</span><br><span class="line">   -cachedCid : cid.Cid</span><br><span class="line">    [methods]</span><br><span class="line">   +Cid() : cid.Cid</span><br><span class="line">   +Equals(other *Block) : bool</span><br><span class="line">   +IsParentOf(c Block) : bool</span><br><span class="line">   +Score() : uint64</span><br><span class="line">   +String() : string</span><br><span class="line">   +ToNode() : node.Node</span><br><span class="line">    [functions]</span><br><span class="line">   +DecodeBlock(b []byte) : *Block, error</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>BlockHeight <ul>
+<li>区块高度相关操作方法</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">▼+BlockHeight : struct</span><br><span class="line">    [fields]</span><br><span class="line">   -val : *big.Int</span><br><span class="line">    [methods]</span><br><span class="line">   +Add(y *BlockHeight) : *BlockHeight</span><br><span class="line">   +AsBigInt() : *big.Int</span><br><span class="line">   +Bytes() : []byte</span><br><span class="line">   +Equal(y *BlockHeight) : bool</span><br><span class="line">   +GreaterEqual(y *BlockHeight) : bool</span><br><span class="line">   +GreaterThan(y *BlockHeight) : bool</span><br><span class="line">   +LessEqual(y *BlockHeight) : bool</span><br><span class="line">   +LessThan(y *BlockHeight) : bool</span><br><span class="line">   +String() : string</span><br><span class="line">   +Sub(y *BlockHeight) : *BlockHeight</span><br><span class="line">    [functions]</span><br><span class="line">   +NewBlockHeight(x uint64) : *BlockHeight</span><br><span class="line">   +NewBlockHeightFromBytes(buf []byte) : *BlockHeight</span><br><span class="line">   +NewBlockHeightFromString(s string, base int) : *BlockHeight, bool</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>BytesAmount (*big.Int)</p>
+<ul>
+<li>提供相关的算数逻辑运算</li>
+</ul>
+</li>
+<li><p>ChannelID(支付通道结构体)</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">▼+ChannelID : struct</span><br><span class="line">    [fields]</span><br><span class="line">   -val : *big.Int</span><br><span class="line">    [methods]</span><br><span class="line">   +Bytes() : []byte</span><br><span class="line">   +Equal(y *ChannelID) : bool</span><br><span class="line">   +Inc() : *ChannelID</span><br><span class="line">   +KeyString() : string</span><br><span class="line">   +String() : string</span><br><span class="line">    [functions]</span><br><span class="line">   +NewChannelID(x uint64) : *ChannelID</span><br><span class="line">   +NewChannelIDFromBytes(buf []byte) : *ChannelID</span><br><span class="line">   +NewChannelIDFromString(s string, base int) : *ChannelID, bool</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一些变量定义<ul>
+<li>创建各类actor对象</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">func init() &#123;</span><br><span class="line">	AccountActorCodeObj = dag.NewRawNode([]byte(&quot;accountactor&quot;))</span><br><span class="line">	AccountActorCodeCid = AccountActorCodeObj.Cid()</span><br><span class="line">	StorageMarketActorCodeObj = dag.NewRawNode([]byte(&quot;storagemarket&quot;))</span><br><span class="line">	StorageMarketActorCodeCid = StorageMarketActorCodeObj.Cid()</span><br><span class="line">	PaymentBrokerActorCodeObj = dag.NewRawNode([]byte(&quot;paymentbroker&quot;))</span><br><span class="line">	PaymentBrokerActorCodeCid = PaymentBrokerActorCodeObj.Cid()</span><br><span class="line">	MinerActorCodeObj = dag.NewRawNode([]byte(&quot;mineractor&quot;))</span><br><span class="line">	MinerActorCodeCid = MinerActorCodeObj.Cid()</span><br><span class="line">	BootstrapMinerActorCodeObj = dag.NewRawNode([]byte(&quot;bootstrapmineractor&quot;))</span><br><span class="line">	BootstrapMinerActorCodeCid = BootstrapMinerActorCodeObj.Cid()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Message相关<ul>
+<li>消息结构及方法</li>
+<li>filecoin网络的交易由一些列的Message组成</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">▼+Message : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +From : address.Address</span><br><span class="line">   +Method : string</span><br><span class="line">   +Nonce : Uint64</span><br><span class="line">   +Params : []byte</span><br><span class="line">   +To : address.Address</span><br><span class="line">   +Value : *AttoFIL</span><br><span class="line">    [methods]</span><br><span class="line">   +Cid() : cid.Cid, error</span><br><span class="line">   +Marshal() : []byte, error</span><br><span class="line">   +String() : string</span><br><span class="line">   +Unmarshal(b []byte) : error</span><br><span class="line">    [functions]</span><br><span class="line">   +NewMessage(from, to address.Address, nonce uint64, value *AttoFIL, method string, params []byte) : *Message</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">▼+MessageReceipt : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +ExitCode : uint8</span><br><span class="line">   +GasAttoFIL : *AttoFIL</span><br><span class="line">   +Return : [][]byte</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">▼+MeteredMessage : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +GasLimit : GasUnits</span><br><span class="line">   +GasPrice : AttoFIL</span><br><span class="line">    [embedded]</span><br><span class="line">   +Message : Message</span><br><span class="line">    [methods]</span><br><span class="line">   +Marshal() : []byte, error</span><br><span class="line">   +Unmarshal(b []byte) : error</span><br><span class="line">    [functions]</span><br><span class="line">   +NewMeteredMessage(msg Message, gasPrice AttoFIL, gasLimit GasUnits) : *MeteredMessage</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">▼+SignedMessage : struct</span><br><span class="line">    [fields]</span><br><span class="line">   +Signature : Signature</span><br><span class="line">    [embedded]</span><br><span class="line">   +MeteredMessage : MeteredMessage</span><br><span class="line">    [methods]</span><br><span class="line">   +Cid() : cid.Cid, error</span><br><span class="line">   +Marshal() : []byte, error</span><br><span class="line">   +RecoverAddress(r Recoverer) : address.Address, error</span><br><span class="line">   +String() : string</span><br><span class="line">   +Unmarshal(b []byte) : error</span><br><span class="line">   +VerifySignature() : bool</span><br><span class="line">    [functions]</span><br><span class="line">   +NewSignedMessage(msg Message, s Signer, gasPrice AttoFIL, gasLimit GasUnits) : *SignedMessage, error</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>TipSet <ul>
+<li>区块集合</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> +Tip : Block</span><br><span class="line"></span><br><span class="line">▼+TipSet : map[cid.Cid]*Tip</span><br><span class="line">    [methods]</span><br><span class="line">   +AddBlock(b *Block) : error</span><br><span class="line">   +Clone() : TipSet</span><br><span class="line">   +Equals(ts2 TipSet) : bool</span><br><span class="line">   +Height() : uint64, error</span><br><span class="line">   +MinTicket() : Signature, error</span><br><span class="line">   +ParentWeight() : uint64, error</span><br><span class="line">   +Parents() : SortedCidSet, error</span><br><span class="line">   +String() : string</span><br><span class="line">   +ToSlice() : []*Block</span><br><span class="line">   +ToSortedCidSet() : SortedCidSet</span><br></pre></td></tr></table></figure>
+
+<h2 id="abi"><a href="#abi" class="headerlink" title="abi"></a>abi</h2><ul>
+<li>abi<ul>
+<li>对filecoin中的各类数据定义数据类型</li>
+<li>提供abi编解码操作方法</li>
+</ul>
+</li>
+</ul>
+<h2 id="pubsub"><a href="#pubsub" class="headerlink" title="pubsub"></a>pubsub</h2><ul>
+<li>提供功能<ul>
+<li>提供订阅实例化以及订阅方法</li>
+<li>提供发布实例化以及发布方法</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">▼ package</span><br><span class="line">    pubsub</span><br><span class="line"></span><br><span class="line">▶ imports</span><br><span class="line"></span><br><span class="line">▼+Subscriber : struct</span><br><span class="line">    [fields]</span><br><span class="line">   -pubsub : *libp2p.PubSub</span><br><span class="line">    [methods]</span><br><span class="line">   +Subscribe(topic string) : Subscription, error</span><br><span class="line">    [functions]</span><br><span class="line">   +NewSubscriber(sub *libp2p.PubSub) : *Subscriber</span><br><span class="line"></span><br><span class="line">▼-subscriptionWrapper : struct</span><br><span class="line">    [embedded]</span><br><span class="line">   +*libp2p.Subscription : *libp2p.Subscription</span><br><span class="line">    [methods]</span><br><span class="line">   +Next(ctx context.Context) : Message, error</span><br><span class="line"></span><br><span class="line">▼+Message : interface</span><br><span class="line">    [methods]</span><br><span class="line">   +GetData() : []byte</span><br><span class="line">   +GetFrom() : peer.ID</span><br><span class="line"></span><br><span class="line">▼+Subscription : interface</span><br><span class="line">    [methods]</span><br><span class="line">   +Cancel()</span><br><span class="line">   +Next(ctx context.Context) : Message, error</span><br><span class="line">   +Topic() : string</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">▼ package</span><br><span class="line">    pubsub</span><br><span class="line"></span><br><span class="line">▶ imports</span><br><span class="line"></span><br><span class="line">▼+Publisher : struct</span><br><span class="line">    [fields]</span><br><span class="line">   -pubsub : *pubsub.PubSub</span><br><span class="line">    [methods]</span><br><span class="line">   +Publish(topic string, data []byte) : error</span><br><span class="line">    [functions]</span><br><span class="line">   +NewPublisher(sub *pubsub.PubSub) : *Publisher</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://learnblockchain.cn/" target="_blank" rel="noopener">深入浅出区块链</a> - 系统学习区块链，打造最好的区块链技术博客</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/FileCoin/" rel="tag"># FileCoin</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/07/wallet-annouce/" rel="next" title="登链钱包-一款功能强大的完全开源以太坊钱包">
+                <i class="fa fa-chevron-left"></i> 登链钱包-一款功能强大的完全开源以太坊钱包
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/07/filecoin-code-analysis-11/" rel="prev" title="filecoin技术架构分析十一：filecoin源码分析之内部接口层api包分析">
+                filecoin技术架构分析十一：filecoin源码分析之内部接口层api包分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ClimbYang</p>
+              <div class="site-description motion-element" itemprop="description">记录学习编程的点滴</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">74</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/yp945" title="GitHub &rarr; https://github.com/yp945" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:pan107104@outlook.com" title="E-Mail &rarr; mailto:pan107104@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#repo"><span class="nav-number">1.</span> <span class="nav-text">repo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#proofs和sectorbuilder"><span class="nav-number">2.</span> <span class="nav-text">proofs和sectorbuilder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#type"><span class="nav-number">3.</span> <span class="nav-text">type</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#abi"><span class="nav-number">4.</span> <span class="nav-text">abi</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pubsub"><span class="nav-number">5.</span> <span class="nav-text">pubsub</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ClimbYang</span>
+
+  
+
+  
+</div>
+
+<div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过
+</span>
+</div>
+
+
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

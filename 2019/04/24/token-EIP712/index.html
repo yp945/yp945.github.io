@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="区块链能够实现去中心化无信任情形下的资产安全，很关键的一点儿就是充分的把公私钥体系引入并使用起来了。通过对每笔交易进行私钥签名的方式保证每个人都只能花费他自己账号里的钱，别人也可以很容易的去验证某笔交易确实是账号所有人所发出的。其实私钥不只是可以签名交易，还可以签名其它数据。">
+<meta name="keywords" content="EIP712">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解 EIP712 - 类型结构化数据 Hash与签名">
+<meta property="og:url" content="http://yoursite.com/2019/04/24/token-EIP712/index.html">
+<meta property="og:site_name" content="ClimbYang的记录">
+<meta property="og:description" content="区块链能够实现去中心化无信任情形下的资产安全，很关键的一点儿就是充分的把公私钥体系引入并使用起来了。通过对每笔交易进行私钥签名的方式保证每个人都只能花费他自己账号里的钱，别人也可以很容易的去验证某笔交易确实是账号所有人所发出的。其实私钥不只是可以签名交易，还可以签名其它数据。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/15561117218102.jpg!/scale/45%">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/15561118926543.jpg!/scale/55%">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/15561120349739.jpg!/scale/55%">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/15561121071312.jpg!/scale/55%">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/15561121415080.jpg">
+<meta property="og:updated_time" content="2019-07-05T08:13:55.349Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解 EIP712 - 类型结构化数据 Hash与签名">
+<meta name="twitter:description" content="区块链能够实现去中心化无信任情形下的资产安全，很关键的一点儿就是充分的把公私钥体系引入并使用起来了。通过对每笔交易进行私钥签名的方式保证每个人都只能花费他自己账号里的钱，别人也可以很容易的去验证某笔交易确实是账号所有人所发出的。其实私钥不只是可以签名交易，还可以签名其它数据。">
+<meta name="twitter:image" content="https://img.learnblockchain.cn/2019/15561117218102.jpg!/scale/45%">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ClimbYang的记录" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/04/24/token-EIP712/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>理解 EIP712 - 类型结构化数据 Hash与签名 | ClimbYang的记录</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+        <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ClimbYang的记录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">blockchain</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/24/token-EIP712/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ClimbYang">
+      <meta itemprop="description" content="记录学习编程的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ClimbYang的记录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">理解 EIP712 - 类型结构化数据 Hash与签名
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-24 10:48:34" itemprop="dateCreated datePublished" datetime="2019-04-24T10:48:34+08:00">2019-04-24</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-05 16:13:55" itemprop="dateModified" datetime="2019-07-05T16:13:55+08:00">2019-07-05</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/以太坊/" itemprop="url" rel="index"><span itemprop="name">以太坊</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+              <span title="本文字数">5.2k</span>
+            </span>
+          
+
+	  
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+              <span title="阅读时长">10 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>区块链能够实现去中心化无信任情形下的资产安全，很关键的一点儿就是充分的把公私钥体系引入并使用起来了。通过对每笔交易进行私钥签名的方式保证每个人都只能花费他自己账号里的钱，别人也可以很容易的去验证某笔交易确实是账号所有人所发出的。其实私钥不只是可以签名交易，还可以签名其它数据。</p>
+<a id="more"></a>
+
+<h2 id="排名第一的去中心化交易所-IDEX"><a href="#排名第一的去中心化交易所-IDEX" class="headerlink" title="排名第一的去中心化交易所 IDEX"></a>排名第一的去中心化交易所 IDEX</h2><p>下面是从 <a href="https://etherscan.io/stat/dextracker" target="_blank" rel="noopener">etherscan</a> 上截取的以太坊去中心化交易所在过去七天的交易量分布图，我们可以清楚的看到，IDEX 的交易量是远远超过其它交易所的。</p>
+<p><img src="https://img.learnblockchain.cn/2019/15561117218102.jpg!/scale/45%" alt="交易所交易量"></p>
+<p>IDEX 有啥特别的呢？与其它去中心化交易所不同，IDEX 采取的是中心化交易戳合，去中心化结算的方式，资产的保存和结算都是在<a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" target="_blank" rel="noopener">智能合约</a>里，交易所无法动用任何用户资产，但同时用户又能享受中心化交易撮合的快速方便。</p>
+<p><img src="https://img.learnblockchain.cn/2019/15561118926543.jpg!/scale/55%" alt="IDEX"></p>
+<h2 id="关键的签名"><a href="#关键的签名" class="headerlink" title="关键的签名"></a>关键的签名</h2><p>IDEX 需要在中心化服务器上进行订单的撮合，如何保证订单不会被交易所更改呢？核心就在于我们的每笔交易，在发送到中心化服务器前都会用用户自己的私钥进行签名，然后智能合约在进行结算时会对用户签名进行验证。如果中心化服务器对订单数据有任何改动，都无法通过智能合约的校验。</p>
+<p><img src="https://img.learnblockchain.cn/2019/15561120349739.jpg!/scale/55%" alt="交易签名"></p>
+<h2 id="EIP712-的改进"><a href="#EIP712-的改进" class="headerlink" title="EIP712 的改进"></a>EIP712 的改进</h2><p>但是，上一步提到的签名有个很大的缺陷，我们能看到的签名信息只能是像下面这样的一串哈希值，至于生成这个哈希值的原始数据，我们是无从得知的，进而也就不易验证。</p>
+<p><img src="https://img.learnblockchain.cn/2019/15561121071312.jpg!/scale/55%" alt="Hash哈希图"></p>
+<p>使用 EIP712 之后，我们看到的签名窗口就是下面这样的了。在这里，我们不只是看到一串哈希数据了，而是能看到完整的签名数据，进而可以验证所签名的数据是不是正确的数据，有没有被攥改。</p>
+<p><img src="https://img.learnblockchain.cn/2019/15561121415080.jpg" alt="EIP712 签名数据图"></p>
+<h2 id="如何把-EIP712-用起来"><a href="#如何把-EIP712-用起来" class="headerlink" title="如何把 EIP712 用起来"></a>如何把 EIP712 用起来</h2><p>下面我们以一个拍卖场景为例，看看如何在产品中把 EIP712 用起来。</p>
+<h3 id="定义数据结构"><a href="#定义数据结构" class="headerlink" title="定义数据结构"></a>定义数据结构</h3><p>首先，用 JSON 格式列出用户所要签名的数据。 比如作为一个拍卖应用，需要签名的就是下面的投标数据：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    amount: <span class="number">100</span>, </span><br><span class="line">    token: “<span class="number">0</span>x….”,</span><br><span class="line">    id: <span class="number">15</span>,</span><br><span class="line">    bidder: &#123;</span><br><span class="line">        userId: <span class="number">323</span>,</span><br><span class="line">        wallet: “<span class="number">0</span>x….”</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>然后，我们可以从上面的代码片段中提炼出两个数据结构: 竞标 Bid，它包括以 <a href="https://learnblockchain.cn/2018/01/12/create_token/" target="_blank" rel="noopener">ERC20</a> 代币资产和拍卖 id 确定的出价金额，以及身份 Identity，它指定了用户 id 和 用户钱包地址。<br>下一步，将 Bid 和 Identity 定义为结构体，就可以写出下面的 solidity 合约代码了。 可以通过 EIP712 协议草案查看 EIP712 所支持的完整数据类型列表，比如地址、 bytes32、 uint256等。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Bid: &#123;</span><br><span class="line">    amount: uint256, </span><br><span class="line">    bidder: Identity</span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">Identity: &#123;</span><br><span class="line">    userId: uint256,</span><br><span class="line">    wallet: address</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="设计域分隔符（domain-separator）"><a href="#设计域分隔符（domain-separator）" class="headerlink" title="设计域分隔符（domain separator）"></a>设计域分隔符（domain separator）</h3><p>主要防止一个 DApp 的签名还能在另一个 DApp 中工作，从而导致签名冲突。拿拍卖为例子的话，一个拍卖应用里的投标请求竟然在另外一个拍卖应用里也能执行成功，可能会就导致不必要的损失。</p>
+<p>具体来说，域分隔符就是下面这样的结构和数据：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    name: <span class="string">"Auction dApp"</span>, <span class="comment">// DApp 的名字</span></span><br><span class="line">    version: <span class="string">"2"</span>, <span class="comment">// DApp 的版本</span></span><br><span class="line">    chainId: <span class="string">"1"</span>, <span class="comment">// [EIP-155] 定义的 chainId</span></span><br><span class="line">    verifyingContract: <span class="string">"0x1c56346..."</span>, <span class="comment">// 验签合约地址</span></span><br><span class="line">    salt: <span class="string">"0x43efba6b4..."</span> <span class="comment">// 硬编码到合约和 DApp 中的一个随机数值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="为-DApp-编写签名代码"><a href="#为-DApp-编写签名代码" class="headerlink" title="为 DApp 编写签名代码"></a>为 DApp 编写签名代码</h3><p>DApp 的前端 Javascript 代码需要能够请求 MetaMask 对相应的数据签名。</p>
+<blockquote>
+<p>备注：需要安装最新版的 MetaMask 浏览器插件钱包</p>
+</blockquote>
+<p>首先，定义数据类型:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> domain = [</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">"name"</span>, <span class="attr">type</span>: <span class="string">"string"</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">"version"</span>, <span class="attr">type</span>: <span class="string">"string"</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">"chainId"</span>, <span class="attr">type</span>: <span class="string">"uint256"</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">"verifyingContract"</span>, <span class="attr">type</span>: <span class="string">"address"</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">"salt"</span>, <span class="attr">type</span>: <span class="string">"bytes32"</span> &#125;,</span><br><span class="line">];</span><br><span class="line"><span class="keyword">const</span> bid = [</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">"amount"</span>, <span class="attr">type</span>: <span class="string">"uint256"</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">"bidder"</span>, <span class="attr">type</span>: <span class="string">"Identity"</span> &#125;,</span><br><span class="line">];</span><br><span class="line"><span class="keyword">const</span> identity = [</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">"userId"</span>, <span class="attr">type</span>: <span class="string">"uint256"</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">"wallet"</span>, <span class="attr">type</span>: <span class="string">"address"</span> &#125;,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>接下来，定义域分隔符和需要签名的应用数据</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> domainData = &#123;</span><br><span class="line">    name: <span class="string">"Auction dApp"</span>,</span><br><span class="line">    version: <span class="string">"2"</span>,</span><br><span class="line">    chainId: <span class="built_in">parseInt</span>(web3.version.network, <span class="number">10</span>),</span><br><span class="line">    verifyingContract: <span class="string">"0x1C56346CD2A2Bf3202F771f50d3D14a367B48070"</span>,</span><br><span class="line">    salt: <span class="string">"0xf2d857f4a3edcb9b78b4d503bfe733db1e3f6cdc2b7971ee739626c97e86a558"</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> message = &#123;</span><br><span class="line">    amount: <span class="number">100</span>,</span><br><span class="line">    bidder: &#123;</span><br><span class="line">        userId: <span class="number">323</span>,</span><br><span class="line">        wallet: <span class="string">"0x3333333333333333333333333333333333333333"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>像下面这样组合这些变量：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> data = <span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">    types: &#123;</span><br><span class="line">        EIP712Domain: domain,</span><br><span class="line">        Bid: bid,</span><br><span class="line">        Identity: identity,</span><br><span class="line">    &#125;,</span><br><span class="line">    domain: domainData,</span><br><span class="line">    primaryType: <span class="string">"Bid"</span>,</span><br><span class="line">    message: message</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>接下来，通过调用 eth_signTypedData_v3 来进行签名：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">web3.currentProvider.sendAsync(</span><br><span class="line">&#123;</span><br><span class="line">    method: <span class="string">"eth_signTypedData_v3"</span>,</span><br><span class="line">    params: [signer, data],</span><br><span class="line">    <span class="keyword">from</span>: signer</span><br><span class="line">&#125;,</span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params">err, result</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">console</span>.error(err);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> signature = result.result.substring(<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">const</span> r = <span class="string">"0x"</span> + signature.substring(<span class="number">0</span>, <span class="number">64</span>);</span><br><span class="line">    <span class="keyword">const</span> s = <span class="string">"0x"</span> + signature.substring(<span class="number">64</span>, <span class="number">128</span>);</span><br><span class="line">    <span class="keyword">const</span> v = <span class="built_in">parseInt</span>(signature.substring(<span class="number">128</span>, <span class="number">130</span>), <span class="number">16</span>);</span><br><span class="line">    <span class="comment">// The signature is now comprised of r, s, and v.</span></span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="在智能合约中添加验证签名代码"><a href="#在智能合约中添加验证签名代码" class="headerlink" title="在智能合约中添加验证签名代码"></a>在智能合约中添加验证签名代码</h3><p>按 EIP712 的要求，数据在签名前首先要进行格式化和相应的哈希计算。为了能够通过 <a href="https://learnblockchain.cn/docs/solidity/units-and-global-variables.html#ecrecover" target="_blank" rel="noopener">ecrecover</a> 来确定是哪个账户进行的数据签名，我们在合约里也要按同样的规则对数据进行格式化。</p>
+<p>首先，需要在 solidity 代码里定义所需要的结构体类型。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">struct Identity &#123;</span><br><span class="line">    uint256 userId;</span><br><span class="line">    address wallet;</span><br><span class="line">&#125;</span><br><span class="line">struct Bid &#123;</span><br><span class="line">    uint256 amount;</span><br><span class="line">    Identity bidder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后，定义相应的类型格式串。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">string private constant IDENTITY_TYPE = <span class="string">"Identity(uint256 userId,address wallet)"</span>;</span><br><span class="line">string private constant BID_TYPE = <span class="string">"Bid(uint256 amount,Identity bidder)Identity(uint256 userId,address wallet)"</span>;</span><br></pre></td></tr></table></figure>
+
+<p>再者，定义域分隔符的哈希值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">uint256 constant chainId = <span class="number">1</span>;</span><br><span class="line">address constant verifyingContract = <span class="number">0x1C56346CD2A2Bf3202F771f50d3D14a367B48070</span>;</span><br><span class="line">bytes32 constant salt = <span class="number">0xf2d857f4a3edcb9b78b4d503bfe733db1e3f6cdc2b7971ee739626c97e86a558</span>;</span><br><span class="line">string private constant EIP712_DOMAIN = <span class="string">"EIP712Domain(string name,string version,uint256 chainId,address verifyingContract,bytes32 salt)"</span>;</span><br><span class="line"></span><br><span class="line">bytes32 private constant DOMAIN_SEPARATOR = keccak256(abi.encode(</span><br><span class="line">    EIP712_DOMAIN_TYPEHASH,</span><br><span class="line">    keccak256(<span class="string">"Auction dApp"</span>),</span><br><span class="line">    keccak256(<span class="string">"2"</span>),</span><br><span class="line">    chainId,</span><br><span class="line">    verifyingContract,</span><br><span class="line">    salt</span><br><span class="line">));</span><br></pre></td></tr></table></figure>
+
+<p>还需要为每种数据类型定义一个计算哈希值的函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hashIdentity</span>(<span class="params">Identity identity</span>) <span class="title">private</span> <span class="title">pure</span> <span class="title">returns</span> (<span class="params">bytes32</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> keccak256(abi.encode(</span><br><span class="line">        IDENTITY_TYPEHASH,</span><br><span class="line">        identity.userId,</span><br><span class="line">        identity.wallet</span><br><span class="line">    ));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hashBid</span>(<span class="params">Bid memory bid</span>) <span class="title">private</span> <span class="title">pure</span> <span class="title">returns</span> (<span class="params">bytes32</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> keccak256(abi.encodePacked(</span><br><span class="line">        <span class="string">"\\x19\\x01"</span>,</span><br><span class="line">       DOMAIN_SEPARATOR,</span><br><span class="line">       keccak256(abi.encode(</span><br><span class="line">            BID_TYPEHASH,</span><br><span class="line">            bid.amount,</span><br><span class="line">            hashIdentity(bid.bidder)</span><br><span class="line">        ))</span><br><span class="line">    ));</span><br></pre></td></tr></table></figure>
+
+<p>最后，别忘了最关键的签名验证函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">verify</span>(<span class="params">address signer, Bid memory bid, sigR, sigS, sigV</span>) <span class="title">public</span> <span class="title">pure</span> <span class="title">returns</span> (<span class="params">bool</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> signer == ecrecover(hashBid(bid), sigV, sigR, sigS);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>本文作者为深入浅出社区共建者 Ashton ，喜欢他的文章可关注<a href="https://www.jianshu.com/u/922115b98e3f" target="_blank" rel="noopener">他的简书</a>。</p>
+<p><a href="https://learnblockchain.cn/" target="_blank" rel="noopener">深入浅出区块链</a> - 打造高质量区块链技术博客，学区块链都来这里，关注<a href="https://www.zhihu.com/people/xiong-li-bing/activities" target="_blank" rel="noopener">知乎</a>、<a href="https://weibo.com/517623789" target="_blank" rel="noopener">微博</a>。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/EIP712/" rel="tag"># EIP712</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/22/randomness-blockchain-2/" rel="next" title="区块链上的随机性（二） - Algorand、Cardano、Dfinity、Randao 项目分析">
+                <i class="fa fa-chevron-left"></i> 区块链上的随机性（二） - Algorand、Cardano、Dfinity、Randao 项目分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/24/bucket-tree/" rel="prev" title="深入理解 Bucket Tree">
+                深入理解 Bucket Tree <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ClimbYang</p>
+              <div class="site-description motion-element" itemprop="description">记录学习编程的点滴</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">74</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/yp945" title="GitHub &rarr; https://github.com/yp945" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:pan107104@outlook.com" title="E-Mail &rarr; mailto:pan107104@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#排名第一的去中心化交易所-IDEX"><span class="nav-number">1.</span> <span class="nav-text">排名第一的去中心化交易所 IDEX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关键的签名"><span class="nav-number">2.</span> <span class="nav-text">关键的签名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EIP712-的改进"><span class="nav-number">3.</span> <span class="nav-text">EIP712 的改进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何把-EIP712-用起来"><span class="nav-number">4.</span> <span class="nav-text">如何把 EIP712 用起来</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义数据结构"><span class="nav-number">4.1.</span> <span class="nav-text">定义数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设计域分隔符（domain-separator）"><span class="nav-number">4.2.</span> <span class="nav-text">设计域分隔符（domain separator）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为-DApp-编写签名代码"><span class="nav-number">4.3.</span> <span class="nav-text">为 DApp 编写签名代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在智能合约中添加验证签名代码"><span class="nav-number">4.4.</span> <span class="nav-text">在智能合约中添加验证签名代码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ClimbYang</span>
+
+  
+
+  
+</div>
+
+<div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过
+</span>
+</div>
+
+
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

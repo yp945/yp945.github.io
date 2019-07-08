@@ -58,4 +58,395 @@
     
   </entry>
   
+  <entry>
+    <title>Libra 源码分析：Libra 的准入控制(AC)模块</title>
+    <link href="http://yoursite.com/2019/07/02/AC-module/"/>
+    <id>http://yoursite.com/2019/07/02/AC-module/</id>
+    <published>2019-07-02T02:23:48.000Z</published>
+    <updated>2019-07-05T08:13:55.279Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;根据Libra的架构图，准入控制模块（AC：admission control，本文中简称AC模块）是位于验证器（Validator）与普通用户交互的入口。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Libra" scheme="http://yoursite.com/categories/Libra/"/>
+    
+    
+      <category term="Libra源码分析" scheme="http://yoursite.com/tags/Libra%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Libra 源码分析：打通Libra CLI客户端与libradb模块</title>
+    <link href="http://yoursite.com/2019/07/01/Proficient-client-and-libradb-modules/"/>
+    <id>http://yoursite.com/2019/07/01/Proficient-client-and-libradb-modules/</id>
+    <published>2019-07-01T02:23:48.000Z</published>
+    <updated>2019-07-05T08:13:55.283Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这篇文章目的是打通Libra CLI 命令行工具与底层数据库模块libradb之间的关系 &lt;code&gt;Libra Cli&lt;/code&gt;指的是 &lt;a href=&quot;https://learnblockchain.cn/docs/libra/docs/my-first-transaction/#克隆并编译-libra-core&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Libra上的第一笔交易&lt;/a&gt; 中提到的命令行工具。 &lt;code&gt;libradb&lt;/code&gt; 指的是&lt;code&gt;storage/libradb&lt;/code&gt;模块 。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Libra" scheme="http://yoursite.com/categories/Libra/"/>
+    
+    
+      <category term="Libra源码分析" scheme="http://yoursite.com/tags/Libra%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+      <category term="libradb" scheme="http://yoursite.com/tags/libradb/"/>
+    
+      <category term="Libra CLI" scheme="http://yoursite.com/tags/Libra-CLI/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>libra的mempool模块解读-1</title>
+    <link href="http://yoursite.com/2019/07/01/Interpretation-of-libra-mempool-module1/"/>
+    <id>http://yoursite.com/2019/07/01/Interpretation-of-libra-mempool-module1/</id>
+    <published>2019-07-01T02:23:48.000Z</published>
+    <updated>2019-07-05T08:13:55.281Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;Mempool模块主要用于缓存未打包的合法交易,该模块和比特币,以太坊源码中的TxPool功能等价,只要包含两个功能:&lt;/p&gt;
+&lt;p&gt;1.接收本地收到的Tx并验证&lt;br&gt;2.和其他节点之间互相同步Tx.&lt;br&gt;因为Libra使用的是不会分叉的PBFT共识,所以缓冲池的实现以
+        
+      
+    
+    </summary>
+    
+      <category term="Libra" scheme="http://yoursite.com/categories/Libra/"/>
+    
+    
+      <category term="Libra源码分析" scheme="http://yoursite.com/tags/Libra%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Libra 源码分析：Libra 中数据存储的 Schema</title>
+    <link href="http://yoursite.com/2019/06/30/Schema-for-data-storage-in-Libra/"/>
+    <id>http://yoursite.com/2019/06/30/Schema-for-data-storage-in-Libra/</id>
+    <published>2019-06-30T02:53:48.000Z</published>
+    <updated>2019-07-05T08:13:55.284Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Libra数据存储使用的RocksDB这个KV数据库.并且&lt;a href=&quot;https://learnblockchain.cn/docs/libra/docs/welcome-to-libra/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Libra&lt;/a&gt;存储和以太坊基本上思路是一样的,就是一个MPT树来保存Libra这个超级状态机.&lt;/p&gt;
+&lt;p&gt;因为RocksDB中除了KV以外,还存在着ColumnFamilyName这一项,这个用起来有点像Bucket.&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Libra" scheme="http://yoursite.com/categories/Libra/"/>
+    
+    
+      <category term="Libra源码分析" scheme="http://yoursite.com/tags/Libra%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
+    
+      <category term="schemadb" scheme="http://yoursite.com/tags/schemadb/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>通过 Libra 学习 Protobuf</title>
+    <link href="http://yoursite.com/2019/06/29/Learn-Protobuf-in-Libra/"/>
+    <id>http://yoursite.com/2019/06/29/Learn-Protobuf-in-Libra/</id>
+    <published>2019-06-29T02:23:48.000Z</published>
+    <updated>2019-07-05T08:13:55.282Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Protobuf是一种平台无关、语言无关、可扩展且轻便高效的序列化数据结构的协议，可以用于网络通信和数据存储，本文看看它如果应用在 &lt;a href=&quot;https://learnblockchain.cn/docs/libra/docs/welcome-to-libra/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Libra&lt;/a&gt; 中。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Libra 是Facebook 牵头发布的基于稳定币的区块链项目，大家可以通过社区翻译的&lt;a href=&quot;https://learnblockchain.cn/docs/libra/docs/welcome-to-libra/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Libra 中文文档&lt;/a&gt;入门Libra。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="Libra" scheme="http://yoursite.com/categories/Libra/"/>
+    
+    
+      <category term="Libra" scheme="http://yoursite.com/tags/Libra/"/>
+    
+      <category term="Protobuf" scheme="http://yoursite.com/tags/Protobuf/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>解读Libra Move：一种可编程资源语言</title>
+    <link href="http://yoursite.com/2019/06/28/deep-move/"/>
+    <id>http://yoursite.com/2019/06/28/deep-move/</id>
+    <published>2019-06-28T02:48:34.000Z</published>
+    <updated>2019-07-05T08:13:55.295Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Facebook最近发表了许可链项目&lt;a href=&quot;https://learnblockchain.cn/docs/libra/docs/welcome-to-libra/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Libra&lt;/a&gt;，其中的最大亮点是Move语言。 下面我们从技术视角解读一下“Move: A Language With Programmable Resources”这篇白皮书，供大家参考。&lt;/p&gt;
+&lt;p&gt;为了便于理解，我们拿比特币、以太坊和Libra来做一个对比。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Libra" scheme="http://yoursite.com/categories/Libra/"/>
+    
+    
+      <category term="Move" scheme="http://yoursite.com/tags/Move/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>入门 Facebook Libra - 开发环境搭建</title>
+    <link href="http://yoursite.com/2019/06/20/libra-init/"/>
+    <id>http://yoursite.com/2019/06/20/libra-init/</id>
+    <published>2019-06-20T12:25:14.000Z</published>
+    <updated>2019-07-05T08:13:55.337Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这几天应该都被Libra刷屏了。Facebook Libra将在2020年底会推出。这里暂且不详细来讨论Libra的意义和阶段性影响。目前来看 Libra 满足了人们进入区块链时代的阶段性的需求，至于如何发展持续保持关注。笔者尝试搭建Libra环境。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Libra" scheme="http://yoursite.com/categories/Libra/"/>
+    
+    
+      <category term="Libra" scheme="http://yoursite.com/tags/Libra/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>理解 Web 3 技术栈及区块链如何助力</title>
+    <link href="http://yoursite.com/2019/06/19/web3-blockchain/"/>
+    <id>http://yoursite.com/2019/06/19/web3-blockchain/</id>
+    <published>2019-06-19T12:25:14.000Z</published>
+    <updated>2019-07-05T08:13:55.357Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Web 3.0 的技术栈虽然尚未完成开发，但是一个&lt;strong&gt;去中心化&lt;/strong&gt;、&lt;strong&gt;透明&lt;/strong&gt;、&lt;strong&gt;安全&lt;/strong&gt;的Web 3.0 互联网时代即将来临，而区块链技术将是Web 3.0 的主要驱动力。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="其他" scheme="http://yoursite.com/categories/%E5%85%B6%E4%BB%96/"/>
+    
+    
+      <category term="Web3" scheme="http://yoursite.com/tags/Web3/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Cosmos 与 波卡 Polkadot 的五大区别</title>
+    <link href="http://yoursite.com/2019/06/18/comsmos-vs-polkadot/"/>
+    <id>http://yoursite.com/2019/06/18/comsmos-vs-polkadot/</id>
+    <published>2019-06-18T02:45:14.000Z</published>
+    <updated>2019-07-05T08:13:55.291Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Cosmos 和 Polkadot 都是关注区块链互操作性的项目，关于二者之间的差别已经有过很多讨论。如果你还不熟悉这两个项目，Linda Xie 发过一串&lt;a href=&quot;https://twitter.com/ljxie/status/1118221870745047040?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1118221870745047040&amp;ref_url=https%3A%2F%2Fmedium.com%2Fmedia%2F4c261ee43d7ae6db10bd7c53dcca9114%3FpostId%3D67f09535594b&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;推特&lt;/a&gt;介绍过这两个项目，可以作为很好的入门材料。&lt;/p&gt;
+&lt;p&gt;虽然已经有很多文章分析过这两个项目的区别了，但是我认为其中大部分都存在一定的偏向性或者不够详细。通过这篇文章，我会从架构权衡到设计哲学等方面更深入地探讨这两个项目。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="跨链" scheme="http://yoursite.com/categories/%E8%B7%A8%E9%93%BE/"/>
+    
+    
+      <category term="Cosmos" scheme="http://yoursite.com/tags/Cosmos/"/>
+    
+      <category term="Polkadot" scheme="http://yoursite.com/tags/Polkadot/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>理解 Cosmos Hub 的治理【译】</title>
+    <link href="http://yoursite.com/2019/06/18/comsmos-governance/"/>
+    <id>http://yoursite.com/2019/06/18/comsmos-governance/</id>
+    <published>2019-06-18T01:25:14.000Z</published>
+    <updated>2019-07-05T08:13:55.290Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本文作者Felix Lutsch 是Chorus One（验证人节点运营服务商）的研究员，本文将介绍Cosmos Hub的治理流程以及如何参与治理。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="跨链" scheme="http://yoursite.com/categories/%E8%B7%A8%E9%93%BE/"/>
+    
+      <category term="Cosmos" scheme="http://yoursite.com/categories/%E8%B7%A8%E9%93%BE/Cosmos/"/>
+    
+    
+      <category term="Cosmos" scheme="http://yoursite.com/tags/Cosmos/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】以太坊 2.0 路线图</title>
+    <link href="http://yoursite.com/2019/06/15/eth-serenity/"/>
+    <id>http://yoursite.com/2019/06/15/eth-serenity/</id>
+    <published>2019-06-15T10:45:14.000Z</published>
+    <updated>2019-07-05T08:13:55.307Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;上一篇文章：&lt;a href=&quot;https://learnblockchain.cn/2019/06/15/eth-history1/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;以太坊发展简史&lt;/a&gt;介绍了当前以太坊经历了哪些升级和硬分叉，本文将继续介绍：什么是Serenity？ETH 2.0将于何时经历哪些阶段？&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="以太坊" scheme="http://yoursite.com/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"/>
+    
+    
+      <category term="以太坊简史" scheme="http://yoursite.com/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%AE%80%E5%8F%B2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【译】以太坊发展简史</title>
+    <link href="http://yoursite.com/2019/06/15/eth-history1/"/>
+    <id>http://yoursite.com/2019/06/15/eth-history1/</id>
+    <published>2019-06-15T07:45:14.000Z</published>
+    <updated>2019-07-05T08:13:55.307Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在&lt;a href=&quot;https://learnblockchain.cn/2019/06/15/eth-serenity/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;以太坊在Serenity (ETH 2.0)&lt;/a&gt;阶段来临之前经历的升级和硬分叉。通过本文将了解到升级或分叉发生的时间，加入那哪些特性。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="以太坊" scheme="http://yoursite.com/categories/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"/>
+    
+    
+      <category term="以太坊简史" scheme="http://yoursite.com/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%AE%80%E5%8F%B2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Poker EOS被盗 2万多EOS事件启示 - 谈私钥安全</title>
+    <link href="http://yoursite.com/2019/06/14/keep-private-key/"/>
+    <id>http://yoursite.com/2019/06/14/keep-private-key/</id>
+    <published>2019-06-14T07:45:14.000Z</published>
+    <updated>2019-07-05T08:13:55.335Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;私钥被盗，满盘皆输——Poker EOS被盗 2万多EOS事件启示。&lt;br&gt;A secret between more than two is no secret. 两人以上知道的秘密就不算秘密。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="区块链安全" scheme="http://yoursite.com/categories/%E5%8C%BA%E5%9D%97%E9%93%BE%E5%AE%89%E5%85%A8/"/>
+    
+    
+      <category term="私钥" scheme="http://yoursite.com/tags/%E7%A7%81%E9%92%A5/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>利用 EYBlockchain 在以太坊上创建隐私币</title>
+    <link href="http://yoursite.com/2019/06/13/EYBlockchain/"/>
+    <id>http://yoursite.com/2019/06/13/EYBlockchain/</id>
+    <published>2019-06-13T07:10:54.000Z</published>
+    <updated>2019-07-05T08:13:55.280Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;前一段时间，介绍了几篇零知识证明文章：&lt;a href=&quot;https://learnblockchain.cn/2019/04/18/learn-zkSNARK/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;入门zkSNARK&lt;/a&gt;， &lt;a href=&quot;https://learnblockchain.cn/2019/05/07/qsp-qap/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;从 QSP 到 QAP&lt;/a&gt;，&lt;a href=&quot;https://learnblockchain.cn/2019/05/27/groth16/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Groth16 算法介绍&lt;/a&gt;， 今天这篇文章分享下利用 EYBlockchain 在以太坊上创建隐私币。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="基础理论" scheme="http://yoursite.com/categories/%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="密码学" scheme="http://yoursite.com/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
+    
+      <category term="EYBlockchain" scheme="http://yoursite.com/tags/EYBlockchain/"/>
+    
+      <category term="零知识证明" scheme="http://yoursite.com/tags/%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>波卡平行链的插槽设计</title>
+    <link href="http://yoursite.com/2019/06/04/polkadot-parachain-slots/"/>
+    <id>http://yoursite.com/2019/06/04/polkadot-parachain-slots/</id>
+    <published>2019-06-04T12:48:34.000Z</published>
+    <updated>2019-07-05T08:13:55.341Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本文翻译自&lt;a href=&quot;https://medium.com/polkadot-network/polkadot-parachain-slots-f3f051d41699&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;链接&lt;/a&gt;，文章虽然是讲平行链的设计，同时也深入阐述了波卡的经济体系设计，以及为什么项目会愿意参与波卡生态，共享用户。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="跨链" scheme="http://yoursite.com/categories/%E8%B7%A8%E9%93%BE/"/>
+    
+      <category term="Polkadot" scheme="http://yoursite.com/categories/%E8%B7%A8%E9%93%BE/Polkadot/"/>
+    
+    
+      <category term="Polkadot" scheme="http://yoursite.com/tags/Polkadot/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>以太坊交易流程及交易池 TXpool 分析</title>
+    <link href="http://yoursite.com/2019/06/03/eth-txpool/"/>
+    <id>http://yoursite.com/2019/06/03/eth-txpool/</id>
+    <published>2019-06-03T12:41:20.000Z</published>
+    <updated>2019-07-05T08:13:55.308Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这篇文章来看看以太坊的交易流程及交易池TXpool。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="基础理论" scheme="http://yoursite.com/categories/%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="以太坊" scheme="http://yoursite.com/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nervos CKB 加密经济模型</title>
+    <link href="http://yoursite.com/2019/06/02/nervos-ckb/"/>
+    <id>http://yoursite.com/2019/06/02/nervos-ckb/</id>
+    <published>2019-06-02T15:48:34.000Z</published>
+    <updated>2019-07-05T08:13:55.340Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Nervos CKB 加密经济模型是我到目前为止见到的比较有特色的经济模型设计。感觉不只是公链，对任何协议层的经济模型设计都有一定的借鉴意义。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Nervos" scheme="http://yoursite.com/categories/Nervos/"/>
+    
+    
+      <category term="Nervos" scheme="http://yoursite.com/tags/Nervos/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>谈谈区块链（去中心化）治理</title>
+    <link href="http://yoursite.com/2019/06/01/govern/"/>
+    <id>http://yoursite.com/2019/06/01/govern/</id>
+    <published>2019-06-01T06:23:00.000Z</published>
+    <updated>2019-07-05T08:13:55.332Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;治理，这个词在英语系国家用的很多，国内使用比较少，原意是控制、引导和操纵，指的是在特定范围内行使权威。如何在众多不同利益共同发挥作用的领域建立一致或取得认同，以便实施某项计划。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="杂文" scheme="http://yoursite.com/categories/%E6%9D%82%E6%96%87/"/>
+    
+    
+      <category term="治理" scheme="http://yoursite.com/tags/%E6%B2%BB%E7%90%86/"/>
+    
+  </entry>
+  
 </feed>

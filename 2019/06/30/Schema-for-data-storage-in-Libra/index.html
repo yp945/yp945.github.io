@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Libra数据存储使用的RocksDB这个KV数据库.并且Libra存储和以太坊基本上思路是一样的,就是一个MPT树来保存Libra这个超级状态机. 因为RocksDB中除了KV以外,还存在着ColumnFamilyName这一项,这个用起来有点像Bucket.">
+<meta name="keywords" content="Libra源码分析,schemadb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Libra 源码分析：Libra 中数据存储的 Schema">
+<meta property="og:url" content="http://yoursite.com/2019/06/30/Schema-for-data-storage-in-Libra/index.html">
+<meta property="og:site_name" content="ClimbYang的记录">
+<meta property="og:description" content="Libra数据存储使用的RocksDB这个KV数据库.并且Libra存储和以太坊基本上思路是一样的,就是一个MPT树来保存Libra这个超级状态机. 因为RocksDB中除了KV以外,还存在着ColumnFamilyName这一项,这个用起来有点像Bucket.">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-05T08:13:55.284Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Libra 源码分析：Libra 中数据存储的 Schema">
+<meta name="twitter:description" content="Libra数据存储使用的RocksDB这个KV数据库.并且Libra存储和以太坊基本上思路是一样的,就是一个MPT树来保存Libra这个超级状态机. 因为RocksDB中除了KV以外,还存在着ColumnFamilyName这一项,这个用起来有点像Bucket.">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ClimbYang的记录" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/06/30/Schema-for-data-storage-in-Libra/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Libra 源码分析：Libra 中数据存储的 Schema | ClimbYang的记录</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+        <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ClimbYang的记录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">blockchain</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/30/Schema-for-data-storage-in-Libra/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ClimbYang">
+      <meta itemprop="description" content="记录学习编程的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ClimbYang的记录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Libra 源码分析：Libra 中数据存储的 Schema
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-30 10:53:48" itemprop="dateCreated datePublished" datetime="2019-06-30T10:53:48+08:00">2019-06-30</time>
+            </span>
+          
+
+          
+            
+
+            
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-07-05 16:13:55" itemprop="dateModified" datetime="2019-07-05T16:13:55+08:00">2019-07-05</time>
+              </span>
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Libra/" itemprop="url" rel="index"><span itemprop="name">Libra</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+              <span title="本文字数">11k</span>
+            </span>
+          
+
+	  
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+              <span title="阅读时长">22 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Libra数据存储使用的RocksDB这个KV数据库.并且<a href="https://learnblockchain.cn/docs/libra/docs/welcome-to-libra/" target="_blank" rel="noopener">Libra</a>存储和以太坊基本上思路是一样的,就是一个MPT树来保存Libra这个超级状态机.</p>
+<p>因为RocksDB中除了KV以外,还存在着ColumnFamilyName这一项,这个用起来有点像Bucket.</p>
+<a id="more"></a>
+
+<h2 id="schemadb"><a href="#schemadb" class="headerlink" title="schemadb"></a>schemadb</h2><h3 id="数据的读写"><a href="#数据的读写" class="headerlink" title="数据的读写"></a>数据的读写</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">/// This DB is a schematized RocksDB wrapper where all data passed in and out are typed according to</span><br><span class="line">/// [`Schema`]s.</span><br><span class="line">#[derive(Debug)]</span><br><span class="line">pub struct DB &#123;</span><br><span class="line">    inner: rocksdb::DB,</span><br><span class="line">&#125;</span><br><span class="line">impl DB &#123;</span><br><span class="line">        /// Reads single record by key.</span><br><span class="line">    pub fn get&lt;S: Schema&gt;(&amp;self, schema_key: &amp;S::Key) -&gt; Result&lt;Option&lt;S::Value&gt;&gt; &#123; //从数据库中读取KV</span><br><span class="line">        let k = schema_key.encode_key()?; //用的是哪里的encode_key?如何关联起来的?</span><br><span class="line">        let cf_handle = self.get_cf_handle(S::COLUMN_FAMILY_NAME)?;</span><br><span class="line"></span><br><span class="line">        self.inner</span><br><span class="line">            .get_cf(cf_handle, &amp;k)</span><br><span class="line">            .map_err(convert_rocksdb_err)?</span><br><span class="line">            .map(|raw_value| S::Value::decode_value(&amp;raw_value))//用的是哪里的decode_value?如何关联起来的?</span><br><span class="line">            .transpose()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /// Writes single record.</span><br><span class="line">    pub fn put&lt;S: Schema&gt;(&amp;self, key: &amp;S::Key, value: &amp;S::Value) -&gt; Result&lt;()&gt; &#123; //向数据库中写</span><br><span class="line">        let k = &lt;S::Key as KeyCodec&lt;S&gt;&gt;::encode_key(&amp;key)?;</span><br><span class="line">        let v = &lt;S::Value as ValueCodec&lt;S&gt;&gt;::encode_value(&amp;value)?;</span><br><span class="line">        let cf_handle = self.get_cf_handle(S::COLUMN_FAMILY_NAME)?;</span><br><span class="line"></span><br><span class="line">        self.inner</span><br><span class="line">            .put_cf_opt(cf_handle, &amp;k, &amp;v, &amp;default_write_options())</span><br><span class="line">            .map_err(convert_rocksdb_err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="数据的批量写SchemaBatch"><a href="#数据的批量写SchemaBatch" class="headerlink" title="数据的批量写SchemaBatch"></a>数据的批量写SchemaBatch</h3><p>为了提供写入的效率,Libra还提供了<code>SchemaBatch</code>,用于批量更新数据.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pub struct SchemaBatch &#123;</span><br><span class="line">    rows: Vec&lt;(ColumnFamilyName, Vec&lt;u8&gt; /* key */, WriteOp)&gt;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一般的用法是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">let db = TestDB::new();</span><br><span class="line"></span><br><span class="line">    for i in 0..1000 &#123;</span><br><span class="line">        let mut db_batch = SchemaBatch::new();</span><br><span class="line">        db_batch</span><br><span class="line">            .put::&lt;TestSchema1&gt;(&amp;TestField(i), &amp;TestField(i))</span><br><span class="line">            .unwrap();</span><br><span class="line">        db_batch</span><br><span class="line">            .put::&lt;TestSchema2&gt;(&amp;TestField(i), &amp;TestField(i))</span><br><span class="line">            .unwrap();</span><br><span class="line">        db.write_schemas(db_batch).unwrap();//一次性提交到数据库中</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    db.flush_all(/* sync = */ true).unwrap();  //刷到硬盘</span><br></pre></td></tr></table></figure>
+
+<p>正如我在代码注释中提到的,其实这里的关键问题就是Rust中的数据类型很丰富,但是RocksDB中无论是Key还是Value都只能是字节序列, 因此在存取的时候必然涉及到不断地编码和解码(<code>KeyCodec</code>和<code>ValueCodec</code>). 如何更方便的实现呢?</p>
+<h3 id="编码和解码"><a href="#编码和解码" class="headerlink" title="编码和解码"></a>编码和解码</h3><p>在Libra中针对KV中的Key和Value两个字段分别设计了编解码接口. Key的编码解码trait是<code>KeyCodec,Value</code>的编解码trait则是<code>ValueCodec</code>. 下面是接口,具体的实现则可以<a href="#AccountState的存取过程">参考AccountState</a>的存取过程.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/// This trait defines a type that can serve as a [`Schema::Key`].</span><br><span class="line">pub trait KeyCodec&lt;S: Schema + ?Sized&gt;: Sized + PartialEq + Debug &#123;</span><br><span class="line">    /// Converts `self` to bytes to be stored in DB.</span><br><span class="line">    fn encode_key(&amp;self) -&gt; Result&lt;Vec&lt;u8&gt;&gt;;</span><br><span class="line">    /// Converts bytes fetched from DB to `Self`.</span><br><span class="line">    fn decode_key(data: &amp;[u8]) -&gt; Result&lt;Self&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/// This trait defines a type that can serve as a [`Schema::Value`].</span><br><span class="line">pub trait ValueCodec&lt;S: Schema + ?Sized&gt;: Sized + PartialEq + Debug &#123;</span><br><span class="line">    /// Converts `self` to bytes to be stored in DB.</span><br><span class="line">    fn encode_value(&amp;self) -&gt; Result&lt;Vec&lt;u8&gt;&gt;;</span><br><span class="line">    /// Converts bytes fetched from DB to `Self`.</span><br><span class="line">    fn decode_value(data: &amp;[u8]) -&gt; Result&lt;Self&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Rust</span><br></pre></td></tr></table></figure>
+
+<h3 id="编解码器的使用"><a href="#编解码器的使用" class="headerlink" title="编解码器的使用"></a>编解码器的使用</h3><p>为了降低SchemaBatch中put,get,delete这些函数的参数形式的复杂度以及提供COLUMN_FAMILY_NAME,因此提供了<code>Schema</code>这个trait.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/// This trait defines a schema: an association of a column family name, the key type and the value</span><br><span class="line">/// type.</span><br><span class="line">pub trait Schema &#123;</span><br><span class="line">    /// The column family name associated with this struct.</span><br><span class="line">    /// Note: all schemas within the same SchemaDB must have distinct column family names.</span><br><span class="line">    const COLUMN_FAMILY_NAME: ColumnFamilyName;</span><br><span class="line"></span><br><span class="line">    /// Type of the key.</span><br><span class="line">    type Key: KeyCodec&lt;Self&gt;;</span><br><span class="line">    /// Type of the value.</span><br><span class="line">    type Value: ValueCodec&lt;Self&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>他没有任何成员函数,就是为了提供Key,Value的类型以及COLUMN_FAMILY_NAME. 通过<code>Schema</code>在<code>SchemaBatch</code>和<code>DB</code>中使用<code>KeyCodec</code>以及<code>ValueCodec</code>就比较方便了.</p>
+<p>为了实现方便,还提供了宏<code>define_schema</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#[macro_export]</span><br><span class="line">macro_rules! define_schema &#123;</span><br><span class="line">    ($schema_type: ident, $key_type: ty, $value_type: ty, $cf_name: expr) =&gt; &#123;</span><br><span class="line">        pub(crate) struct $schema_type;</span><br><span class="line"></span><br><span class="line">        impl $crate::schema::Schema for $schema_type &#123;</span><br><span class="line">            const COLUMN_FAMILY_NAME: $crate::ColumnFamilyName = $cf_name;</span><br><span class="line">            type Key = $key_type;</span><br><span class="line">            type Value = $value_type;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="说说define-schema这个宏"><a href="#说说define-schema这个宏" class="headerlink" title="说说define_schema这个宏"></a>说说<code>define_schema</code>这个宏</h3><p>顺便为了学习宏,这里把这个宏展开一下.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//输入:</span><br><span class="line">define_schema!(TestSchema, TestKey, TestValue, &quot;TestCF&quot;);</span><br><span class="line"></span><br><span class="line">struct TestKey(u32, u32, u32);</span><br><span class="line"></span><br><span class="line">struct TestValue(u32);</span><br><span class="line"></span><br><span class="line">Rust</span><br></pre></td></tr></table></figure>
+
+<p>对应的内容宏展开后就是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">impl crate::schema::Schema for TestSchema &#123;</span><br><span class="line">    const COLUMN_FAMILY_NAME: crate::ColumnFamilyName = &quot;TestCF&quot;;</span><br><span class="line">    type Key = TestKey;</span><br><span class="line">    type Value = TestValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>是不是宏看起来也很简单这里就是为了避免重复写这种可以自动生成的代码,因此提供了宏.<br>好处是减少了代码的重复,坏处是目前IDE都不能很好识别宏,导致代码跳转都有问题,</p>
+<h2 id="AccountState的存取过程"><a href="#AccountState的存取过程" class="headerlink" title="AccountState的存取过程"></a>AccountState的存取过程</h2><p>为了方便学习,这里选取一个真实的例子,看看上面的内容是如何使用的.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">define_schema!(</span><br><span class="line">    AccountStateSchema,</span><br><span class="line">    HashValue,</span><br><span class="line">    AccountStateBlob,</span><br><span class="line">    ACCOUNT_STATE_CF_NAME</span><br><span class="line">);</span><br><span class="line">//这是对HashValue的编解码,这么写的好处是在put和get中用起来清晰</span><br><span class="line">//但是同一个HashValue在不同的Schema中反复出现,则需要反复实现</span><br><span class="line">//具体可以参考StateMerkleNodeSchema,他里面的Key也是HashValue,</span><br><span class="line">//但是不得不把HashValue的编解码重复了一遍</span><br><span class="line">impl KeyCodec&lt;AccountStateSchema&gt; for HashValue &#123; </span><br><span class="line">    fn encode_key(&amp;self) -&gt; Result&lt;Vec&lt;u8&gt;&gt; &#123;</span><br><span class="line">        Ok(self.to_vec())</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn decode_key(data: &amp;[u8]) -&gt; Result&lt;Self&gt; &#123;</span><br><span class="line">        Ok(HashValue::from_slice(data)?)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl ValueCodec&lt;AccountStateSchema&gt; for AccountStateBlob &#123;</span><br><span class="line">    fn encode_value(&amp;self) -&gt; Result&lt;Vec&lt;u8&gt;&gt; &#123;</span><br><span class="line">        Ok(self.clone().into())</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn decode_value(data: &amp;[u8]) -&gt; Result&lt;Self&gt; &#123;</span><br><span class="line">        Ok(data.to_vec().into())</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以<code>SchemaBatch</code>调用过程为例.</p>
+<ol>
+<li>SchemaBatch.put 放入缓存Vec中</li>
+<li><blockquote>
+<blockquote>
+<p>SchemaBatch.put中调用Key的encode_key,Value的encode_value编码成字节序列</p>
+</blockquote>
+</blockquote>
+</li>
+<li>DB.write_schemas 写入到磁盘</li>
+</ol>
+<p>SchemaBatch put的实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/// Adds an insert/update operation to the batch.</span><br><span class="line">//这的S可以看做是`AccountStateSchema`,S::Key就是KeyCodec&lt;AccountStateSchema&gt;,</span><br><span class="line">//S::Value则是ValueCodec&lt;AccountStateSchema&gt;,注意他们都是trait类型</span><br><span class="line">pub fn put&lt;S: Schema&gt;(&amp;mut self, key: &amp;S::Key, value: &amp;S::Value) -&gt; Result&lt;()&gt; &#123;</span><br><span class="line">    let key = key.encode_key()?;</span><br><span class="line">    let value = value.encode_value()?;</span><br><span class="line">    self.rows</span><br><span class="line">        .push((S::COLUMN_FAMILY_NAME, key, WriteOp::Value(value)));</span><br><span class="line">    Ok(())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>前面通过宏<code>define_schema</code>生成的辅助代码<code>XXSchema</code>就是为了这里使用,否则参数类型会特别长,并且之间没有强制关联.</p>
+<h2 id="数据在数据库中存储"><a href="#数据在数据库中存储" class="headerlink" title="数据在数据库中存储"></a>数据在数据库中存储</h2><p>主要是依据<code>storage/libradb/src/schema</code>中的定义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pub(super) const ACCOUNT_STATE_CF_NAME: ColumnFamilyName = &quot;account_state&quot;;</span><br><span class="line">pub(super) const EVENT_ACCUMULATOR_CF_NAME: ColumnFamilyName = &quot;event_accumulator&quot;;</span><br><span class="line">pub(super) const EVENT_BY_ACCESS_PATH_CF_NAME: ColumnFamilyName = &quot;event_by_access_path&quot;;</span><br><span class="line">pub(super) const EVENT_CF_NAME: ColumnFamilyName = &quot;event&quot;;</span><br><span class="line">pub(super) const SIGNATURE_CF_NAME: ColumnFamilyName = &quot;signature&quot;;</span><br><span class="line">pub(super) const SIGNED_TRANSACTION_CF_NAME: ColumnFamilyName = &quot;signed_transaction&quot;;</span><br><span class="line">pub(super) const STATE_MERKLE_NODE_CF_NAME: ColumnFamilyName = &quot;state_merkle_node&quot;;</span><br><span class="line">pub(super) const TRANSACTION_ACCUMULATOR_CF_NAME: ColumnFamilyName = &quot;transaction_accumulator&quot;;</span><br><span class="line">pub(super) const TRANSACTION_INFO_CF_NAME: ColumnFamilyName = &quot;transaction_info&quot;;</span><br><span class="line">pub(super) const VALIDATOR_CF_NAME: ColumnFamilyName = &quot;validator&quot;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="account-state"><a href="#account-state" class="headerlink" title="account_state"></a>account_state</h4><p>HashValue=&gt;AccountStateBlob的映射 HashValue应该是账户地址</p>
+<h4 id="event-accumulator-EventAccumulatorSchema"><a href="#event-accumulator-EventAccumulatorSchema" class="headerlink" title="event_accumulator (EventAccumulatorSchema)"></a>event_accumulator (EventAccumulatorSchema)</h4><p>(Version,Position)=&gt;HashValue<br>使用方法见<code>libradb/src/event_store</code>中的<code>put_events</code></p>
+<h4 id="event-by-access-path"><a href="#event-by-access-path" class="headerlink" title="event_by_access_path"></a>event_by_access_path</h4><p>(AccessPath, SeqNum)=&gt; (Version, Index)</p>
+<h4 id="event"><a href="#event" class="headerlink" title="event"></a>event</h4><p>(Version, Index)=&gt;ContractEvent</p>
+<h4 id="signed-transaction"><a href="#signed-transaction" class="headerlink" title="signed_transaction"></a>signed_transaction</h4><p>Version=&gt;SignedTransaction</p>
+<h4 id="state-merkle-node"><a href="#state-merkle-node" class="headerlink" title="state_merkle_node"></a>state_merkle_node</h4><p>HashValue=&gt;sparse_merkle::node_type::Node</p>
+<h4 id="transaction-accumulator"><a href="#transaction-accumulator" class="headerlink" title="transaction_accumulator"></a>transaction_accumulator</h4><p>types::proof::position::Position=&gt;HashValue</p>
+<h4 id="transaction-info"><a href="#transaction-info" class="headerlink" title="transaction_info"></a>transaction_info</h4><p>Version=&gt;TransactionInfo</p>
+<h4 id="validator"><a href="#validator" class="headerlink" title="validator"></a>validator</h4><p>(Version,PublicKey)=&gt;()空<br>这个为什么这样定义呢?</p>
+<h4 id="ledger-info"><a href="#ledger-info" class="headerlink" title="ledger_info"></a>ledger_info</h4><p>Version=&gt;LedgerInfoWithSignatures<br>注意这个是放在<code>DEFAULT_CF_NAME</code>中的</p>
+<h2 id="schema的使用"><a href="#schema的使用" class="headerlink" title="schema的使用"></a>schema的使用</h2><h3 id="state-store"><a href="#state-store" class="headerlink" title="state_store"></a>state_store</h3><p>位于storage/libradb/src/state_store:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">pub(crate) struct StateStore &#123;</span><br><span class="line">    db: Arc&lt;DB&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl StateStore &#123;</span><br><span class="line">    pub fn new(db: Arc&lt;DB&gt;) -&gt; Self &#123;</span><br><span class="line">        Self &#123; db &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /// Get the account state blob given account address and root hash of state Merkle tree</span><br><span class="line">    pub fn get_account_state_with_proof_by_state_root(</span><br><span class="line">        &amp;self,</span><br><span class="line">        address: AccountAddress,</span><br><span class="line">        root_hash: HashValue,</span><br><span class="line">    ) -&gt; Result&lt;(Option&lt;AccountStateBlob&gt;, SparseMerkleProof)&gt; &#123;</span><br><span class="line">        let (blob, proof) =</span><br><span class="line">            SparseMerkleTree::new(self).get_with_proof(address.hash(), root_hash)?; //去数据库中读取在指定roothash情况下的这个地址的状态</span><br><span class="line">        debug_assert!(</span><br><span class="line">            verify_sparse_merkle_element(root_hash, address.hash(), &amp;blob, &amp;proof).is_ok(),</span><br><span class="line">            &quot;Invalid proof.&quot;</span><br><span class="line">        );</span><br><span class="line">        Ok((blob, proof))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /// Put the results generated by `keyed_blob_sets` to `batch` and return the result root hashes</span><br><span class="line">    /// for each write set.</span><br><span class="line">    pub fn put_account_state_sets(</span><br><span class="line">        &amp;self,</span><br><span class="line">        account_state_sets: Vec&lt;HashMap&lt;AccountAddress, AccountStateBlob&gt;&gt;,</span><br><span class="line">        root_hash: HashValue,</span><br><span class="line">        batch: &amp;mut SchemaBatch,</span><br><span class="line">    ) -&gt; Result&lt;Vec&lt;HashValue&gt;&gt; &#123;</span><br><span class="line">       ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl TreeReader for StateStore &#123;</span><br><span class="line">    fn get_node(&amp;self, node_hash: HashValue) -&gt; Result&lt;Node&gt; &#123;</span><br><span class="line">        Ok(self</span><br><span class="line">            .db</span><br><span class="line">            .get::&lt;StateMerkleNodeSchema&gt;(&amp;node_hash)? //使用上面的编解码器进行自动解码</span><br><span class="line">            .ok_or_else(|| format_err!(&quot;Failed to find node with hash &#123;:?&#125;&quot;, node_hash))?)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fn get_blob(&amp;self, blob_hash: HashValue) -&gt; Result&lt;AccountStateBlob&gt; &#123;</span><br><span class="line">        Ok(self</span><br><span class="line">            .db</span><br><span class="line">            .get::&lt;AccountStateSchema&gt;(&amp;blob_hash)?//使用上面的编解码器进行自动解码</span><br><span class="line">            .ok_or_else(|| &#123;</span><br><span class="line">                format_err!(</span><br><span class="line">                    &quot;Failed to find account state blob with hash &#123;:?&#125;&quot;,</span><br><span class="line">                    blob_hash</span><br><span class="line">                )</span><br><span class="line">            &#125;)?)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>尤其是下面的get_node和get_blob就非常清晰的看出来,直接使用了StateMerkleNodeSchema和AccountStateSchema进行decode.</p>
+<h3 id="transaction-store"><a href="#transaction-store" class="headerlink" title="transaction_store"></a>transaction_store</h3><p>上一个state_store可能看起来稍显复杂,下面的则更清晰直接.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">pub(crate) struct TransactionStore &#123;</span><br><span class="line">    db: Arc&lt;DB&gt;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">impl TransactionStore &#123;</span><br><span class="line">    pub fn new(db: Arc&lt;DB&gt;) -&gt; Self &#123;</span><br><span class="line">        Self &#123; db &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /// Get signed transaction given `version`</span><br><span class="line">    pub fn get_transaction(&amp;self, version: Version) -&gt; Result&lt;SignedTransaction&gt; &#123;</span><br><span class="line">        self.db</span><br><span class="line">            .get::&lt;SignedTransactionSchema&gt;(&amp;version)? //get是直接从db读取</span><br><span class="line">            .ok_or_else(|| LibraDbError::NotFound(format!(&quot;Txn &#123;&#125;&quot;, version)).into())</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /// Save signed transaction at `version`</span><br><span class="line">    pub fn put_transaction(</span><br><span class="line">        &amp;self,</span><br><span class="line">        version: Version,</span><br><span class="line">        signed_transaction: &amp;SignedTransaction,</span><br><span class="line">        batch: &amp;mut SchemaBatch,</span><br><span class="line">    ) -&gt; Result&lt;()&gt; &#123;</span><br><span class="line">        batch.put::&lt;SignedTransactionSchema&gt;(&amp;version, signed_transaction) //put则使用的是batch操作</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="event-store和ledger-store"><a href="#event-store和ledger-store" class="headerlink" title="event_store和ledger_store"></a>event_store和ledger_store</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pub(crate) struct EventStore &#123;</span><br><span class="line">    db: Arc&lt;DB&gt;,</span><br><span class="line">&#125;</span><br><span class="line">pub(crate) struct LedgerStore &#123;</span><br><span class="line">    db: Arc&lt;DB&gt;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>两者稍微复杂一点,这就不一一列举了，但是思路是完全一样的。</p>
+<p>本文作者为深入浅出共建者：白振轩，欢迎大家关注他的<a href="http://stevenbai.top" target="_blank" rel="noopener">博客</a> 。</p>
+<p><a href="https://learnblockchain.cn/" target="_blank" rel="noopener">深入浅出区块链</a> - 打造高质量区块链技术博客，学区块链都来这里，关注<a href="https://www.zhihu.com/people/xiong-li-bing/activities" target="_blank" rel="noopener">知乎</a>、<a href="https://weibo.com/517623789" target="_blank" rel="noopener">微博</a>。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/Libra源码分析/" rel="tag"># Libra源码分析</a>
+          
+            <a href="/tags/schemadb/" rel="tag"># schemadb</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/29/Learn-Protobuf-in-Libra/" rel="next" title="通过 Libra 学习 Protobuf">
+                <i class="fa fa-chevron-left"></i> 通过 Libra 学习 Protobuf
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/01/Interpretation-of-libra-mempool-module1/" rel="prev" title="libra的mempool模块解读-1">
+                libra的mempool模块解读-1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ClimbYang</p>
+              <div class="site-description motion-element" itemprop="description">记录学习编程的点滴</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">86</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">74</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/yp945" title="GitHub &rarr; https://github.com/yp945" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:pan107104@outlook.com" title="E-Mail &rarr; mailto:pan107104@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#schemadb"><span class="nav-number">1.</span> <span class="nav-text">schemadb</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据的读写"><span class="nav-number">1.1.</span> <span class="nav-text">数据的读写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据的批量写SchemaBatch"><span class="nav-number">1.2.</span> <span class="nav-text">数据的批量写SchemaBatch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编码和解码"><span class="nav-number">1.3.</span> <span class="nav-text">编码和解码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编解码器的使用"><span class="nav-number">1.4.</span> <span class="nav-text">编解码器的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#说说define-schema这个宏"><span class="nav-number">1.5.</span> <span class="nav-text">说说define_schema这个宏</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AccountState的存取过程"><span class="nav-number">2.</span> <span class="nav-text">AccountState的存取过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据在数据库中存储"><span class="nav-number">3.</span> <span class="nav-text">数据在数据库中存储</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#account-state"><span class="nav-number">3.0.1.</span> <span class="nav-text">account_state</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#event-accumulator-EventAccumulatorSchema"><span class="nav-number">3.0.2.</span> <span class="nav-text">event_accumulator (EventAccumulatorSchema)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#event-by-access-path"><span class="nav-number">3.0.3.</span> <span class="nav-text">event_by_access_path</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#event"><span class="nav-number">3.0.4.</span> <span class="nav-text">event</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#signed-transaction"><span class="nav-number">3.0.5.</span> <span class="nav-text">signed_transaction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#state-merkle-node"><span class="nav-number">3.0.6.</span> <span class="nav-text">state_merkle_node</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#transaction-accumulator"><span class="nav-number">3.0.7.</span> <span class="nav-text">transaction_accumulator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#transaction-info"><span class="nav-number">3.0.8.</span> <span class="nav-text">transaction_info</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#validator"><span class="nav-number">3.0.9.</span> <span class="nav-text">validator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ledger-info"><span class="nav-number">3.0.10.</span> <span class="nav-text">ledger_info</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#schema的使用"><span class="nav-number">4.</span> <span class="nav-text">schema的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#state-store"><span class="nav-number">4.1.</span> <span class="nav-text">state_store</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#transaction-store"><span class="nav-number">4.2.</span> <span class="nav-text">transaction_store</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#event-store和ledger-store"><span class="nav-number">4.3.</span> <span class="nav-text">event_store和ledger_store</span></a></li></ol></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ClimbYang</span>
+
+  
+
+  
+</div>
+
+<div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style="display:none">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style="display:none">
+    有<span id="busuanzi_value_site_uv"></span>人看过
+</span>
+</div>
+
+
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
