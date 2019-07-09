@@ -1050,7 +1050,7 @@ pre .javascript .function {
   right: 30px;
   z-index: 1050;
   padding: 0 6px;
-  width: 24px;
+  width: initial;
   background: #222;
   font-size: 12px;
   opacity: 0.6;
@@ -1600,6 +1600,28 @@ pre .javascript .function {
 .post-copyright i.fa {
   font-size: 15px;
 }
+.swal-overlay {
+  background-color: transparent;
+}
+.copy-success-message {
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  width: auto;
+  margin: 16x 0px;
+  vertical-align: top;
+}
+.copy-success-message .swal-content {
+  margin: 0px 0px !important;
+  padding: 10px 16px;
+  line-height: 1em;
+}
+.copy-success-message .message-icon {
+  color: #52c41a;
+  margin-right: 8px;
+}
+.copy-success-message .message-content {
+  font-size: 14px;
+}
 .rtl.post-body p,
 .rtl.post-body a,
 .rtl.post-body h1,
@@ -1742,7 +1764,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #3e3409;
+  background: #0affbb;
 }
 .feed-link,
 .chat {
@@ -2099,6 +2121,25 @@ pre .javascript .function {
   top: 50%;
   transform: translate(-50%, -50%);
   color: #ccc;
+}
+.popular-posts-header {
+  margin-top: 60px;
+  margin-bottom: 10px;
+  font-size: 24px;
+  border-bottom: 1px solid #eee;
+  display: block;
+}
+ul.popular-posts {
+  padding: 0;
+}
+ul.popular-posts .popular-posts-item {
+  margin-left: 2em;
+}
+ul.popular-posts .popular-posts-item .popular-posts-title {
+  font-weight: normal;
+  font-size: 14px;
+  margin: 0;
+  line-height: 2.4;
 }
 .page-archive .archive-page-counter {
   position: relative;

@@ -104,7 +104,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://img.learnblockchain.cn/2019/1551843006.png!wl">
 <meta property="og:image" content="https://img.learnblockchain.cn/2019/15525530768209.jpg!wl">
-<meta property="og:updated_time" content="2019-07-05T08:13:55.309Z">
+<meta property="og:updated_time" content="2019-07-09T07:12:55.979Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何开发一款以太坊（安卓）钱包系列1 - 通过助记词创建账号">
 <meta name="twitter:description" content="上周我们开源了登链钱包，反映很好，一周时间不到已经快到100 Star。接下来我会写把钱包核心要点写出来作为一个以太坊钱包开发系列文章，对代码进行一个解读。">
@@ -430,7 +430,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-05 16:13:55" itemprop="dateModified" datetime="2019-07-05T16:13:55+08:00">2019-07-05</time>
+                <time title="修改时间：2019-07-09 15:12:55" itemprop="dateModified" datetime="2019-07-09T15:12:55+08:00">2019-07-09</time>
               </span>
             
           
@@ -511,7 +511,7 @@
 <a id="more"></a>
 <h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>本钱包是基于Android安卓平台开发，使用的是原生语言 Java 编写， 是基于Java 1.8 版本，其中使用了Java 1.8 中一些较新的语言特性，如 Lambda表达式等；另外还较多使用了<a href="https://github.com/ReactiveX/RxAndroid/" target="_blank" rel="noopener">ReactiveX/RxAndroid</a>响应式编程用法。</p>
 <p>在本系列文章中，重点是介绍以太坊钱包账号、交易等逻辑，有时可能会假定读者已经了解<a href="https://wiki.learnblockchain.cn/ethereum/readme.html" target="_blank" rel="noopener">以太坊</a>及Android开发等相关知识，因为这些内容不是文章的重点，因此不会过多介绍，请海涵。</p>
-<h2 id="钱包包含的功能"><a href="#钱包包含的功能" class="headerlink" title="钱包包含的功能"></a>钱包包含的功能</h2><p>通常一个钱包会包含以下功能：</p>
+<h2 id="钱包包含的功能"><a href="#钱包包含的功能" class="headerlink" title="钱包包含的功能"></a>钱包包含的功能</h2><p>通常一个钱包会包含以下功能：</p>
 <ul>
 <li><input checked disabled type="checkbox"> 支持通过生成助记词、Keystore文件、私钥 创建钱包账号。</li>
 <li><input checked disabled type="checkbox"> 支持导出钱包账号助记词、私钥、Keystore文件。</li>
@@ -576,6 +576,36 @@
     </div>
 
     
+      
+
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\04\19\eth-wallet-dev-6\" rel="bookmark">如何开发一款以太坊安卓钱包系列6 - 获取账号交易列表</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\04\04\eth-wallet-dev-5\" rel="bookmark">如何开发一款以太坊安卓钱包系列5 - 发送转账交易</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\03\26\eth-wallet-dev-4\" rel="bookmark">如何开发一款以太坊安卓钱包系列4 - 获取以太及Token余额</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
 
     
     
@@ -600,6 +630,8 @@
 
 
 <ul class="post-copyright">
+   <li class="post-copyright-title">
+    <strong>post.copyright.title：</strong>如何开发一款以太坊（安卓）钱包系列1 - 通过助记词创建账号</li>
   <li class="post-copyright-author">
     <strong>本文作者： </strong>Tiny熊</li>
   <li class="post-copyright-link">
@@ -1022,7 +1054,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#钱包包含的功能"><span class="nav-number">2.</span> <span class="nav-text">钱包包含的功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建账号预备知识"><span class="nav-number">3.</span> <span class="nav-text">创建账号预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Web3j-amp-bitcoinj"><span class="nav-number">3.1.</span> <span class="nav-text">Web3j &amp; bitcoinj</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建账号实现"><span class="nav-number">4.</span> <span class="nav-text">创建账号实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过助记词常见钱包账号"><span class="nav-number">4.1.</span> <span class="nav-text">通过助记词常见钱包账号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个注意事项"><span class="nav-number">5.</span> <span class="nav-text">几个注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-number">1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#钱包包含的功能"><span class="nav-number">2.</span> <span class="nav-text">钱包包含的功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建账号预备知识"><span class="nav-number">3.</span> <span class="nav-text">创建账号预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Web3j-amp-bitcoinj"><span class="nav-number">3.1.</span> <span class="nav-text">Web3j &amp; bitcoinj</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建账号实现"><span class="nav-number">4.</span> <span class="nav-text">创建账号实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过助记词常见钱包账号"><span class="nav-number">4.1.</span> <span class="nav-text">通过助记词常见钱包账号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个注意事项"><span class="nav-number">5.</span> <span class="nav-text">几个注意事项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
             
 
           </div>
@@ -1093,6 +1125,8 @@
     
       <div class="back-to-top">
         <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
         
       </div>
     
