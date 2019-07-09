@@ -511,15 +511,13 @@
       
         <p>上一篇<a href="https://learnblockchain.cn/2019/05/24/eos-dev-intro/" target="_blank" rel="noopener">简析了下 EOS</a> , 这篇分析下<a href="https://learnblockchain.cn/2019/05/25/eos-dev-principle/" target="_blank" rel="noopener">EOS的技术原理</a> 。</p>
 <a id="more"></a>
-
 <h2 id="总体架构"><a href="#总体架构" class="headerlink" title="总体架构"></a>总体架构</h2><p><img src="https://img.learnblockchain.cn/2019/05/15589392544485.jpg" alt></p>
 <p class="image-caption">模块架构图</p>
 
 <p>如上图所示，总体上EOS主要由keosd，cleos，nodeos三大运行时组件构成：</p>
 <p><strong>keosd</strong> 可以认为是个密钥管理器，用来管理和EOS账户相关的公私钥。<br><strong>cleos</strong> 客户端命令行交互组件，用于解析用户命令，根据具体命令请求调用相应的接口，例如查看区块信息、操作钱包等等。<br><strong>nodeos</strong> 是EOS核心进程，EOS大部分的功能都是在 nodeos 中进行。我们可以使用插件来配置nodeos去执行各种功能。p2p网络、合约代码调度以及区块链数据持久化等大部分区块链核心功能都被放在了nodeos中。对于开发人员来说，nodeos也足够用来建立一个单节点区块链网络。</p>
 <p>用户在和eos进行交互时，通常来说都是通过cleos来发送指令，根据具体情况将请求转发到keosd还是nodes，由keosd进行账户创建，交易签名等操作。</p>
-<p>##账户体系</p>
-<p>账户体系是EOS中的亮点之一，实现了基于角色的权限管理和账户恢复功能，使得用户可以灵活地以一种组织化的方式管理账户，并最大化保证资产的安全性。</p>
+<h2 id="账户体系"><a href="#账户体系" class="headerlink" title="账户体系"></a>账户体系</h2><p>账户体系是EOS中的亮点之一，实现了基于角色的权限管理和账户恢复功能，使得用户可以灵活地以一种组织化的方式管理账户，并最大化保证资产的安全性。</p>
 <blockquote>
 <p>备注：EOS 账户是通过智能合约实现的。</p>
 </blockquote>
@@ -990,7 +988,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#总体架构"><span class="nav-number">1.</span> <span class="nav-text">总体架构</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#总体架构"><span class="nav-number">1.</span> <span class="nav-text">总体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#账户体系"><span class="nav-number">2.</span> <span class="nav-text">账户体系</span></a></li></ol></div>
             
 
           </div>

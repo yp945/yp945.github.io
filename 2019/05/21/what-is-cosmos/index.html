@@ -528,7 +528,6 @@
       
         <p>本文从技术角度全面了解 Cosmos 项目， Tendermint 是什么，Cosmos SDK 要解决什么，如何进行跨链，如何解决扩展性问题。</p>
 <a id="more"></a>
-
 <h2 id="Cosmos-简介"><a href="#Cosmos-简介" class="headerlink" title="Cosmos 简介"></a>Cosmos 简介</h2><p>严格来说，<strong>Cosmos是一个独立并行区块链的去中心化网络，每个区块链都由<a href="https://cosmos.network/intro#what-is-tendermint-core-and-the-abci" target="_blank" rel="noopener">Tendermint</a>共识这样的BFT共识算法构建</strong>。</p>
 <blockquote>
 <p>BFT 代表拜占庭容错(Byzantine Fault-Tolerance)。 分布式系统中的拜占庭故障是一些最难处理的问题。 一个拜占庭容错共识算法是一个共识算法，可以保证多达三分之一的拜占庭或恶意行为者的情况下分布式系统的安全。</p>
@@ -570,14 +569,10 @@
 <p>这些限制不是特定于以太坊，而是所有试图创建一个适合所有使用情况的单一平台的区块链。 这也是 Cosmos 发挥作用的地方。</p>
 <h3 id="COSMOS-愿景-区块链-3-0"><a href="#COSMOS-愿景-区块链-3-0" class="headerlink" title="COSMOS 愿景 (区块链 3.0)"></a>COSMOS 愿景 (区块链 3.0)</h3><p><img src="https://img.learnblockchain.cn/2019/05/15585164205028.jpg!wl/scale/60%" alt="Cosmos is composed of three layers"></p>
 <p>Cosmos的愿景是让开发人员轻松构建区块链，并通过允许他们彼此进行交易（通信）来打破区块链之间的障碍。 最终目标是创建一个<strong>区块链网络，一个能够以去中心化方式相互通信的区块链网络</strong>。 通过Cosmos，区块链可以保持主权，快速处理交易并与生态系统中的其他区块链进行通信，使其成为各种场景的最佳选择。</p>
-<p>Cosmos通过一系列开源工具实现这个愿景，如<em>Tendermint*，</em><a href="https://learnblockchain.cn/docs/cosmos/" target="_blank" rel="noopener">Cosmos SDK</a>* 和 <em>IBC</em>，旨在让人们快速构建自定义、安全、可扩展和可互操作的区块链应用。 后面会有工具以及 Cosmos 网络的技术架构的分析。 </p>
+<p>Cosmos通过一系列开源工具实现这个愿景，如<em>Tendermint</em>，<em><a href="https://learnblockchain.cn/docs/cosmos/" target="_blank" rel="noopener">Cosmos SDK</a></em> 和 <em>IBC</em>，旨在让人们快速构建自定义、安全、可扩展和可互操作的区块链应用。 后面会有工具以及 Cosmos 网络的技术架构的分析。 </p>
 <blockquote>
 <p><em>Tendermint</em> 是一个<strong>共识引擎和BFT共识算法</strong>。 在Tendermint之上可以使用任何编程语言构建一个状态机，Tendermint 将负责信息的（按照共识要求的一致性和安全性）复制。</p>
-</blockquote>
-<blockquote>
 <p><em>Cosmos SDK</em> 是一个<strong>模块化框架</strong>，用来简化构建安全的区块链应用。</p>
-</blockquote>
-<blockquote>
 <p><em>IBC</em>是区块链之间的<strong>通信协议</strong>，可以被认为是区块链的TCP/IP。 它允许快速最终性（fast-finality）的区块链以去中心化的方式相互交换价值和数据。</p>
 </blockquote>
 <h2 id="什么是-Tendermint-BFT-和-ABCI"><a href="#什么是-Tendermint-BFT-和-ABCI" class="headerlink" title="什么是 Tendermint BFT 和  ABCI"></a>什么是 Tendermint BFT 和  ABCI</h2><p>之前创建一个区块链需要从头开始构建所有三层：网络、共识和应用程序。 以太坊通过提供虚拟机区块链简化了去中心化应用的开发，任何人都可以以<a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" target="_blank" rel="noopener">智能合约</a>的形式部署自定义逻辑。 但是，它并没有简化区块链本身的开发。 就像比特币一样，Go-Ethereum 仍然是整体耦合的系统，不易自定义。2014年Jae Kwon 创建 Tendermint 就是想要解决这个问题。</p>
@@ -593,10 +588,8 @@
 </li>
 <li><p><strong>高性能：</strong> Tendermint BFT 具有 1 秒数量级的出块时间，每秒处理数千个交易。</p>
 </li>
-<li><p><strong>即时最终确定性：</strong> Tendermint共识算法的一个属性是即时最终确定性（Instant finality）。 只要三分之一以上验证者是诚实的（拜占庭下），就永远不会分叉。 用户可以确保他们的交易一旦创建到区块就是最终（确定）的（这不是比特币和以太坊等工作区块链的情况）。</p>
-</li>
-<li><p><strong>安全：</strong> Tendermint 共识不仅是容错的，同时也有问责（accountable）。 如果发生分叉，有<a href="https://github.com/tendermint/tendermint/wiki/Byzantine-Consensus-Algorithm#proof-of-fork-accountability" target="_blank" rel="noopener">一种方法来确定责任（liability）</a>。</p>
-</li>
+<li><strong>即时最终确定性：</strong> Tendermint共识算法的一个属性是即时最终确定性（Instant finality）。 只要三分之一以上验证者是诚实的（拜占庭下），就永远不会分叉。 用户可以确保他们的交易一旦创建到区块就是最终（确定）的（这不是比特币和以太坊等工作区块链的情况）。</li>
+<li><strong>安全：</strong> Tendermint 共识不仅是容错的，同时也有问责（accountable）。 如果发生分叉，有<a href="https://github.com/tendermint/tendermint/wiki/Byzantine-Consensus-Algorithm#proof-of-fork-accountability" target="_blank" rel="noopener">一种方法来确定责任（liability）</a>。</li>
 </ul>
 <h2 id="Cosmos-SDK-和其他应用层框架"><a href="#Cosmos-SDK-和其他应用层框架" class="headerlink" title="Cosmos SDK 和其他应用层框架"></a>Cosmos SDK 和其他应用层框架</h2><p>Tendermint BFT 将区块链的开发时间大大缩减，但从头构建一个安全的 ABCI应用（实现ABCI协议）仍然是一项艰巨的任务。 这就是为什么需要 Cosmos SDK 。</p>
 <p><a href="https://cosmos.network/sdk" target="_blank" rel="noopener">Cosmos SDK</a> Cosmos SDK是一个通用框架，简化了在Tendermint BFT之上构建安全区块链应用的过程，它基于两个主要原则：</p>

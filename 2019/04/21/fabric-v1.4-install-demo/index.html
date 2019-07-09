@@ -540,7 +540,6 @@
       
         <p>Fabric-V1.4安装配置 及 票据应用示例</p>
 <a id="more"></a>
-
 <h2 id="Fabric-1-4-更新内容"><a href="#Fabric-1-4-更新内容" class="headerlink" title="Fabric 1.4 更新内容"></a>Fabric 1.4 更新内容</h2><p>Fabric已经发布到1.4LTS版本，各个版本对比如下：</p>
 <p><strong>Fabric v1.1版本主要的新特性包括：</strong></p>
 <ul>
@@ -579,162 +578,118 @@
 <h3 id="相关前置软件安装"><a href="#相关前置软件安装" class="headerlink" title="相关前置软件安装"></a>相关前置软件安装</h3><p>关闭Selinux，关闭防火墙等相关操作，相关操作网络上随处可查。</p>
 <p>建议更新后再进行下列操作：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; yum update</span><br></pre></td></tr></table></figure>
-
 <h4 id="安装git、curl、pip"><a href="#安装git、curl、pip" class="headerlink" title="安装git、curl、pip"></a>安装git、curl、pip</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt; yum install git</span><br><span class="line">&gt; yum install curl</span><br><span class="line">&gt; yum -y install epel-release</span><br><span class="line">&gt; yum install python-pip</span><br><span class="line">&gt; pip install --upgrade pip</span><br></pre></td></tr></table></figure>
-
 <h4 id="安装docker相关"><a href="#安装docker相关" class="headerlink" title="安装docker相关"></a>安装docker相关</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;  yum install docker-ce</span><br><span class="line"><span class="comment"># 或者：yum install docker-ce.18.06.3.ce-3.el7  指定具体版本，可以先设置好yum 源（yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo）</span></span><br><span class="line">&gt; pip install docker-compose <span class="comment">#（可能会失败，那就用以下的命令）</span></span><br><span class="line">&gt; pip install docker-compose --ignore-installed requests</span><br></pre></td></tr></table></figure>
-
 <p>相关软件环境：<br>安装完成后查看各个软件版本，如下图：<br><img src="http://static.zybuluo.com/JackyJin/j4oj3qpfpe9gyneamd9sg515/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-01%20%E4%B8%8B%E5%8D%883.37.38.png" alt="屏幕快照 2019-04-01 下午3.37.38.png-435kB"></p>
 <p><strong>注：</strong> 可能会碰到docker-compose报错：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">File &quot;/usr/lib/python2.7/site-packages/paramiko/ssh_gss.py&quot;, line 55, in &lt;module&gt;</span><br><span class="line">GSS_EXCEPTIONS = (gssapi.GSSException,)</span><br><span class="line">AttributeError: &apos;module&apos; object has no attribute &apos;GSSException&apos;</span><br></pre></td></tr></table></figure>
-
 <p>那么通过修改配置文件:/usr/lib/python2.7/site-packages/paramiko/ssh_gss.py来解决:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/lib/python2.7/site-packages/paramiko/ssh_gss.py</span><br><span class="line">53.55行修改如下解决：</span><br><span class="line">53：import gssapi.error</span><br><span class="line">55：GSS_EXCEPTIONS = (gssapi.error.GSSException,)</span><br></pre></td></tr></table></figure>
-
 <p><img src="http://static.zybuluo.com/JackyJin/qcmrry22eydcy7olg3e560e4/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-01%20%E4%B8%8B%E5%8D%883.42.12.png" alt="屏幕快照 2019-04-01 下午3.42.12.png-158.8kB"></p>
 <hr>
 <h4 id="安装Golang、Node-js、npm"><a href="#安装Golang、Node-js、npm" class="headerlink" title="安装Golang、Node.js、npm"></a>安装Golang、Node.js、npm</h4><p><strong>安装Golang</strong></p>
 <p>如果单独去下载安装包麻烦的话，那么直接通过wget来下载解压，配置环境变量。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://studygolang.com/dl/golang/go1.10.8.linux-amd64.tar.gz</span><br><span class="line">tar -xvf go1.10.8.linux-amd64.tar.gz</span><br></pre></td></tr></table></figure>
-
 <p>配置环境变量。修改/etc/profile文件,路径根据下载安装路径来。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br><span class="line">添加</span><br><span class="line">export GOROOT=/usr/go</span><br><span class="line">export GOPATH=/usr/gopath</span><br><span class="line">export PATH=$PATH:$GOROOT/bin:$GOPATH/bin</span><br></pre></td></tr></table></figure>
-
 <p><strong>安装Node.js</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https://npm.taobao.org/mirrors/node/v11.0.0/node-v11.0.0.tar.gz</span><br><span class="line">tar -xvf node-v11.0.0.tar.gz</span><br><span class="line">解压后进入Node文件夹：</span><br><span class="line">yum install gcc gcc-c++</span><br><span class="line">完成后gcc -v,这时候会发现gcc为4.8.5 建议更新：</span><br><span class="line">wget http://ftp.gnu.org/gnu/gcc/gcc-7.3.0/gcc-7.3.0.tar.gz</span><br></pre></td></tr></table></figure>
-
 <p>更新完成后，解压gcc，并安装：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf gcc-7.3.0.tar.gz</span><br><span class="line">进入gcc-7.3.0目录执行：</span><br><span class="line">./contrib/download_prerequisites</span><br><span class="line">mkdir 一个新的目录</span><br><span class="line">进入该目录 cd 目录</span><br><span class="line">../configure --enable-checking=release --enable-languages=c,c++ --disable-multilib </span><br><span class="line">make (请耐心等待，我这里大概等待了2个多小时。。。)</span><br><span class="line">make install</span><br><span class="line">建议重启后再进行之后的操作</span><br></pre></td></tr></table></figure>
-
 <p>重启后看到gcc版本为7.3.0</p>
 <p><img src="http://static.zybuluo.com/JackyJin/t15h1oltz7rc9sux22w8la2l/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-01%20%E4%B8%8B%E5%8D%887.22.57.png" alt="屏幕快照 2019-04-01 下午7.22.57.png-137.4kB"></p>
 <p>安装Node.js</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">进入Node.js文件夹(这里可能有一个文件夹名的问题，建议修改node7.3.0文件夹名直接为node)</span><br><span class="line">./configure</span><br><span class="line">make （耐心等待）</span><br><span class="line">make install</span><br><span class="line">建议重启后再进行之后的操作</span><br></pre></td></tr></table></figure>
-
 <p><strong>安装npm</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install npm -g</span><br></pre></td></tr></table></figure>
-
 <p>完成上述操作后，查看各软件版本：</p>
 <p><img src="http://static.zybuluo.com/JackyJin/0c1bstxapb2abbov2y9cimih/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8A%E5%8D%8810.40.50.png" alt="屏幕快照 2019-04-02 上午10.40.50.png-206.8kB"></p>
 <h2 id="安装-Fabric"><a href="#安装-Fabric" class="headerlink" title="安装 Fabric"></a>安装 Fabric</h2><p>首先下载Fabric源码，我们在go/src目录下新建文件夹。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p github.com/hyperledger</span><br><span class="line">进入该文件夹执行：</span><br><span class="line">git clone https://github.com/hyperledger/fabric.git (耐心等待)</span><br></pre></td></tr></table></figure>
-
 <p>完成后进入 fabric/scripts文件夹，可以看到bootstrap.sh脚本，cat该脚本可以看到fabric版本为1.4.0：</p>
 <p><img src="http://static.zybuluo.com/JackyJin/b9qq5yrn7jy3o6by1zgw2cta/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8A%E5%8D%8811.21.22.png" alt="屏幕快照 2019-04-02 上午11.21.22.png-259.7kB"></p>
-<p>执行bootstrap.sh脚本，自动进行fabric相关镜像的下载,耐心等待</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bootstrap.sh</span><br></pre></td></tr></table></figure>
-
+<p>执行bootstrap.sh脚本，自动进行fabric相关镜像的下载,耐心等待<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bootstrap.sh</span><br></pre></td></tr></table></figure></p>
 <p><img src="http://static.zybuluo.com/JackyJin/zhcpi5o7h9enn0e25gap6wzb/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8A%E5%8D%8811.26.35.png" alt="屏幕快照 2019-04-02 上午11.26.35.png-781.6kB"></p>
 <p>镜像下载完成后如图：</p>
 <p><img src="http://static.zybuluo.com/JackyJin/gqmfotupxempqafc8iredlkt/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8A%E5%8D%8811.48.58.png" alt="屏幕快照 2019-04-02 上午11.48.58.png-476.3kB"></p>
-<p>通过Fabric-samples提供的BYFN(build your first network)构建网络。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./byfn.sh -m generate -c jackychannel（自定义名字）</span><br></pre></td></tr></table></figure>
-
+<p>通过Fabric-samples提供的BYFN(build your first network)构建网络。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./byfn.sh -m generate -c jackychannel（自定义名字）</span><br></pre></td></tr></table></figure></p>
 <p>过程很快，完成后如图：<br><img src="http://static.zybuluo.com/JackyJin/lln962u9tfeikopbsp9hjmxb/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8B%E5%8D%8812.34.40.png" alt="屏幕快照 2019-04-02 下午12.34.40.png-432.6kB"></p>
-<p>启动网络：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./byfn.sh -m up -c jackychannel</span><br></pre></td></tr></table></figure>
-
+<p>启动网络：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./byfn.sh -m up -c jackychannel</span><br></pre></td></tr></table></figure></p>
 <p>启动后如图：<br><img src="http://static.zybuluo.com/JackyJin/doa3adonfpnfbii7lfsb7v4s/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8B%E5%8D%8812.36.24.png" alt="屏幕快照 2019-04-02 下午12.36.24.png-610.7kB"><br>完成后如图：<br><img src="http://static.zybuluo.com/JackyJin/o0peadgti0g4vkqe5xydvt3r/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8B%E5%8D%8812.37.48.png" alt="屏幕快照 2019-04-02 下午12.37.48.png-86.5kB"></p>
 <p>这个时候出现4个peer节点，通过top命令可以清楚看到：<br><img src="http://static.zybuluo.com/JackyJin/9a3azzmat2ys656yk93eba3u/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8B%E5%8D%8812.39.07.png" alt="屏幕快照 2019-04-02 下午12.39.07.png-308.2kB"></p>
 <p><strong>注：</strong> 关闭命令：<code>./byfn.sh -m down</code></p>
 <p>启动网络服务后会启动排序服务节点、4个Peer节点，以及1个命令行容器cli。</p>
 <h2 id="搭建完成后功能测试"><a href="#搭建完成后功能测试" class="headerlink" title="搭建完成后功能测试"></a>搭建完成后功能测试</h2><p>上述步骤完成后，可是去看下一些基本的操作和命令。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/first-network/channel-artifacts目录中,可称为创世区块目录（目录根据每个人的配置）</span><br></pre></td></tr></table></figure>
-
 <p>可以看到下列文件：</p>
 <p><img src="http://static.zybuluo.com/JackyJin/cxalxjgjm1ss6rh89jp0w9zo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8B%E5%8D%8812.57.54.png" alt="屏幕快照 2019-04-02 下午12.57.54.png-155.5kB"></p>
 <p>Org1MSPanchors.tx、Org2MSPanchors.tx,两个锚节点配置。<br>channel.tx，生成通道配置文件。<br>genesis.block，创世区块文件。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/first-network/crypto-config目录中，可称为证书目录（目录根据每个人的配置）</span><br></pre></td></tr></table></figure>
-
 <p>该目录存放生成排序服务节点和Peer节点的MSP证书文件，如图：<br><img src="http://static.zybuluo.com/JackyJin/b3wmxbbfqbiaifqtcpx3y6dk/1112019-04-02%20%E4%B8%8B%E5%8D%881.11.57.png" alt="1112019-04-02 下午1.11.57.png-560.3kB"></p>
 <p>使用docker命令查看运行中的镜像：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
-
 <p>结果如图：<br><img src="http://static.zybuluo.com/JackyJin/vsucu8979qqo9lo5kztqa2vg/12222019-04-02%20%E4%B8%8B%E5%8D%881.14.47.png" alt="12222019-04-02 下午1.14.47.png-614.9kB"></p>
 <p>进入cli来进行一些简单的操作：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it cli bash</span><br></pre></td></tr></table></figure>
-
 <p>切换到容器内做一个简单的查询：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode query -C jackychannel(刚设置启动的名称) -n mycc -c &apos;&#123;&quot;Args&quot;:[&quot;query&quot;,&quot;a&quot;]&#125;&apos;</span><br></pre></td></tr></table></figure>
-
 <p>结果会看到90余额。</p>
 <h2 id="票据应用测试"><a href="#票据应用测试" class="headerlink" title="票据应用测试"></a>票据应用测试</h2><p>在Fabric官网文档中有一个商业票据的例子，这里简单进行了测试。(停止Fabric网络服务后再进行以下操作。)</p>
 <p>两个组织：MagnetoCorp、DigiBank，<br>票据网络：PaperNet。</p>
 <p>进入该目录启动基本网络：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/basic-network</span><br><span class="line">./start.sh</span><br></pre></td></tr></table></figure>
-
 <p>启动完成后查看：docker ps 会出现4个运行中容器。</p>
 <p>使用：docker network inspect net_basic命令查看docker网络：<br><img src="http://static.zybuluo.com/JackyJin/9n888ptxe1vz0jdi14btmh64/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8B%E5%8D%884.20.01.png" alt="屏幕快照 2019-04-02 下午4.20.01.png-780.9kB"></p>
 <p>进入以下目录，启动：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd commercial-paper/organization/magnetocorp/configuration/cli/</span><br><span class="line">./monitordocker.sh net_basic</span><br></pre></td></tr></table></figure>
-
 <p>出现下图：</p>
 <p><img src="http://static.zybuluo.com/JackyJin/s4suayq6vax8aakckn01ho1v/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8B%E5%8D%884.32.23.png" alt="屏幕快照 2019-04-02 下午4.32.23.png-79.5kB"></p>
 <p>另外开一个终端连接到服务器，在之前目录下，创建MagnetoCorp公司特定的docker容器。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd commercial-paper/organization/magnetocorp/configuration/cli/</span><br><span class="line">docker-compose -f docker-compose.yml up -d cliMagnetoCorp</span><br></pre></td></tr></table></figure>
-
 <p>再输入：docker ps 可以看到fabric-tools：3f078207c01a已加入网络中：<br><img src="http://static.zybuluo.com/JackyJin/v6wwfv4qf1rzctss5c40hvie/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8B%E5%8D%884.34.27.png" alt="屏幕快照 2019-04-02 下午4.34.27.png-304.3kB"></p>
 <p>MagnetoCorp 管理员通过fabric-tools：3f078207c01a来进行操作。</p>
 <p>接下来看下智能合约：<br>进入以下目录：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/commercial-paper/organization/magnetocorp/contract/lib</span><br></pre></td></tr></table></figure>
-
 <p>该目录下三个文件，其中papercontract.js为商业票据的智能合约。可以cat看下具体内容，这里暂不展开。</p>
 <p>执行如下部署合约代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec cliMagnetoCorp peer chaincode install -n papercontract -v 0 -p /opt/gopath/src/github.com/contract -l node</span><br></pre></td></tr></table></figure>
-
 <p><img src="http://static.zybuluo.com/JackyJin/yuypzlkg6wltfis1kpn8twpp/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8B%E5%8D%884.56.54.png" alt="屏幕快照 2019-04-02 下午4.56.54.png-179.5kB"></p>
 <p>实例化智能合约：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec cliMagnetoCorp peer chaincode instantiate -n papercontract -v 0 -l node -c &apos;&#123;&quot;Args&quot;:[&quot;org.papernet.commercialpaper:instantiate&quot;]&#125;&apos; -C mychannel -P &quot;AND (&apos;Org1MSP.member&apos;)&quot;</span><br></pre></td></tr></table></figure>
-
 <p>输入如下：<br><img src="http://static.zybuluo.com/JackyJin/ce9uwcgxv74nwvi9a9dr9vdv/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8B%E5%8D%884.58.28.png" alt="屏幕快照 2019-04-02 下午4.58.28.png-209.7kB"></p>
 <p>之前打开的终端中会有输出，也就是logsout容器的中的日志输出内容，具体如下：<br><img src="http://static.zybuluo.com/JackyJin/dqsjc6ya5qgymuwy1bss2xfo/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8B%E5%8D%884.59.47.png" alt="屏幕快照 2019-04-02 下午4.59.47.png-1484.7kB"></p>
 <p>再次docker ps就可以看到：dev-peer0.org1.example.com-papercontract-0，说明此容器是peer0.org1.example.com节点启动的，且正在运行的papercontract链码版本为0。<br><img src="http://static.zybuluo.com/JackyJin/5t06ol21nlqtj8atlfk2zai8/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-02%20%E4%B8%8B%E5%8D%885.01.25.png" alt="屏幕快照 2019-04-02 下午5.01.25.png-403.6kB"></p>
 <p>MagnetoCorp Application进行票据发行:</p>
 <p>过程图：<br><img src="http://static.zybuluo.com/JackyJin/7huyzsd9xmxoxd1m1bwibyez/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-03%20%E4%B8%8B%E5%8D%8812.03.35.png" alt="屏幕快照 2019-04-03 下午12.03.35.png-153kB"></p>
 <p>MagnetoCorp的Isabella发起整个交易过程。</p>
-<p>进入以下目录：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/commercial-paper/organization/magnetocorp/application</span><br></pre></td></tr></table></figure>
-
+<p>进入以下目录：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/commercial-paper/organization/magnetocorp/application</span><br></pre></td></tr></table></figure></p>
 <p>可以看到下列文件:<br>eslintrc.js、issue.js、package.json、addToWallet.js、node_modules </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node addToWallet.js</span><br></pre></td></tr></table></figure>
-
 <p><strong>在执行上述命令的时候，强烈建议先进行如下操作：这几个坑一般都存在~~</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">修改package.json文件</span><br><span class="line">vi package.json</span><br><span class="line">把里面1.0.0版本改成1.4.0</span><br><span class="line">npm install（如报错执行下列命令）</span><br><span class="line">npm install --unsafe-perm fabric-network</span><br><span class="line">如有：Error: /lib64/libstdc++.so.6: version `CXXABI_1.3.9&apos; not found 报错那么执行下列命令：</span><br><span class="line">find / -name &quot;libstdc++.so.6*</span><br><span class="line">找到文件的指定目录，笔者这里是6.0.24，复制到/lib64目录、删除之前的libstdc++.so.6文件，执行如下命令链接：</span><br><span class="line">ln -s libstdc++.so.6.0.24 libstdc++.so.6</span><br></pre></td></tr></table></figure>
-
-<p>再删除之前的node_modules文件夹，再次执行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install（如报错执行下列命令）</span><br><span class="line">npm install --unsafe-perm fabric-network</span><br><span class="line">node addToWallet.js</span><br></pre></td></tr></table></figure>
-
+<p>再删除之前的node_modules文件夹，再次执行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install（如报错执行下列命令）</span><br><span class="line">npm install --unsafe-perm fabric-network</span><br><span class="line">node addToWallet.js</span><br></pre></td></tr></table></figure></p>
 <p>这个时候正常的话会出现done，如图：<br><img src="http://static.zybuluo.com/JackyJin/3hm4pzr3cdv9mtxsish4yfe8/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-03%20%E4%B8%8A%E5%8D%8811.25.58.png" alt="屏幕快照 2019-04-03 上午11.25.58.png-26.2kB"></p>
-<p>查看钱包的结构：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ll ../identity/user/isabella/wallet/</span><br><span class="line">ll ../identity/user/isabella/wallet/User1\@org1.example.com</span><br></pre></td></tr></table></figure>
-
+<p>查看钱包的结构：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ll ../identity/user/isabella/wallet/</span><br><span class="line">ll ../identity/user/isabella/wallet/User1\@org1.example.com</span><br></pre></td></tr></table></figure></p>
 <p>结果如下图：<br><img src="http://static.zybuluo.com/JackyJin/snahsk20u8gxmtzwyt82hvhb/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-03%20%E4%B8%8A%E5%8D%8811.59.10.png" alt="屏幕快照 2019-04-03 上午11.59.10.png-199.3kB"></p>
-<p>Isabella钱包信息:<br>用户私钥：c75bd6911aca808941c3557ee7c97e90f3952e379497dc55eb903f31b50abc83-priv<br>用户公钥：c75bd6911aca808941c3557ee7c97e90f3952e379497dc55eb903f31b50abc83-pub<br>用户证书文件：<a href="mailto:User1@org1.example.com" target="_blank" rel="noopener">User1@org1.example.com</a></p>
-<p>发起交易：<br>Isabella现在可以使用issue.js来提交一个交易（发行MagnetoCorp 公司的商业票据00001）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node issue.js</span><br></pre></td></tr></table></figure>
-
+<p>Isabella钱包信息:<br>用户私钥：c75bd6911aca808941c3557ee7c97e90f3952e379497dc55eb903f31b50abc83-priv<br>用户公钥：c75bd6911aca808941c3557ee7c97e90f3952e379497dc55eb903f31b50abc83-pub<br>用户证书文件：User1@org1.example.com</p>
+<p>发起交易：<br>Isabella现在可以使用issue.js来提交一个交易（发行MagnetoCorp 公司的商业票据00001）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node issue.js</span><br></pre></td></tr></table></figure></p>
 <p>结果如图：<br><img src="http://static.zybuluo.com/JackyJin/1azpthmfxjaq40bycx7yq25z/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-03%20%E4%B8%8B%E5%8D%8812.11.41.png" alt="屏幕快照 2019-04-03 下午12.11.41.png-239.8kB"></p>
 <hr>
 <p>以上操作都是在MagnetoCorp的Isabella，接下来是，DigiBank-Balaji ，他将购买刚刚发行的商业票据。</p>
 <p>购买流程图：<br><img src="http://static.zybuluo.com/JackyJin/6fm92c8g4xyww6ahiozd7dck/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-03%20%E4%B8%8B%E5%8D%8812.13.56.png" alt="购买流程图"></p>
 <p>进入下列目录：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/commercial-paper/organization/digibank/configuration/cli</span><br><span class="line">执行：docker-compose -f docker-compose.yml up -d cliDigiBank</span><br></pre></td></tr></table></figure>
-
 <p>结果如图：</p>
 <p><img src="http://static.zybuluo.com/JackyJin/0nu04j79yiz9ld5gnss47x02/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-03%20%E4%B8%8B%E5%8D%8812.22.48.png" alt="屏幕快照 2019-04-03 下午12.22.48.png-104.5kB"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/go/src/github.com/hyperledger/fabric/scripts/fabric-samples/commercial-paper/organization/digibank/application</span><br><span class="line">vi buy.js</span><br></pre></td></tr></table></figure>
-
 <p>buy.js文件可查看合约内容.</p>
 <p>和之前npm的操作一样、修改相关文件内容：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">修改package.json文件</span><br><span class="line">vi package.json  # 把里面1.0.0版本改成1.4.0</span><br><span class="line">npm install（如报错执行下列命令）</span><br><span class="line">npm install --unsafe-perm fabric-network</span><br></pre></td></tr></table></figure>
-
 <p>创建账户及购买，商业票据00001生命周期的最后一个交易是redeem交易，Balaji 通过运行redeem.js程序来实现这一过程。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">node addToWallet.js </span><br><span class="line">node buy.js</span><br><span class="line">node redeem.js</span><br></pre></td></tr></table></figure>
-
 <p>在执行过程中可能会出现：<br><img src="http://static.zybuluo.com/JackyJin/wzn2xsgbnwh3vukiiqtaewr6/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-03%20%E4%B8%8B%E5%8D%881.17.42.png" alt="屏幕快照 2019-04-03 下午1.17.42.png-343.7kB"></p>
 <p>那么执行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g js-yaml</span><br></pre></td></tr></table></figure>
-
 <p>结果如图：<br><img src="http://static.zybuluo.com/JackyJin/eil998xtoev9ue94jkmqf5o9/11111.png" alt="11111.png-261.8kB"><br><img src="http://static.zybuluo.com/JackyJin/ak150f86umc6j675izas6h52/2222.png" alt="2222.png-231.8kB"></p>
 <p>整个实验大致完成。</p>
 <p>参考文章：</p>

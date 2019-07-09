@@ -512,7 +512,6 @@
       
         <p>大概整整两年前，我从一篇介绍“区块链”技术的文章里知道了“以太坊”这个项目，当时当然没想到它会对我个人产生如此大的影响。在其后这两年时间里，我投入了大量的时间和精力来学习它、研究它，做了多次技术分享，甚至还写了讲解智能合约开发的书、开发了关于智能合约开发的在线课程；所以不管未来我们各自的走向如何，以太坊都已经在我生命中留下了重重的一笔。在我们相识两周年之际，我觉得我总该要写点儿什么。</p>
 <a id="more"></a>
-
 <h2 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h2><p>新年的这第一个月我过的很充实：只感了两次冒，每次大概半个月……。本来我是计划在月底前写完技术专题“工程师眼中的比特币和以太坊”的，可惜也无奈地再次被教育了：“年龄不是问题，但身体是问题。”所以临近月底只能以这篇文章勉强交个作业吧。</p>
 <p>2017 年底的时候，我曾在简书发过一篇博客，介绍“以太坊是什么”，但那是一篇对以太坊 Homestead 官方文档的翻译稿节选。客观地讲，当时我本人对以太坊的理解也还不是非常深入透彻，所以这篇原创的“再谈：以太坊是什么”还是有一些参考价值的，我相信这篇文章也许比一年前的那篇翻译稿更好懂一些，而且真正讲出了一些“本质性”的基本概念。</p>
 <p>当然，这不是一篇 hardcore 的技术文章，我的初衷是基于我本人对以太坊的理解，从概念上给那些还不是很清楚地知道“以太坊是什么”的朋友做一个简单的扫盲。这也是我写这个新的技术专题的初衷：我希望让更多软件工程师能了解区块链、了解<a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" target="_blank" rel="noopener">智能合约</a>，希望有更多的人能真正搞懂一些最基本的概念，并以此为契机深入到区块链和智能合约的世界中。</p>
@@ -545,9 +544,7 @@
 <h2 id="区块链范式"><a href="#区块链范式" class="headerlink" title="区块链范式"></a>区块链范式</h2><p>从技术层面讲，我们可以把类似于比特币这样的、通过分布式共识进行“公证”的公共账本系统（也就是所谓的“区块链”）抽象地理解为一个“状态转换系统（state transition system）”。这种系统会维持一个“全局的状态”（我们用 S 来表示），然后通过系统中发生的“交易”（我们用 tx 来表示）来进行相应的状态转换以达到一个“新的全局状态”（我们用 S’ 来表示）。那么这种状态转换就可以抽象地表示为：Apply(S, tx) = S’，其中的 Apply 即“状态转换函数”。</p>
 <p>下图是比特币中的状态转换示意：</p>
 <p><img src="https://img.learnblockchain.cn/2019/15561110364211.jpg" alt="比特币中的状态转换示意图"></p>
-<p>图中用 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;txid&gt;:&lt;output_index&gt;的形式来表示某个 UTXO：其中 txid 即交易哈希，用来标识某个具体的交易；output_index 即交易生成的输出（UTXO）的索引。</span><br></pre></td></tr></table></figure>
-
+<p>图中用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;txid&gt;:&lt;output_index&gt;的形式来表示某个 UTXO：其中 txid 即交易哈希，用来标识某个具体的交易；output_index 即交易生成的输出（UTXO）的索引。</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p><strong>UTXO</strong>，即 Unspent Transaction Output，是基于比特币的数据模型产生的一个术语。比特币中的交易都是由若干输入（Input）和若干输出（Output）组成的。按照协议约定，一个输入必定是某个历史交易的某个输出的引用，通过在输入中包含特定的“解锁脚本（unlocking script）”来对历史交易的输出中指定的“锁定脚本（locking script）”进行解锁，以此来“消耗/使用（spend）”相应的输出。那些<strong>未被任何“输入”引用过的“输出”</strong>就是 UTXO。</p>
 </blockquote>
@@ -568,7 +565,7 @@
 <p>以太坊中的每个合约账户都可以在“存储”中使用若干“存储单元（storage slot）”：每个合约的代码中可以自定义若干状态数据，每个状态数据对应一个或多个“存储单元”；这些存储单元都可以通过简单的寻址算法进行存取操作。这就是以太坊的持久化数据存储方案。</p>
 <h2 id="以太坊中的“状态转换”"><a href="#以太坊中的“状态转换”" class="headerlink" title="以太坊中的“状态转换”"></a>以太坊中的“状态转换”</h2><p>基于“账户模型”和“存储”，以太坊中的状态转换自然也就有了不同的形式。下图是以太坊中的状态转换示意：</p>
 <p><img src="https://img.learnblockchain.cn/2019/15561110819140.jpg" alt="以太坊中的状态转换示意图"></p>
-<p>图中演示了以太坊中的一个由交易引发的状态转换：在初始状态 <code>State</code> 中，<code>14c5f8ba</code>、<code>bb75a980</code>、<code>892bf92f</code> 和 <code>4096ad65</code> 代表了 4 个<strong>账户地址</strong>，其中 <code>14c5f8ba</code> 和 <code>4096ad65</code> 是 *<em>EOA 外部账户 *</em>，<code>bb75a980</code> 和 <code>892bf92f</code> 则为合约账户（因为有关联代码）。然后图中所示的交易，其逻辑意义也很简单，即从 <code>14c5f8ba</code> 向 <code>bb75a980</code> 发送 10 以太币，并附加了一些额外的数据 Data，这个 Data 数据的意思是将目标合约的第 2 个“存储单元”的数值设定为“CHARLIE”。这个交易的执行会产生一个新的状态 State’，其中 <code>14c5f8ba</code> 地址的余额减少了 10 以太币，<code>bb75a980</code> 地址的余额增加了 10 以太币，并且 <code>bb75a980</code> 地址的第 2 个“存储单元”的数值变为了“CHARLIE”。</p>
+<p>图中演示了以太坊中的一个由交易引发的状态转换：在初始状态 <code>State</code> 中，<code>14c5f8ba</code>、<code>bb75a980</code>、<code>892bf92f</code> 和 <code>4096ad65</code> 代表了 4 个<strong>账户地址</strong>，其中 <code>14c5f8ba</code> 和 <code>4096ad65</code> 是 <strong>EOA 外部账户 </strong>，<code>bb75a980</code> 和 <code>892bf92f</code> 则为合约账户（因为有关联代码）。然后图中所示的交易，其逻辑意义也很简单，即从 <code>14c5f8ba</code> 向 <code>bb75a980</code> 发送 10 以太币，并附加了一些额外的数据 Data，这个 Data 数据的意思是将目标合约的第 2 个“存储单元”的数值设定为“CHARLIE”。这个交易的执行会产生一个新的状态 State’，其中 <code>14c5f8ba</code> 地址的余额减少了 10 以太币，<code>bb75a980</code> 地址的余额增加了 10 以太币，并且 <code>bb75a980</code> 地址的第 2 个“存储单元”的数值变为了“CHARLIE”。</p>
 <p>很明显，因为基础数据模型的改动，以太坊中的状态转换与比特币中的状态转换几乎完全不同。与之相应地，构造交易、验证数据等等的逻辑自然也会完全不同。当然，这里只是一个示意介绍，实际上在以太坊的交易中附加的 <strong>data 是一种“可执行代码”</strong>，是可以由用户自定义的，用户可以用这些具体的代码来执行任意的计算任务；这种方式与在比特币交易的输入和输出中附加脚本代码是类似的。</p>
 <h2 id="以太坊中的“可执行代码”-EVM"><a href="#以太坊中的“可执行代码”-EVM" class="headerlink" title="以太坊中的“可执行代码” - EVM"></a>以太坊中的“可执行代码” - EVM</h2><p>在以太坊协议中，我们可以在交易的 data 字段中附加一种特殊的“可执行代码”来完成任意的计算任务，这种“可执行代码”是在一个虚拟的执行环境中运行的。与比特币脚本系统的执行环境类似，以太坊的这种虚拟执行环境也是基于“栈（stack）”的；但以太坊的虚拟执行环境还提供了可以供应用程序在运行时使用的临时存储空间“内存（memory）”和刚刚介绍过的永久存储机制“存储（storage）”。这就使以太坊的虚拟执行环境有了更强的计算能力，更像是一种“虚拟的计算机”，这个虚拟的执行环境就是大名鼎鼎的“<a href="https://learnblockchain.cn/2019/04/09/easy-evm/" target="_blank" rel="noopener">以太坊虚拟机（Ethereum Virtual Machine，简称 EVM</a>）”，EVM 也是以太坊被称为“世界计算机（World Computer）”的由来，它也是以太坊与比特币相比在技术层面的最大创新。</p>
 <p>以太坊协议中的这种可以在 EVM 中运行的“可执行代码”就是所谓的“EVM 字节码”。EVM 字节码是以太坊计算能力的根本，这是一种“图灵完备（Turing-complete）”的操作码系统。以太坊的高级开发语言 <a href="https://learnblockchain.cn/docs/solidity/" target="_blank" rel="noopener">Solidity</a> 就可以编译为 EVM 字节码，然后在 EVM 中运行；这种方式与其他编译型的高级语言是类似的，就像 Java 语言和 Java 虚拟机字节码的关系那样。</p>

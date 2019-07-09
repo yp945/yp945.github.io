@@ -483,7 +483,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
               
-              <span title="本文字数">8.4k</span>
+              <span title="本文字数">8.2k</span>
             </span>
           
 
@@ -493,7 +493,7 @@
                 <i class="fa fa-clock-o"></i>
               </span>
               
-              <span title="阅读时长">17 分钟</span>
+              <span title="阅读时长">16 分钟</span>
             </span>
           
 
@@ -519,11 +519,8 @@
 <p>技术人除了通俗的理解零知识证明外，还需要对零知识的理论和推导过程深入理解运用。<a href="https://blog.ethereum.org/2016/12/05/zksnarks-in-a-nutshell/" target="_blank" rel="noopener">以太坊的这篇blog</a>，比较适合想深入理解零知识证明的小伙伴。</p>
 <p>本篇文章也是这篇blog的翻译和我自己的理解。通过这篇文章，能快速建立零知识证明的逻辑框架。虽然这篇文章有些推导公式，但是相对简单，小伙伴可以耐心阅读。</p>
 <a id="more"></a>
-
 <h2 id="0-零知识证明"><a href="#0-零知识证明" class="headerlink" title="0 - 零知识证明"></a><strong>0 - 零知识证明</strong></h2><p>先给出零知识证明的逻辑框架：</p>
 <span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="https://img.learnblockchain.cn/2019/15555712771039.jpg" class="full-image" alt="零知识证明的逻辑框架图" title="框架图" style="max-width: none; width: 35%;"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
-
-
 <h3 id="零知识证明的基本概念"><a href="#零知识证明的基本概念" class="headerlink" title="零知识证明的基本概念"></a><strong>零知识证明的基本概念</strong></h3><p>零知识证明，<strong>zkSNARK</strong>，<strong>z</strong>ero-<strong>k</strong>nowledge <strong>S</strong>uccint <strong>N</strong>on-interactive <strong>AR</strong>guments of <strong>K</strong>nowledge的简称：</p>
 <ul>
 <li><strong>S</strong>uccinct：证明的数据量比较小</li>
@@ -555,17 +552,17 @@
 </ul>
 <p>一个布尔公式可满足，指输入是0/1的情况下，存在输出为真。SAT问题指，找出所有可满足的布尔公式。SAT问题看上去，除了枚举一个个可能的布尔公式外，没有更好的办法，也就是多项式时间内不可解。如果知道一个可满足的布尔公式，验证非常方便（输入是0/1的情况下，看看输出是否为真）。SAT问题是NP问题。</p>
 <p>再看看另外一个NP问题：<strong>PolyZero问题</strong>。PolyZero问题指某个多项式满足：多项式输入是0或1的情况下，多项式输出为0。</p>
-<p>​            $$PolyZero(f) := 1$$</p>
+<p>​            <script type="math/tex">PolyZero(f) := 1</script></p>
 <p>f满足输入是0/1的情况下，多项式输出为0。</p>
 <p>一个布尔表达式f可以通过如下的归约函数r，转化为多项式：</p>
 <ul>
-<li>$$r(x_i) := (1-x_i)$$</li>
-<li>$$r(\lnot f) := (1-r(f))$$</li>
-<li>$$r(f \land g) := (1- (1 - r(f))(1 - r(g)))$$</li>
-<li>$$r(f \lor g) := r(f)r(g)$$</li>
+<li><script type="math/tex; mode=display">r(x_i) := (1-x_i)</script></li>
+<li><script type="math/tex; mode=display">r(\lnot f) := (1-r(f))</script></li>
+<li><script type="math/tex; mode=display">r(f \land g) := (1- (1 - r(f))(1 - r(g)))</script></li>
+<li><script type="math/tex; mode=display">r(f \lor g) := r(f)r(g)</script></li>
 </ul>
 <p>也就是说，一个SAT问题，通过归约函数r，可以归约为一个PolyZero问题：f是可满足的，当且仅当r(f)输出为0。</p>
-<p>​            $$SAT(f) = PolyZero(r(f))$$</p>
+<p>​            <script type="math/tex">SAT(f) = PolyZero(r(f))</script></p>
 <p>总结一下，NP问题是在多项式时间内无解，但是可以多项式时间验证的问题。NP问题可以相互归约。</p>
 <h2 id="2-QSP问题"><a href="#2-QSP问题" class="headerlink" title="2 - QSP问题"></a><strong>2 - QSP问题</strong></h2><p>需要证明的问题，肯定是NP问题，如果是P问题，不存在问题解的”寻找“，也就不存在证明。简单的说，zkSNARK问题处理的都是NP问题。既然NP问题相互可以归约，首先需要确定一个NP问题，其他NP问题都可以归约到这个NP问题，再进行证明。也就是，证明了一个NP问题，就可以证明所有NP问题。</p>
 <p>QSP问题是个NP问题，也特别适合zkSNARK。为啥特别适合，目前还不需要深究。有相关的<a href="https://eprint.iacr.org/2012/215.pdf" target="_blank" rel="noopener">论文论证</a>。</p>
@@ -573,56 +570,40 @@
 <ul>
 <li>给定多个多项式：$v_0, … , v_m, w_0, … , w_m$</li>
 <li>目标多项式：$t$</li>
-<li>映射函数：$$f: \left{(i, j) |1\leq i \leq n, j\in{0,1} \right} \to \left{1, … m\right}$$</li>
+<li>映射函数：<script type="math/tex">f: \left\{(i, j) |1\leq i \leq n, j\in{0,1} \right\} \to \left\{1, ... m\right\}</script></li>
 </ul>
 <p>给定一个证据（Witness）u，满足如下条件，即可验证u是QSP问题的解：</p>
 <ul>
-<li><p>$$a_k, b_k = 1\   \  如果 k = f(i, u[i])$$</p>
-</li>
-<li><p>$$a_k, b_k = 0\   \   如果 k = f(i, 1- u[i])$$</p>
-</li>
-<li><p>$$v_aw_b能整除\ t，其中v_a = v_0 + a_1v_1 + … + a_mv_m, w_b = w_0 + b_1w_1+ … + b_mw_m$$</p>
-</li>
+<li><script type="math/tex; mode=display">a_k, b_k = 1\   \  如果 k = f(i, u[i])</script></li>
+<li><script type="math/tex; mode=display">a_k, b_k = 0\   \   如果 k = f(i, 1- u[i])</script></li>
+<li><script type="math/tex; mode=display">v_aw_b能整除\ t，其中v_a = v_0 + a_1v_1 + ... + a_mv_m, w_b = w_0 + b_1w_1+ ... + b_mw_m</script></li>
 </ul>
 <p>对一个证据u，对每一位进行两次映射计算（$u[i]$以及$1-u[i]$），确定多项式之间的系数。因为针对证据u的每一位，计算两次，确定多项式之间的系数，如果$2n &lt; m$，多项式的选择还是有很大的灵活性。</p>
 <p>如果证明者知道QSP问题的解，需要提供证据（也就是u）。验证者在获知证据u的情况下，按照上述的规则恢复出多项式的系数，验证$v_av_b$是否能整除$t$：$th=v_aw_b$。为了方便验证者验证，证明者可以同时提供$h$。在多项式维度比较大的情况下，多项式的乘法还是比较复杂的。</p>
 <p>有个简单的想法，与其验证者验证整个多项式是否相等，不如随机挑选数值进行验证。假设验证者随机挑选验证数值s，验证者只需要验证$t(s)h(s)=v_a(s)w_b(s)$。</p>
 <p>以上是基础知识，下面开始介绍zkSNARK的证明过程。在继续深入一个QSP问题证明细节之前，先看看一个多项式问题的证明过程。</p>
-<h2 id="3-多项式问题的证明过程"><a href="#3-多项式问题的证明过程" class="headerlink" title="3 - 多项式问题的证明过程"></a><strong>3 - 多项式问题的证明过程</strong></h2><p>假设一个多项式 $$f(x)=a_0+a_1x+a_2x^2+ … + a_{d-1}x^{d-1}+a_dx^d$$ 。证明一个多项式，即给定一个输入$x$，提供$f(x)$的证明。</p>
+<h2 id="3-多项式问题的证明过程"><a href="#3-多项式问题的证明过程" class="headerlink" title="3 - 多项式问题的证明过程"></a><strong>3 - 多项式问题的证明过程</strong></h2><p>假设一个多项式 <script type="math/tex">f(x)=a_0+a_1x+a_2x^2+ ... + a_{d-1}x^{d-1}+a_dx^d</script> 。证明一个多项式，即给定一个输入$x$，提供$f(x)$的证明。</p>
 <p><strong>3.1 有线群论基础（椭圆曲线）</strong></p>
 <p>定一个有限群，生成元是$g$，阶为$n$，则该群包括如下的元素：$g^0,g^1,g^2, … ,g^{n-1}$。通过有限群加密的方式很简单：$E(x) := g^x$。也就是说，得知$g^x$的情况下，不能反推出$x$。</p>
 <p><strong>3.2 选定随机数</strong></p>
 <p>验证者随机选择一个有限群中的元素，比如$s$。提供如下的计算结果（$s$的不同阶的加密结果）：</p>
-<p>$$E(s^0), E(s^1), … , E(s^d)$$</p>
-<p>在生成这些计算结果后，$s$就不需要了，可以忘记。</p>
+<script type="math/tex; mode=display">E(s^0), E(s^1), ... , E(s^d)</script><p>在生成这些计算结果后，$s$就不需要了，可以忘记。</p>
 <p><strong>3.3 $E(f(s))$计算</strong></p>
 <p>举个例子，$f(x) = 4 + 2x + 4x^2$，$E(f(s)) = E(s^0)^4E(s^1)^2E(s^2)^4$。显然，$E(f(s))$ 可以不知道$s$ 的情况下，通过验证者提供的数据计算出来。</p>
 <p><strong>3.4 $\alpha$对</strong></p>
 <p>注意的是，验证者是不知道待证明的多项式参数的，即使证明者提供了$E(f(s))$，验证者也无法验证。 $\alpha$对的方法可以让验证者确认证明者是通过多项式计算出结果。 在3.2的基础上，验证者还随机选择另外一个元素$\alpha$，并提供额外的计算结果：</p>
 <p>$E(\alpha s^0), E(\alpha s^1), … , E(\alpha s^d)$</p>
 <p>证明者需要提供$E(f(s))$和$E(\alpha f(s))$。</p>
-<p>$$E(f(s)) = E(s^0)^4E(s^1)^2E(s^2)^4$$</p>
-<p>$$E(\alpha f(s)) = E(\alpha s^0)^4E(\alpha s^1)^2E(\alpha s^2)^4$$</p>
-<p><strong>3.5 配对函数</strong></p>
+<script type="math/tex; mode=display">E(f(s)) = E(s^0)^4E(s^1)^2E(s^2)^4</script><script type="math/tex; mode=display">E(\alpha f(s)) = E(\alpha s^0)^4E(\alpha s^1)^2E(\alpha s^2)^4</script><p><strong>3.5 配对函数</strong></p>
 <p>配对函数$e$，满足如下定义：</p>
-<p>$$e(g^x, g^y) = e(g, g)^{xy}$$</p>
-<p>验证者验证$\alpha$对的方式很简单，检验如下的等式是否成立：</p>
-<p>$$e(E(f(s)), g^\alpha) = e(E(\alpha f(s)), g) $$</p>
-<p>假设$A= e(E(f(s)), B=E(\alpha f(s))$推导过程如下：</p>
-<p>$$e(A, g^\alpha) = e(E(f(s)), g^\alpha)  = e(g^{f(s)}, g^\alpha) = e(g, g)^{\alpha f(s)}$$</p>
-<p>$$e(B, g) = e(E(\alpha f(s)), g) = e(g^{\alpha f(s)}, g) = e(g, g)^{\alpha f(s)}$$</p>
-<p>到此为止，验证者提供$\alpha$对的情况下，证明者可以证明通过某个多项式计算出某个结果，验证者不知道具体的多项式的参数。</p>
+<script type="math/tex; mode=display">e(g^x, g^y) = e(g, g)^{xy}</script><p>验证者验证$\alpha$对的方式很简单，检验如下的等式是否成立：</p>
+<script type="math/tex; mode=display">e(E(f(s)), g^\alpha) = e(E(\alpha f(s)), g)</script><p>假设$A= e(E(f(s)), B=E(\alpha f(s))$推导过程如下：</p>
+<script type="math/tex; mode=display">e(A, g^\alpha) = e(E(f(s)), g^\alpha)  = e(g^{f(s)}, g^\alpha) = e(g, g)^{\alpha f(s)}</script><script type="math/tex; mode=display">e(B, g) = e(E(\alpha f(s)), g) = e(g^{\alpha f(s)}, g) = e(g, g)^{\alpha f(s)}</script><p>到此为止，验证者提供$\alpha$对的情况下，证明者可以证明通过某个多项式计算出某个结果，验证者不知道具体的多项式的参数。</p>
 <p><strong>3.6 $\delta $ 偏移</strong></p>
 <p>更进一步，证明者采用$\delta ​$ 偏移，甚至不想让验证者知道$E(f(s))​$。采用$\delta ​$ 偏移，证明者不再提供$A​$和$B​$，而是随机一个$\delta ​$参数，提供$A’​$和$B’​$。</p>
-<p>$$A’ = E(\delta + f(s)) = g^{\delta + f(s)} = g^\delta g^{f(s)} = E(\delta)E(f(s)) = E(\delta)A$$</p>
-<p>$$B’ = E(\alpha (\delta + f(s))) = E(\alpha\delta + \alpha f(s)) = g^{\alpha \delta + \alpha f(s)} = E(\alpha)^\delta E(\alpha f(s)) = E(\alpha)^\delta B$$</p>
-<p>很显然，验证者从$A’$无法推导出$E(f(s))$，但验证者一样能验证$\alpha$对的配对函数是否成立：</p>
-<p>$$e(A’, g^\alpha) = e(E(\delta + f(s)), g^\alpha)  = e(g^{\delta + f(s)}, g^\alpha) = e(g, g)^{\alpha (\delta + f(s))}$$</p>
-<p>$$e(B, g) = e(E(\alpha (\delta + f(s)), g) = e(g^{\alpha (\delta + f(s))}, g) = e(g, g)^{\alpha (\delta + f(s))}$$</p>
-<p>多项式的整个证明过程如下图所示：</p>
+<script type="math/tex; mode=display">A' = E(\delta + f(s)) = g^{\delta + f(s)} = g^\delta g^{f(s)} = E(\delta)E(f(s)) = E(\delta)A</script><script type="math/tex; mode=display">B' = E(\alpha (\delta + f(s))) = E(\alpha\delta + \alpha f(s)) = g^{\alpha \delta + \alpha f(s)} = E(\alpha)^\delta E(\alpha f(s)) = E(\alpha)^\delta B</script><p>很显然，验证者从$A’$无法推导出$E(f(s))$，但验证者一样能验证$\alpha$对的配对函数是否成立：</p>
+<script type="math/tex; mode=display">e(A', g^\alpha) = e(E(\delta + f(s)), g^\alpha)  = e(g^{\delta + f(s)}, g^\alpha) = e(g, g)^{\alpha (\delta + f(s))}</script><script type="math/tex; mode=display">e(B, g) = e(E(\alpha (\delta + f(s)), g) = e(g^{\alpha (\delta + f(s))}, g) = e(g, g)^{\alpha (\delta + f(s))}</script><p>多项式的整个证明过程如下图所示：</p>
 <span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="https://img.learnblockchain.cn/2019/15555714473237.jpg" class="full-image" alt="多项式证明过程" title="证明过程图" style="max-width: none; width: 50%;"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
-
-
 <h2 id="4-QSP问题的skSNARK证明"><a href="#4-QSP问题的skSNARK证明" class="headerlink" title="4 - QSP问题的skSNARK证明"></a><strong>4 - QSP问题的skSNARK证明</strong></h2><p>skSNARK证明过程分为两部分：a) setup阶段 b）证明阶段。QSP问题就是给定一系列的多项式$v_0, …, v_m, w_0, …, w_m$以及目标多项式$t$，证明存在一个证据$u$。这些多项式中的最高阶为$d$。</p>
 <p><strong>4.1 setup和CRS</strong></p>
 <p><strong>CRS</strong> - Common Reference String，也就是预先setup的公开信息。在选定$s$和$\alpha$的情况下，发布如下信息：</p>
@@ -644,42 +625,28 @@
 </ul>
 <p><strong>4.2 证明者提供证据</strong></p>
 <p>在QSP的映射函数中，如果$2n &lt; m$，$1, …, m$中有些数字没有映射到。这些没有映射到的数字组成$I_{free}$，并定义（$k$为未映射到的数字）：</p>
-<p>$$v_{free}(x) = \sum_k a_kv_k(x)$$</p>
-<p>证明者需提供的证据如下</p>
+<script type="math/tex; mode=display">v_{free}(x) = \sum_k a_kv_k(x)</script><p>证明者需提供的证据如下</p>
 <ul>
-<li><p>$$V_{free} := E(v_{free}(s)), \ W := E(w(s)),  \ H := E(h(s)),$$  </p>
-</li>
-<li><p>$$V_{free}’ := E(\alpha v_{free}(s)),  W’ := E(\alpha w(s)), H’ := E(\alpha h(s)), $$</p>
-</li>
-<li><p>$$Y := E(\beta_vv_{free}(s) + \beta_ww(s))$$</p>
-</li>
+<li><script type="math/tex; mode=display">V_{free} := E(v_{free}(s)), \ W := E(w(s)),  \ H := E(h(s)),</script></li>
+<li><script type="math/tex; mode=display">V_{free}' := E(\alpha v_{free}(s)),  W' := E(\alpha w(s)), H' := E(\alpha h(s)),</script></li>
+<li><script type="math/tex; mode=display">Y := E(\beta_vv_{free}(s) + \beta_ww(s))</script></li>
 </ul>
-<p>$$V_{free}/V_{free}’, W/W’, H/H’ 是 \alpha 对，用以验证 v_{free}, w, h是否是多项式形式。$$</p>
-<p>$$t 是已知，公开的，毋需验证。 Y 用来确保 v_{free}(s) 和 w(s) 的计算采用一致的参数。$$</p>
-<p><strong>4.3 验证者验证</strong></p>
+<script type="math/tex; mode=display">V_{free}/V_{free}', W/W', H/H' 是 \alpha 对，用以验证 v_{free}, w, h是否是多项式形式。</script><script type="math/tex; mode=display">t 是已知，公开的，毋需验证。 Y 用来确保 v_{free}(s) 和 w(s) 的计算采用一致的参数。</script><p><strong>4.3 验证者验证</strong></p>
 <p>在QSP的映射函数中，如果$2n &lt; m$，$1, …, m$中所有映射到的数字作为组成系数组成的二项式定义为（和$v_{free}$互补）：</p>
-<p>$$v_{in}(x) = \sum_k a_kv_k(x)$$</p>
-<p>验证者需要验证如下的等式是否成立：</p>
+<script type="math/tex; mode=display">v_{in}(x) = \sum_k a_kv_k(x)</script><p>验证者需要验证如下的等式是否成立：</p>
 <ul>
-<li><p>$$e(V_{free}’, g) = e(V_{free}, g^\alpha), e(W’, E(1)) = e(W, E(\alpha)), e(H’, E(1)) = e(H, E(\alpha))$$</p>
-</li>
-<li><p>$$e(E(\gamma), Y) = e(E(\beta_v\gamma), V_{free})e(E(\beta_w\gamma), W)$$</p>
-</li>
-<li><p>$$e(E(v_0(s))E(v_{in}(s))V_{free}, E(w_0(s))W) = e(H, E(t(s)))$$</p>
-</li>
+<li><script type="math/tex; mode=display">e(V_{free}', g) = e(V_{free}, g^\alpha), e(W', E(1)) = e(W, E(\alpha)), e(H', E(1)) = e(H, E(\alpha))</script></li>
+<li><script type="math/tex; mode=display">e(E(\gamma), Y) = e(E(\beta_v\gamma), V_{free})e(E(\beta_w\gamma), W)</script></li>
+<li><script type="math/tex; mode=display">e(E(v_0(s))E(v_{in}(s))V_{free}, E(w_0(s))W) = e(H, E(t(s)))</script></li>
 </ul>
-<p>$$第一个（系列）等式验证 V_{free}/V’<em>{free} , W/W’, H/H’ 是否是 \alpha 对。$$<br>$$第二个等式验证 V</em>{free} 和 W 的计算采用一致的参数。$$<br>$$因为v_{free}和w都是二项式，它们的和也同样是一个多项式，所以采用\gamma 参数进行确认。$$<br>证明过程如下：</p>
-<p>$$e(E(\gamma), Y) = e(E(\gamma), E(\beta_vv_{free}(s) + \beta_ww(s))) = e(g, g)^{\gamma(\beta_vv_{free}(s) + \beta_ww(s))}$$</p>
-<p>$$e(E(\beta_v\gamma), V_{free})e(E(\beta_w\gamma), W) = e(E(\beta_v\gamma), E(v_{free}(s)))e(E(\beta_w\gamma), E(w(s))) $$<br>$$= e(g,g)^{(\beta_v\gamma)v_{free}(s)}e(g,g)^{(\beta_w\gamma)w(s)} =  e(g, g)^{\gamma(\beta_vv_{free}(s) + \beta_ww(s))}$$</p>
-<p>第三个等式验证$v(s)w(s) = h(s)t(s)$，其中$$v_0(s)+v_{in}(s)+v_{free}(s) = v(s)。$$</p>
+<script type="math/tex; mode=display">第一个（系列）等式验证 V_{free}/V'_{free} , W/W', H/H' 是否是 \alpha 对。</script><script type="math/tex; mode=display">第二个等式验证 V_{free} 和 W 的计算采用一致的参数。</script><script type="math/tex; mode=display">因为v_{free}和w都是二项式，它们的和也同样是一个多项式，所以采用\gamma 参数进行确认。</script><p>证明过程如下：</p>
+<script type="math/tex; mode=display">e(E(\gamma), Y) = e(E(\gamma), E(\beta_vv_{free}(s) + \beta_ww(s))) = e(g, g)^{\gamma(\beta_vv_{free}(s) + \beta_ww(s))}</script><script type="math/tex; mode=display">e(E(\beta_v\gamma), V_{free})e(E(\beta_w\gamma), W) = e(E(\beta_v\gamma), E(v_{free}(s)))e(E(\beta_w\gamma), E(w(s)))</script><script type="math/tex; mode=display">= e(g,g)^{(\beta_v\gamma)v_{free}(s)}e(g,g)^{(\beta_w\gamma)w(s)} =  e(g, g)^{\gamma(\beta_vv_{free}(s) + \beta_ww(s))}</script><p>第三个等式验证$v(s)w(s) = h(s)t(s)$，其中<script type="math/tex">v_0(s)+v_{in}(s)+v_{free}(s) = v(s)。</script></p>
 <p>简单的说，逻辑是确认$v, w, h$是多项式，并且$v,w$采用同样的参数，满足$v(s)w(s) = h(s)t(s)$。</p>
 <p>到目前为止，整个QSP的zkSNARK的证明过程逻辑已见雏形：</p>
 <span itemprop="image" itemscope itemtype="http://schema.org/ImageObject"><img itemprop="url image" src="https://img.learnblockchain.cn/2019/15555714821588.jpg" class="full-image" alt="QSP的zkSNARK的证明过程图" title="证明过程图" style="max-width: none; width: 80%;"><meta itemprop="width" content="auto"><meta itemprop="height" content="auto"></span>
-
-
 <p><strong>4.4 $\delta $ 偏移</strong></p>
-<p>为了进一步“隐藏” $$V_{free} 和 W，额外需要采用两个偏移: \delta_{free} 和 \delta_w$$。<br>$v_{free}(s)/w(s)/h(s)​$进行如下的变形，验证者用同样的逻辑验证。</p>
-<p>　$$v_{free}(s) \rightarrow v_{free}(s) + \delta_{free}t(s)$$<br>　$$w(s) \rightarrow w(s) + \delta_wt(s)$$<br>　$$h(s) \rightarrow h(s)+\delta_{free}(w_0(s) + w(s)) + \delta_w(v_0(s) + v_{in}(s) + v_{free}(s)) + (\delta_{free}\delta_w)t(s)$$</p>
+<p>为了进一步“隐藏” <script type="math/tex">V_{free} 和 W，额外需要采用两个偏移: \delta_{free} 和 \delta_w</script>。<br>$v_{free}(s)/w(s)/h(s)​$进行如下的变形，验证者用同样的逻辑验证。</p>
+<p>　<script type="math/tex">v_{free}(s) \rightarrow v_{free}(s) + \delta_{free}t(s)</script><br>　<script type="math/tex">w(s) \rightarrow w(s) + \delta_wt(s)</script><br>　<script type="math/tex">h(s) \rightarrow h(s)+\delta_{free}(w_0(s) + w(s)) + \delta_w(v_0(s) + v_{in}(s) + v_{free}(s)) + (\delta_{free}\delta_w)t(s)</script></p>
 <p>至此，zkSNARK的推导逻辑就基本完整。使用zkSNARK证明，由如下的几步组成：</p>
 <p>1/ 问题转化:  一个需要证明的NP问题转化为选定的NP问题（比如QSP问题）</p>
 <p>2/ 设置参数（setup）：设置参数的过程也是挑选随机数的过程，并提供CRS</p>

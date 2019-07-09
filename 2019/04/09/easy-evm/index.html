@@ -530,7 +530,6 @@
       
         <p>创业有三种状态：投机，寻租以及自恋。屌丝程序员发现区块链是快速改变自己阶级命运的神器，一股脑冲进去，这是投机。早期的创业者，初初接触商业，寻求各种社会资源，各种“优惠”，努力实现“旱涝保收”的状态，这是寻租。稳定盈利的创业者会自恋，认为自己无所不能。创业过程会在这三种状态之间徘徊。在每个状态都要理智控制自己的情绪和理智。创业，最美妙的心理历程是以自己可控方式进入自恋的状态，做自己想做的事情，反推现状，寻找破局。</p>
 <a id="more"></a>
-
 <h2 id="以太坊虚拟机"><a href="#以太坊虚拟机" class="headerlink" title="以太坊虚拟机"></a>以太坊虚拟机</h2><p>以太坊虚拟机，简称EVM，是用来执行以太坊上的交易的。业务流程如下图：<br><img src="https://img.learnblockchain.cn/2019/15548145070948.jpg" alt></p>
 <p>输入一笔交易，内部会转换成一个Message对象，传入EVM执行。</p>
 <p>如果是一笔普通转账交易，那么直接修改<code>StateDB</code>中对应的账户余额即可。如果是<a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" target="_blank" rel="noopener">智能合约</a>的创建或者调用，则通过EVM中的解释器加载和执行字节码，执行过程中可能会查询或者修改StateDB。</p>
@@ -563,9 +562,7 @@
 <li><p>后面跟的就是调用该函数需要提供的参数了，长度不定。</p>
 </li>
 </ul>
-<p>举个例子：我在部署完A合约后，调用add(1)对应的Input数据是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0x87db03b70000000000000000000000000000000000000000000000000000000000000001</span><br></pre></td></tr></table></figure>
-
+<p>举个例子：我在部署完A合约后，调用add(1)对应的Input数据是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0x87db03b70000000000000000000000000000000000000000000000000000000000000001</span><br></pre></td></tr></table></figure></p>
 <p>而在我们编译智能合约的时候，编译器会自动在生成的字节码的最前面增加一段函数选择逻辑：</p>
 <p>首先通过<code>CALLDATALOAD</code>指令将“4-byte signature”压入堆栈中，然后依次跟该合约中包含的函数进行比对，如果匹配则调用JUMPI指令跳入该段代码继续执行。</p>
 <p>这么讲可能有点抽象，我们可以看一看上图中的合约对应的反汇编代码就一目了然了：</p>
@@ -614,7 +611,6 @@
 <p><img src="https://img.learnblockchain.cn/2019/15548164197499.jpg" alt></p>
 <p>我们写个合约验证一下我们的理解：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.25</span>;</span><br><span class="line"></span><br><span class="line">contract A &#123;</span><br><span class="line">  int public x;</span><br><span class="line">   </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">inc_call</span>(<span class="params">address _contractAddress</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">      _contractAddress.call(bytes4(keccak256(<span class="string">"inc()"</span>)));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">inc_callcode</span>(<span class="params">address _contractAddress</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">      _contractAddress.callcode(bytes4(keccak256(<span class="string">"inc()"</span>)));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">contract B &#123;</span><br><span class="line">  int public x;</span><br><span class="line">   </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">inc</span>(<span class="params"></span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">      x++;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>我们先调用一下<code>inc_call()</code>，然后查询合约A和B中x的值有什么变化：</p>
 <p><img src="https://img.learnblockchain.cn/2019/15548164969951.jpg" alt></p>
 <p>可以发现，合约B中的x被修改了，而合约A中的x还等于0。</p>
@@ -627,7 +623,6 @@
 <p><img src="https://img.learnblockchain.cn/2019/15548165586862.jpg" alt="CALLCODE和DELEGATECALL区别"></p>
 <p>我们还是写一段代码来验证我们的理解：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^0.4.25;</span><br><span class="line"></span><br><span class="line">contract A &#123;</span><br><span class="line">  int public x;</span><br><span class="line">   </span><br><span class="line">  function inc_callcode(address _contractAddress) public &#123;</span><br><span class="line">      _contractAddress.callcode(bytes4(keccak256(&quot;inc()&quot;)));</span><br><span class="line">  &#125;</span><br><span class="line">  function inc_delegatecall(address _contractAddress) public &#123;</span><br><span class="line">      _contractAddress.delegatecall(bytes4(keccak256(&quot;inc()&quot;)));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">contract B &#123;</span><br><span class="line">  int public x;</span><br><span class="line">   </span><br><span class="line">  event senderAddr(address);</span><br><span class="line">  function inc() public &#123;</span><br><span class="line">      x++;</span><br><span class="line">      emit senderAddr(msg.sender);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>我们首先调用一下inc_callcode()，观察一下log输出：</p>
 <p><img src="https://img.learnblockchain.cn/2019/15548165876226.jpg" alt></p>
 <p>可以发现，msg.sender指向合约A的地址，而非交易发起者的地址。</p>
@@ -641,7 +636,7 @@
 <p><img src="https://img.learnblockchain.cn/2019/15548166792555.jpg" alt></p>
 <p>可以看到，解释器增加了一个readOnly属性，STATICCALL会把该属性置为true，如果出现状态变量的写操作，则会返回一个errWriteProtection错误。</p>
 <p>总结：<a href="https://learnblockchain.cn/2017/11/20/whatiseth/" target="_blank" rel="noopener">以太坊</a>虚拟机用来执行以太坊上的交易，更改以太坊状态。交易分两种：普通交易和智能合约交易。在执行交易时需要支付油费。智能合约之间的调用有四种方式。</p>
-<p>作者Star Li，他的公众号<a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzU5MzMxNTk2Nw==&scene=124#wechat_redirect" target="_blank" rel="noopener">星想法</a>有很多原创高质量文章，欢迎大家关注。</p>
+<p>作者Star Li，他的公众号<a href="https://mp.weixin.qq.com/mp/profile_ext?action=home&amp;__biz=MzU5MzMxNTk2Nw==&amp;scene=124#wechat_redirect" target="_blank" rel="noopener">星想法</a>有很多原创高质量文章，欢迎大家关注。</p>
 <p><a href="https://learnblockchain.cn/" target="_blank" rel="noopener">深入浅出区块链</a> - 系统学习区块链，学区块链都在这里，打造最好的区块链技术博客。</p>
 
       

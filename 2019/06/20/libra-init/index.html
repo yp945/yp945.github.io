@@ -514,8 +514,6 @@
       
         <p>这几天应该都被Libra刷屏了。Facebook Libra将在2020年底会推出。这里暂且不详细来讨论Libra的意义和阶段性影响。目前来看 Libra 满足了人们进入区块链时代的阶段性的需求，至于如何发展持续保持关注。笔者尝试搭建Libra环境。</p>
 <a id="more"></a>
-
-
 <h2 id="Libra-相关资源"><a href="#Libra-相关资源" class="headerlink" title="Libra 相关资源"></a>Libra 相关资源</h2><p>这里列举相关Libra的相关资源链接，仅供参考：</p>
 <ul>
 <li>Libra官网： <a href="https://libra.org/zh-CN/" target="_blank" rel="noopener">https://libra.org/zh-CN/</a></li>
@@ -532,39 +530,32 @@
 <hr>
 <h2 id="系统安装配置"><a href="#系统安装配置" class="headerlink" title="系统安装配置"></a>系统安装配置</h2><p>基本的系统安装，安装好之后无外乎关闭selinux、防火墙这些基本的配置。<br>这里建议安装好之后设置阿里yum，设置完成后：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum update</span><br></pre></td></tr></table></figure>
-
 <h2 id="下载Libra及相关软件安装"><a href="#下载Libra及相关软件安装" class="headerlink" title="下载Libra及相关软件安装"></a>下载Libra及相关软件安装</h2><ul>
 <li>下载Libra：</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/libra/libra.git</span><br></pre></td></tr></table></figure>
-
 <hr>
 <ul>
 <li>安装 Golang</li>
 </ul>
 <p>安装Golang<br>如果单独去下载安装包麻烦的话，那么直接通过wget来下载解压，配置环境变量。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://studygolang.com/dl/golang/go1.12.5.linux-amd64.tar.gz</span><br><span class="line">tar -xvf go1.12.5.linux-amd64.tar.gz</span><br></pre></td></tr></table></figure>
-
 <p>配置环境变量。修改/etc/profile文件,路径根据下载安装路径来。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br><span class="line">#添加</span><br><span class="line">export GOROOT=/usr/go</span><br><span class="line">export GOPATH=/usr/gopath</span><br><span class="line">export PATH=$PATH:$GOROOT/bin:$GOPATH/bin</span><br></pre></td></tr></table></figure>
-
 <hr>
 <ul>
 <li>安装Rust等相关</li>
 </ul>
 <p>安装rust</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl https://sh.rustup.rs -sSf | sh</span><br><span class="line">rustup toolchain install nightly-2019-05-22-x86_64-unknown-linux-gnu</span><br><span class="line">rustup override set nightly-2019-05-22</span><br></pre></td></tr></table></figure>
-
 <p>安装完成后查看版本信息：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@libra libra]# rustc --version</span><br><span class="line">rustc 1.36.0-nightly (50a0defd5 2019-05-21)</span><br><span class="line">[root@libra libra]# rustup --version</span><br><span class="line">rustup 1.18.3 (435397f48 2019-05-22)</span><br></pre></td></tr></table></figure>
-
 <hr>
 <ul>
 <li>安装cmake</li>
 </ul>
 <p>在官网：<a href="https://cmake.org/download/" target="_blank" rel="noopener">https://cmake.org/download/</a><br>选择对应操作系统版本下载，下载后解压：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tar -xvzf cmake-3.15.0-rc2.tar.gz</span><br><span class="line">cd cmake-3.15.0-rc2/</span><br><span class="line">./bootstrap</span><br><span class="line">gmake</span><br><span class="line">gmake install</span><br><span class="line">以上步骤有点慢，耐心等待~</span><br></pre></td></tr></table></figure>
-
 <hr>
 <ul>
 <li>protocol安装配置</li>
@@ -572,15 +563,11 @@
 <p>文件下载地址：<a href="https://github.com/protocolbuffers/protobuf/releases/tag/v3.6.1" target="_blank" rel="noopener">https://github.com/protocolbuffers/protobuf/releases/tag/v3.6.1</a></p>
 <p>选择对应的版本：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf protobuf-all-3.8.0.tar.gz</span><br><span class="line">cd protobuf-3.8.0/</span><br><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make check</span><br><span class="line">sudo make install</span><br><span class="line">protoc --version</span><br><span class="line"># 显示：libprotoc 3.8.0</span><br></pre></td></tr></table></figure>
-
 <h2 id="安装测试Libra环境"><a href="#安装测试Libra环境" class="headerlink" title="安装测试Libra环境"></a>安装测试Libra环境</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd libra</span><br><span class="line">./scripts/dev_setup.sh</span><br></pre></td></tr></table></figure>
-
 <p>显示如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Installing CMake......</span><br><span class="line">CMake is already installed</span><br><span class="line">Installing Go......</span><br><span class="line">Go is already installed</span><br><span class="line">Installing Protobuf......</span><br><span class="line">Protobuf is already installed</span><br><span class="line"></span><br><span class="line">Finished installing all dependencies.</span><br><span class="line"></span><br><span class="line">You should now be able to build the project by running:</span><br><span class="line">	source /root/.cargo/env</span><br><span class="line">	cargo build</span><br></pre></td></tr></table></figure>
-
 <p>测试网络脚本运行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./scripts/cli/start_cli_testnet.sh</span><br><span class="line"># 比较慢耐心等待~~~</span><br></pre></td></tr></table></figure>
-
 <p>完成后显示如下：<br><img src="https://img.learnblockchain.cn/2019/06/15610366965462.png" alt></p>
 <hr>
 <h2 id="创建账户及账户状态查看"><a href="#创建账户及账户状态查看" class="headerlink" title="创建账户及账户状态查看"></a>创建账户及账户状态查看</h2><p>根据官网的指导，先查看account内容：</p>
@@ -589,18 +576,14 @@
 <li>创建账户 Alice、Bob</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">libra% account create</span><br><span class="line">&gt;&gt; Creating/retrieving next account from wallet</span><br><span class="line">Created/retrieved account <span class="comment">#0 address c94d5411d85442374cc24c0eb0203f1666c9cd681eb4eeedf366905c950c20ee</span></span><br><span class="line">libra% account create</span><br><span class="line">&gt;&gt; Creating/retrieving next account from wallet</span><br><span class="line">Created/retrieved account <span class="comment">#1 address 39c0ff0bdc00b710599e6f4c8c32d2fa873ce360f20b100703eca748e0941f24</span></span><br><span class="line">libra%</span><br></pre></td></tr></table></figure>
-
 <p>通过account list查看内容：<br><img src="https://img.learnblockchain.cn/2019/06/15610367437648.png" alt></p>
 <p>将Libra Coins添加到Alice和Bob的账户。</p>
 <p>根据之前的建account顺序，那么0为Alice、1为Bob，110和50为Libra coin。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">libra% account mint 0 110</span><br><span class="line">&gt;&gt; Minting coins</span><br><span class="line">Mint request submitted</span><br><span class="line">libra% account mint 1 52</span><br><span class="line">&gt;&gt; Minting coins</span><br><span class="line">Mint request submitted</span><br><span class="line">libra%</span><br></pre></td></tr></table></figure>
-
 <p>检查下account 0、1 的余额：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">libra% query balance 0</span><br><span class="line">Balance is: 110</span><br><span class="line">libra% query balance 1</span><br><span class="line">Balance is: 52</span><br><span class="line">libra%</span><br></pre></td></tr></table></figure>
-
 <p>查看账户序列：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ibra% query sequence 0</span><br><span class="line">&gt;&gt; Getting current sequence number</span><br><span class="line">Sequence number is: 0</span><br><span class="line">libra% query sequence 1</span><br><span class="line">&gt;&gt; Getting current sequence number</span><br><span class="line">Sequence number is: 0</span><br><span class="line">libra%</span><br></pre></td></tr></table></figure>
-
 <h2 id="交易"><a href="#交易" class="headerlink" title="交易"></a>交易</h2><p>根据例子，我们转移10个Libra coin从Alice到Bob：</p>
 <p>transfer 0 1 10</p>
 <ul>
@@ -609,7 +592,6 @@
 <li>10是从Alice的账户转移到Bob的账户的Libra的数量。</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">transfer 0 1 10</span><br></pre></td></tr></table></figure>
-
 <p>下图清晰显示账户转账后的状态：</p>
 <p><img src="https://img.learnblockchain.cn/2019/06/15610368113447.png" alt></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>大致搭建了Libra的环境，根据官方开发文档实现一些基本的功能。在搭建过程中我把相关软件的版本都列举出来，可能会有一些软件版本的问题导致在编译的时候不通过，建议按照列出的版本来安装，后面还有有文章更新，请期待。<br>有兴趣可联系我一块交流。</p>

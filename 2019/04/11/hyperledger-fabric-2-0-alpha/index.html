@@ -507,9 +507,7 @@
       
 
       
-        <h2 id="Hyperledger-Fabric-2-0-Alpha发布了！"><a href="#Hyperledger-Fabric-2-0-Alpha发布了！" class="headerlink" title="Hyperledger Fabric 2.0 Alpha发布了！"></a>Hyperledger Fabric 2.0 Alpha发布了！</h2><p>随着近期Fabric v1.4.1 LTS的发布，Fabric项目目前工作的重点正在向1.4.1和2.0的正式版推进。v2.0.0是2019年的主要目标，重点集中在更多的新特性上，包括增强的链码生命周期管理，raft共识机制，以此来循序渐进地迁移至拜占庭容错算法，以及更强大的token支持。近期发布的2.0版本建议大家仅作为尝鲜之用，生产环境暂时不要考虑。</p>
-<a id="more"></a>
-
+        <h2 id="Hyperledger-Fabric-2-0-Alpha发布了！"><a href="#Hyperledger-Fabric-2-0-Alpha发布了！" class="headerlink" title="Hyperledger Fabric 2.0 Alpha发布了！"></a>Hyperledger Fabric 2.0 Alpha发布了！</h2><p>随着近期Fabric v1.4.1 LTS的发布，Fabric项目目前工作的重点正在向1.4.1和2.0的正式版推进。v2.0.0是2019年的主要目标，重点集中在更多的新特性上，包括增强的链码生命周期管理，raft共识机制，以此来循序渐进地迁移至拜占庭容错算法，以及更强大的token支持。近期发布的2.0版本建议大家仅作为尝鲜之用，生产环境暂时不要考虑。<br><a id="more"></a></p>
 <h2 id="Fabric-chaincode-lifecycle"><a href="#Fabric-chaincode-lifecycle" class="headerlink" title="Fabric chaincode lifecycle"></a>Fabric chaincode lifecycle</h2><p>Fabric 2.0 Alpha介绍了分布式治理链码的特性，包括在你的节点上安装链码以及在一个通道中启动链码的新流程。新的Fabric生命周期允许多组织对链码的参数达成共识，例如链码在开始和账本进行交互前的背书策略。新的模型在之前的生命周期上进行了改进：</p>
 <ul>
 <li><p>多个组织必须同意链码的参数：在Fabric 1.x版本中，一个组织能够为所有其他通道成员设置链码参数（例如背书策略）。新的Fabric链码生命周期将变得更灵活，提供了中心化的信任模型（例如之前版本的生命周期模型）以及去中心化的要求足够多的组织同意才能生效的模型。</p>

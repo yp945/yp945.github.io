@@ -512,10 +512,9 @@
       
 
       
-        <p>Cosmos 和 Polkadot 都是关注区块链互操作性的项目，关于二者之间的差别已经有过很多讨论。如果你还不熟悉这两个项目，Linda Xie 发过一串<a href="https://twitter.com/ljxie/status/1118221870745047040?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1118221870745047040&ref_url=https%3A%2F%2Fmedium.com%2Fmedia%2F4c261ee43d7ae6db10bd7c53dcca9114%3FpostId%3D67f09535594b" target="_blank" rel="noopener">推特</a>介绍过这两个项目，可以作为很好的入门材料。</p>
+        <p>Cosmos 和 Polkadot 都是关注区块链互操作性的项目，关于二者之间的差别已经有过很多讨论。如果你还不熟悉这两个项目，Linda Xie 发过一串<a href="https://twitter.com/ljxie/status/1118221870745047040?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1118221870745047040&amp;ref_url=https%3A%2F%2Fmedium.com%2Fmedia%2F4c261ee43d7ae6db10bd7c53dcca9114%3FpostId%3D67f09535594b" target="_blank" rel="noopener">推特</a>介绍过这两个项目，可以作为很好的入门材料。</p>
 <p>虽然已经有很多文章分析过这两个项目的区别了，但是我认为其中大部分都存在一定的偏向性或者不够详细。通过这篇文章，我会从架构权衡到设计哲学等方面更深入地探讨这两个项目。</p>
 <a id="more"></a>
-
 <h2 id="为什么要构建一条新的区块链？"><a href="#为什么要构建一条新的区块链？" class="headerlink" title="为什么要构建一条新的区块链？"></a>为什么要构建一条新的区块链？</h2><p>为什么一些项目要选择从头开始构建一条专门承载应用程序的区块链，而不是以<a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" target="_blank" rel="noopener">智能合约</a>的形式在现有的区块链上编写应用程序呢？主要有以下两点原因。</p>
 <p>首先，现有的智能合约平台不一定能满足应用程序所需的灵活性和可定制性。举例来说，如果你想搭建的应用程序需要自定义的哈希函数，那么把它编写到以太坊上会消耗很多 gas ，因为这个函数每调用一次都需要在以太坊虚拟机内执行一次。一种解决方案是提议将这个函数作为<a href="https://ethereum.stackexchange.com/questions/15479/list-of-pre-compiled-contracts" target="_blank" rel="noopener">预编译合约</a>添加至以太坊协议内。但是，除非这个函数也广泛应用于其它应用程序，否则这项提议大概率是不会通过的。从头开始编写一条新的区块链，你就可以自由灵活地设计区块链的核心逻辑，以此满足你的应用程序的需求。</p>
 <p>其次是自治问题。在<a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" target="_blank" rel="noopener">智能合约</a>平台上构建的应用程序必须接受平台的治理并遵守其规则，从区块时间和 gas 定价之类影响用户体验的规则，到回滚之类改变状态的决策等等。</p>

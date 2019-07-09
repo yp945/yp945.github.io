@@ -512,7 +512,6 @@
       
         <p>在<a href="https://learnblockchain.cn/2019/06/15/eth-serenity/" target="_blank" rel="noopener">以太坊在Serenity (ETH 2.0)</a>阶段来临之前经历的升级和硬分叉。通过本文将了解到升级或分叉发生的时间，加入那哪些特性。</p>
 <a id="more"></a>
-
 <p><img src="https://img.learnblockchain.cn/2019/06/15606099659926.jpg" alt="以太坊发展图"></p>
 <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>时至今日当我们鸟瞰区块链技术的发展，它仍旧算得上是一个新事物。尽管有关区块链的基础核心概念（例如密码学、去中心化及点对点网络和交易）的研究已经进行了数十年，但可以说是直到2008年比特币的滥觞，这些零散的概念才被整合起来创造出了一个功能性产品。直到2015年，以太坊逐渐走入人们的视线。至此，以太坊区块链得以成型并且实际可用。尽管计划内升级的日期和细节发生了变化，但以太坊仍坚持不断对协议进行升级，以确保提高其可用性、安全性、功能性和去中心化。</p>
 <p>在今年2月的<strong><a href="https://media.consensys.net/the-constantinople-hard-fork-what-you-need-to-know-d438a91dec3f" target="_blank" rel="noopener">君士坦丁堡（Constantinople）升级</a></strong>完成之后，以太坊目前正处于<strong>宁静（Serenity， 也称为以太坊2.0）</strong>阶段的风口浪尖，Serenity升级需要通过一系列更新方能达成。然而，居安当思归来源，我们不能忘记自己从哪里来，如此方知来者之可追。以下时间线着眼于以太坊计划内（或计划外）的硬分叉和升级历史，为其下一阶段的升级做好准备。</p>
@@ -533,7 +532,7 @@
 <p>“家园”升级是最早的以太坊改进提案（EIP）实施案例之一。EIPs是面向社区提出的改进建议，一旦获得批准，则会囊括在网络升级中。</p>
 <p><strong>“家园”升级包括三个EIPs：</strong></p>
 <ul>
-<li>**<a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2.md" target="_blank" rel="noopener">EIP-2</a>：“家园”阶段主要更新 **</li>
+<li><strong><a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2.md" target="_blank" rel="noopener">EIP-2</a>：“家园”阶段主要更新 </strong></li>
 </ul>
 <pre><code>EIP 2.1：通过交易创建智能合约的成本被提高至21,000至53,000个[gas](https://learnblockchain.cn/2019/06/11/gas-mean/)。通过一个合约创建另一个合约（首选方式）的成本高于通过交易创建合约。通过提高以交易形式创建智能合约的成本，EIP2.1鼓励用户转向以合约创建合约的方式。
 
@@ -541,7 +540,8 @@ EIP 2.2：“s值大于secp256k1n/2的所有交易签名均视为无效。ECDSA�
 
 EIP 2.3：当合约创建过程中没有足够的gas用以完成操作，该合约将“作废”而非创建一个空白合约。之前的交易可能输出结果包括[成功] [失败]或者[空白]，这一改进则删除了[空白]结果。
 
-EIP 2.4：取消用户挖掘稍高难度区块的激励，即增加可挖掘的区块。此升级将新区快产生的时间稳定在每10-20秒之间，并将网络恢复至每块约15秒的总目标时间。</code></pre><ul>
+EIP 2.4：取消用户挖掘稍高难度区块的激励，即增加可挖掘的区块。此升级将新区快产生的时间稳定在每10-20秒之间，并将网络恢复至每块约15秒的总目标时间。
+</code></pre><ul>
 <li><p><strong>EIP-7</strong></p>
 <p>  “在0xf4添加一个新的操作码，DELEGATECALL，它与CALLCODE的理念类似，不同之处在于前者将发送方和发送值从父范围扩散到子范围，即创建的调用与原始调用具有相同的发送方和发送值。”</p>
 </li>
@@ -558,7 +558,8 @@ EIP 2.4：取消用户挖掘稍高难度区块的激励，即增加可挖掘的�
 <li><p><strong>EIP 658</strong></p>
 </li>
 </ul>
-<pre><code>对于拜占庭硬分叉升级后的区块，交易收据包括了一个状态字段，用于表示成功（由1表示）或失败（由0表示）。</code></pre><ul>
+<pre><code>对于拜占庭硬分叉升级后的区块，交易收据包括了一个状态字段，用于表示成功（由1表示）或失败（由0表示）。
+</code></pre><ul>
 <li><p><strong>EIP 649</strong></p>
 <p>  “难度炸弹”(Difficulty Bomb)是这样一种机制：一旦被激活，将增加挖掘新区块所耗费的成本（即“难度”），直到难度系数变为不可能或者没有新区块等待挖掘。此时，以太坊网络将处于“冻结”状态。“难度炸弹”机制最初于2015年9月被引入以太坊网络。它的目的是为以太坊最终从工作量证明(PoW)转向权益证明(PoS)提供支持。从理论上来说，未来在PoS机制下，矿工仍然可以选择在旧的PoW链上作业，而这种行为将导致社区分裂，从而形成两条独立的链：PoS链由验证人(stakers)维护，PoW条则由矿工维护。为了预防这种情况的发生，“难度炸弹”机制应运而生。通过增加难度，它将最终淘汰PoW挖矿，并催使网络完全过渡到PoS机制，并且在这个过程中避免了产生具有争议的硬分叉。在此建议中，也被称作“冰河时期”的“难度炸弹”时期将延迟一年，并且区块奖励从5 ETH减少到3 ETH。</p>
 </li>
@@ -580,8 +581,6 @@ EIP 2.4：取消用户挖掘稍高难度区块的激励，即增加可挖掘的�
 <p>   此改进提案包含两大内容：减少区块奖励和延迟难度炸弹。</p>
 <blockquote>
 <p><strong><a href="https://media.consensys.net/the-thirdening-what-you-need-to-know-df96599ad857" target="_blank" rel="noopener">减少区块奖励</a>：</strong><br>将区块采矿奖励从每块3 ETH减少到2 ETH。这个改变也被称作“<a href="https://media.consensys.net/the-thirdening-what-you-need-to-know-df96599ad857" target="_blank" rel="noopener">Thirdening</a>”，即以太坊第三次区块奖励减半。</p>
-</blockquote>
-<blockquote>
 <p><strong>推迟“难度炸弹”：</strong><br>EIP 1234将“难度炸弹”时期推迟12个月，届时将会进行再次投票。</p>
 </blockquote>
 </li>

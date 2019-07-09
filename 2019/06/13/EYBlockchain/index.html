@@ -111,7 +111,7 @@
 <meta property="og:image" content="https://img.learnblockchain.cn/2019/06/mint_pcode.jpg">
 <meta property="og:image" content="https://img.learnblockchain.cn/2019/06/mint_pcode2.jpg">
 <meta property="og:image" content="https://img.learnblockchain.cn/2019/06/0df7b9b3f163b79fb778dfd29bdfab45.jpg">
-<meta property="og:image" content="https://img.learnblockchain.cn/2019/06/%E9%9A%90%E7%A7%81%E5%B8%81.jpg">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/06/隐私币.jpg">
 <meta property="og:image" content="https://img.learnblockchain.cn/2019/06/merkle-t.jpg">
 <meta property="og:image" content="https://img.learnblockchain.cn/2019/06/ac149ea567701996b78a86bc1ca70cb0.jpg">
 <meta property="og:image" content="https://img.learnblockchain.cn/2019/06/burn.jpg">
@@ -521,7 +521,6 @@
       
         <p>前一段时间，介绍了几篇零知识证明文章：<a href="https://learnblockchain.cn/2019/04/18/learn-zkSNARK/" target="_blank" rel="noopener">入门zkSNARK</a>， <a href="https://learnblockchain.cn/2019/05/07/qsp-qap/" target="_blank" rel="noopener">从 QSP 到 QAP</a>，<a href="https://learnblockchain.cn/2019/05/27/groth16/" target="_blank" rel="noopener">Groth16 算法介绍</a>， 今天这篇文章分享下利用 EYBlockchain 在以太坊上创建隐私币。</p>
 <a id="more"></a>
-
 <h2 id="EYBlockchain-简介"><a href="#EYBlockchain-简介" class="headerlink" title="EYBlockchain 简介"></a>EYBlockchain 简介</h2><p>EYBlockchain是在以太坊的基础上，提供隐私交易的能力。EYBlockchain目前的实现并不是传统意义上的链，并没有修改以太坊的代码。而是在ZoKrates（以太坊上 <a href="https://learnblockchain.cn/2019/04/18/learn-zkSNARK/" target="_blank" rel="noopener">zkSNARKs</a> 的工具箱）的基础上，利用以太坊上的智能合约，提供了以太坊上的比较完整的隐私交易的服务。在<a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" target="_blank" rel="noopener">以太坊智能合约</a>中，隐私交易的管理类似<a href="https://learnblockchain.cn/2019/05/23/anonymous-coin/" target="_blank" rel="noopener">Zcash</a>。</p>
 <p>EYBlockchain的源代码为<a href="https://github.com/EYBlockchain/nightfall" target="_blank" rel="noopener">Nightfall</a>, 白皮书在<a href="https://img.learnblockchain.cn/pdf/nightfall-v1.pdf" target="_blank" rel="noopener">这里</a> 。</p>
 <p><a href="https://img.learnblockchain.cn/pdf/nightfall-v1.pdf" target="_blank" rel="noopener">白皮书</a> 对EYBlockchain的愿景以及实现细节解释的比较清楚。</p>
@@ -566,7 +565,7 @@
 <p><strong>FToken</strong> - EY发行的<a href="https://learnblockchain.cn/2018/01/12/create_token/" target="_blank" rel="noopener">ERC20</a>的代币合约，EY OPs Coin，简称OPS。<br><strong>FTokenShield</strong> - ERC20对应的隐私交易合约，管理所有隐私交易信息。<br><strong>NFToken</strong> - EY发行的<a href="https://learnblockchain.cn/2018/03/23/token-erc721/" target="_blank" rel="noopener">ERC721</a>的代币合约，EYToken，简称EYT。<br><strong>NFTokenShield</strong> - ERC721对应的隐私交易合约，管理所有隐私交易信息。<br><strong>GM17</strong> - 零知识验证智能合约。<br><strong>Verifier Registry</strong> - 提供两个功能：1. 所有零知识验证的验证密钥注册 2. 所有证明信息的存储。</p>
 <p>在向Verifier Registry注册一个验证密钥后，智能合约会返回一个验证密钥编号（vkId）。</p>
 <p>以下以ERC20为例，说明隐私交易的生成/转账/销毁逻辑。注意的是，隐私交易涉及的智能合约的交易计算量都比较大，目前代码中建议使用<strong>6500000</strong>的<a href="https://learnblockchain.cn/2019/06/11/gas-mean/" target="_blank" rel="noopener">Gas</a>油费。</p>
-<h2 id="隐私代币生成（Mint）"><a href="#隐私代币生成（Mint）" class="headerlink" title="隐私代币生成（Mint）"></a>隐私代币生成（Mint）</h2><p>隐私代币生成的过程，就是从非隐私的OPS代币，到隐私代币的过程。注意的是，mint的过程本身并不是隐私的，发起账户和金额都是公开的。<br><img src="https://img.learnblockchain.cn/2019/06/%E9%9A%90%E7%A7%81%E5%B8%81.jpg" alt="隐私币生成"></p>
+<h2 id="隐私代币生成（Mint）"><a href="#隐私代币生成（Mint）" class="headerlink" title="隐私代币生成（Mint）"></a>隐私代币生成（Mint）</h2><p>隐私代币生成的过程，就是从非隐私的OPS代币，到隐私代币的过程。注意的是，mint的过程本身并不是隐私的，发起账户和金额都是公开的。<br><img src="https://img.learnblockchain.cn/2019/06/隐私币.jpg" alt="隐私币生成"></p>
 <ul>
 <li><p><strong>Step1</strong> - 通过ft-mint的vkId，生成证明。公开信息为转账金额和（c，pk，r）三元组生成的hash值。私有信息为pk和r。r为随机数。</p>
 </li>

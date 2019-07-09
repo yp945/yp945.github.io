@@ -519,7 +519,6 @@
       
         <p>这是如何<a href="https://learnblockchain.cn/2019/04/11/wallet-dev-guide/" target="_blank" rel="noopener">开发以太坊安卓钱包系列</a>第5篇，利用钱包对交易进行本地签名，然后发送到以太坊网络。</p>
 <a id="more"></a>
-
 <h2 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h2><p>发送一个交易， 逻辑上会包含三个步骤：</p>
 <ol>
 <li>构造交易对象；</li>
@@ -529,7 +528,6 @@
 <p>第 2 3步，web3j 提供的API 几句代码就可以解决，关键第 1 步构造交易对象，我们来逐步分解。</p>
 <h2 id="一个交易长什么样"><a href="#一个交易长什么样" class="headerlink" title="一个交易长什么样"></a>一个交易长什么样</h2><p>一个交易的结构如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RawTransaction</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String to;</span><br><span class="line">    <span class="keyword">private</span> BigInteger value;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> BigInteger gasLimit;    </span><br><span class="line">    <span class="keyword">private</span> BigInteger gasPrice;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> BigInteger nonce;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String data;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>发起交易的时候，就是需要填充<strong>每一个字段</strong>，构建这样一个交易结构，每个字段含义如下：</p>
 <ul>
 <li><code>to</code> : 用户要转账的目标地址；</li>
@@ -538,7 +536,7 @@
 <li><code>gasPrice</code>: 交易发起者愿意支付的<strong>单位工作量</strong>费用，矿工在选择交易的时候，是按照<code>gasPrice</code>进行排序，先服务高出价者，因此如果出价过低会导致交易迟迟不能打包确认，出价过高则费用较大；</li>
 </ul>
 <blockquote>
-<p>Gas是<a href="https://learnblockchain.cn/2017/11/20/whatiseth/" target="_blank" rel="noopener">以太坊</a>的工作计费机制，是交易者给矿工打包的一笔<strong>预算</strong>，预算= gasLimit * gasPrice， 可以类比为请货车的运费：公里数 * 每公里单价。</p>
+<p>Gas是<a href="https://learnblockchain.cn/2017/11/20/whatiseth/" target="_blank" rel="noopener">以太坊</a>的工作计费机制，是交易者给矿工打包的一笔<strong>预算</strong>，预算= gasLimit <em> gasPrice， 可以类比为请货车的运费：公里数 </em> 每公里单价。</p>
 </blockquote>
 <ul>
 <li><p><code>nonce</code>: 交易序列号， 它可以用来防止重放攻击，如果没有nonce的活，同一笔交易就可以多次广播。同样的道理，如果遇到一个交易很久没有打包，可以使用相同的交易nonce序列号， 用更高的gasPrice 重发这笔交易；</p>
@@ -560,7 +558,6 @@
 </blockquote>
 <p>获取Gas设置，<a href="https://github.com/xilibi2003/Upchain-wallet" target="_blank" rel="noopener">代码</a>中提供了一个专门的类<code>FetchGasSettingsInteract</code></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FetchGasSettingsInteract</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> MutableLiveData&lt;BigInteger&gt; gasPrice = <span class="keyword">new</span> MutableLiveData&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> BigInteger cachedGasPrice;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FetchGasSettingsInteract</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        gasSettingsDisposable = Observable.interval(<span class="number">0</span>, <span class="number">60</span>, TimeUnit.SECONDS)</span></span></span><br><span class="line"><span class="function">                .<span class="title">doOnNext</span><span class="params">(l -&gt;fetchGasPriceByWeb3()</span></span></span><br><span class="line"><span class="function">                ).<span class="title">subscribe</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">fetchGasPriceByWeb3</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Web3j web3j = Web3j.build(rpcServerUrl));</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            EthGasPrice price = web3j.ethGasPrice().send();</span><br><span class="line">            <span class="keyword">if</span> (price.getGasPrice().compareTo(BalanceUtils.gweiToWei(BigDecimal.ONE)) &gt;= <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                cachedGasPrice = price.getGasPrice();</span><br><span class="line">                gasPrice.postValue(cachedGasPrice);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">            <span class="comment">// silently</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> MutableLiveData&lt;BigInteger&gt; <span class="title">gasPriceUpdate</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> gasPrice;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>FetchGasSettingsInteract 类中<code>gasPrice</code>是一个可以订阅的<code>LiveData</code>数据，<code>fetchGasPriceByWeb3</code>函数用于获取价格，在构造函数中使用了Observable.interval来开启一个间隔一分钟的循环任务，即每分钟去取一下最新的价格。</p>
 <h3 id="Gas-Limit"><a href="#Gas-Limit" class="headerlink" title="Gas Limit"></a>Gas Limit</h3><p>Gas Limit用来确定工作量，不像Gas Price 谁时间的变化而浮动，工作量任务确定后，这个值就是固定的，如一个转账到普通的交易，工作量中是<code>21000</code>。</p>
 <p>对于<a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" target="_blank" rel="noopener">智能合约</a>交易，gasLimit则根据执行的任务而变化，如果设定的不够，会发生<em>out-of-gas</em> 错误，交易就不会打包上链，如果设定的过高，多余的就会退回交易发起者，这也是为什么我把这个费用称为预算的原因。</p>
@@ -570,7 +567,6 @@
 </blockquote>
 <p>这里使用推荐默认值，在FetchGasSettingsInteract加入方法：</p>
 <figure class="highlight java"><figcaption><span>FetchGasSettingsInteract.java</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> Single&lt;GasSettings&gt; <span class="title">fetch</span><span class="params">(ConfirmationType type)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Single.fromCallable( () -&gt; &#123;</span><br><span class="line">        BigInteger gasLimit;</span><br><span class="line">        <span class="keyword">if</span> (type == ConfirmationType.ETH) &#123;</span><br><span class="line">            gasLimit = <span class="keyword">new</span> BigInteger(<span class="number">21000</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (type == ConfirmationType.ERC20) &#123;</span><br><span class="line">            gasLimit = <span class="keyword">new</span> BigInteger(<span class="number">21000</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;   </span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> GasSettings(cachedGasPrice, gasLimit);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>为了避免 SendActivity（UI） 与数据的耦合使用了<code>ConfirmationViewModel</code>， <code>ConfirmationViewModel</code> 中保留了一个 <code>FetchGasSettingsInteract</code> 对象，界面提供推荐的gas的代码逻辑调用流程是这样：</p>
 <pre class="mermaid" style="text-align: center;">
             sequenceDiagram
@@ -587,8 +583,6 @@ FetchGasSettingsInteract->>FetchGasSettingsInteract: fetch
 FetchGasSettingsInteract-->>ConfirmationViewModel: onGasSettings
 ConfirmationViewModel-->>SendActivity: onGasSettings
           </pre>
-
-
 <p>其中虚线部分是数据订阅回调，在SendActivity拿到GasSettings就可以进行展示。</p>
 <p>代码调用代码逻辑，大家最好把代码<a href="https://github.com/xilibi2003/Upchain-wallet" target="_blank" rel="noopener">https://github.com/xilibi2003/Upchain-wallet</a> 克隆到本地跟一下。</p>
 <h2 id="确认交易数据"><a href="#确认交易数据" class="headerlink" title="确认交易数据"></a>确认交易数据</h2><p>用户在没有填写收款地址、发送金额以及调整好Gas（可选），在发送交易之前，一般需要用户再次确认下交易详情，使用下面这个对话框：</p>
@@ -597,7 +591,6 @@ ConfirmationViewModel-->>SendActivity: onGasSettings
 <p>在用户确认无误之后，点击确认，用户输入<strong>密码</strong>之后，就可以正式发起交易了。</p>
 <h2 id="获取nonce"><a href="#获取nonce" class="headerlink" title="获取nonce"></a>获取nonce</h2><p>细心的同学可能会发现，现在构造交易结构还差<code>nonce</code>，web3j提供了相应的API，获取的逻辑在EthereumNetworkRepository类中，代码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Single&lt;BigInteger&gt; <span class="title">getLastTransactionNonce</span><span class="params">(Web3j web3j, String walletAddress)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Single.fromCallable(() -&gt; &#123;</span><br><span class="line">        EthGetTransactionCount ethGetTransactionCount = web3j</span><br><span class="line">                .ethGetTransactionCount(walletAddress, DefaultBlockParameterName.PENDING)</span><br><span class="line">                .send();</span><br><span class="line">        <span class="keyword">return</span> ethGetTransactionCount.getTransactionCount();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="发起交易"><a href="#发起交易" class="headerlink" title="发起交易"></a>发起交易</h2><p>完整的交易流程调用序列图如下：</p>
 <pre class="mermaid" style="text-align: center;">
             sequenceDiagram
@@ -612,9 +605,6 @@ CreateTransactionInteract->>CreateTransactionInteract: ethSendRawTransaction
 CreateTransactionInteract-->>ConfirmationViewModel: onCreateTransaction
 ConfirmationViewModel-->>SendActivity:onTransaction
           </pre>
-
-
-
 <p>交易主要在<code>createEthTransaction</code>函数完成，逻辑有：</p>
 <ol>
 <li>获取交易nonce</li>
@@ -624,19 +614,19 @@ ConfirmationViewModel-->>SendActivity:onTransaction
 </ol>
 <p><code>createEthTransaction</code>代码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Single&lt;String&gt;  <span class="title">createEthTransaction</span><span class="params">(ETHWallet from,  String to,</span></span></span><br><span class="line"><span class="function"><span class="params">    BigInteger amount,</span></span></span><br><span class="line"><span class="function"><span class="params">    BigInteger gasPrice, BigInteger gasLimit,</span></span></span><br><span class="line"><span class="function"><span class="params">    String password)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Web3j web3j = Web3j.build(rpcServerUrl));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> networkRepository.getLastTransactionNonce(web3j, from.address)</span><br><span class="line">            .flatMap(nonce -&gt; Single.fromCallable( () -&gt; &#123;</span><br><span class="line"></span><br><span class="line">        Credentials credentials = WalletUtils.loadCredentials(password,  keystorePath);</span><br><span class="line">        RawTransaction rawTransaction = RawTransaction.createEtherTransaction(nonce, gasPrice, gasLimit, to, amount);</span><br><span class="line">        <span class="keyword">byte</span>[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);</span><br><span class="line"></span><br><span class="line">        String hexValue = Numeric.toHexString(signedMessage);</span><br><span class="line">        EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ethSendTransaction.getTransactionHash();</span><br><span class="line"></span><br><span class="line">    &#125; ).subscribeOn(Schedulers.computation())</span><br><span class="line">                    .observeOn(AndroidSchedulers.mainThread()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="Token-转账交易"><a href="#Token-转账交易" class="headerlink" title="Token 转账交易"></a>Token 转账交易</h3><p>Token 转账交易部分，请订阅我的<a href="https://xiaozhuanlan.com/blockchaincore" target="_blank" rel="noopener">小专栏</a>。</p>
 <div style="display: none">
 
-<p>对于Token 转账交易，有两点需要注意：</p>
-<ol>
-<li>交易的目标地址（即交易字段的<code>to</code>字段）其实不是用户填写的收款人钱包地址，目标地址是Token 合约地址。</li>
-<li>需要把对转账函数transfer的调用转化为交易的附加数据<code>data</code>。</li>
-</ol>
-<p>转化为交易的附加数据的方法如下：</p>
+对于Token 转账交易，有两点需要注意：
+1. 交易的目标地址（即交易字段的`to`字段）其实不是用户填写的收款人钱包地址，目标地址是Token 合约地址。
+2.  需要把对转账函数transfer的调用转化为交易的附加数据`data`。
+
+转化为交易的附加数据的方法如下：
+
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">createTokenTransferData</span><span class="params">(String to, BigInteger tokenAmount)</span> </span>&#123;</span><br><span class="line">    List&lt;Type&gt; params = Arrays.&lt;Type&gt;asList(<span class="keyword">new</span> Address(to), <span class="keyword">new</span> Uint256(tokenAmount));</span><br><span class="line"></span><br><span class="line">    List&lt;TypeReference&lt;?&gt;&gt; returnTypes = Arrays.&lt;TypeReference&lt;?&gt;&gt;asList(<span class="keyword">new</span> TypeReference&lt;Bool&gt;() &#123;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    Function function = <span class="keyword">new</span> Function(<span class="string">"transfer"</span>, params, returnTypes);</span><br><span class="line">    <span class="keyword">return</span> FunctionEncoder.encode(function);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>ERC20转账函数<code>createERC20Transfer</code> 有一点点不同：得到调用函数附加数据之后，在构造交易对象时，加入附加数据，部分代码如下：</p>
+ERC20转账函数`createERC20Transfer` 有一点点不同：得到调用函数附加数据之后，在构造交易对象时，加入附加数据，部分代码如下：
+
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String callFuncData = createTokenTransferData(to, amount);</span><br><span class="line">rawTransaction = RawTransaction.createTransaction(</span><br><span class="line">                    nonce, gasPrice, gasLimit, contractAddress, callFuncData);</span><br></pre></td></tr></table></figure>
 
 

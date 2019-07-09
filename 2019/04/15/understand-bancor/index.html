@@ -522,7 +522,6 @@
       
         <p>Bancor协议是为了降低币币交易的门槛，形成Token经济中的Token交易的长尾效应。目前大量的市值相对小的Token没能在交易所上交易，Bancor协议在有一定“抵押物”的情况下，实现Token和“抵押物”的自由交易。进一步，所有通过Bancor协议实现交易的Token又能聚集在一起形成Bancor生态。举个例子，一个TokenA，一个TokenB都是以以太进行抵押，通过Bancor都能实现TokenA和ETH，TokenB和ETH的交易，逻辑上也就实现了TokenA和TokenB的交易。Bancor协议，取名Bancor，是为了纪念宏观经济经济学之父 - 约翰·梅纳德·凯恩斯。</p>
 <a id="more"></a>
-
 <h2 id="Bancor名字历史"><a href="#Bancor名字历史" class="headerlink" title="Bancor名字历史"></a>Bancor名字历史</h2><p>英国经济学家约翰·梅纳德 ·凯恩斯于1944年在美国新罕布什尔州的布雷顿森林举行联合国货币金融会议上提出Bancor计划。其目的是为维持和延续英镑的国际地位，削弱美元的影响力，并与美国分享国际金融领导权。由于历经二战的英国经济军事实力严重衰退，而英国最有力的竞争对手美国实力空前膨胀，最终凯恩斯计划在美国提出的怀特计划面前流产。凯恩斯提出的这套世界货币方案中，由国际清算同盟发行统一的世界货币（<strong>Bancor Coin</strong>），货币的分配份额按照二战前三年的进出口贸易平均值计算。</p>
 <p>凯恩斯是何许人也？</p>
 <p>约翰·梅纳德·凯恩斯（John Maynard Keynes，1883年6月5日—1946年4月21日），英国经济学家，现代经济学最有影响的经济学家之一。他创立的宏观经济学与弗洛伊德所创的精神分析法和爱因斯坦发现的相对论一起并称为二十世纪人类知识界的三大革命。</p>
@@ -541,10 +540,13 @@
 <h3 id="公式1-储备金比例计算"><a href="#公式1-储备金比例计算" class="headerlink" title="公式1 - 储备金比例计算"></a>公式1 - 储备金比例计算</h3><p>Bancor协议要求在创建Smart Token的时候必须提供储备金，储备金比例的计算公式如下：</p>
 <p><img src="https://img.learnblockchain.cn/2019/15553147507540.jpg" alt></p>
 <p>也就是说，储备金比例（CW）等于储备金的价值除以Smart Token的预期价值。比如说，创建一个Smart Token，名叫STAR，初始总量1000万，提供储备金为<a href="https://learnblockchain.cn/2017/11/20/whatiseth/" target="_blank" rel="noopener">以太坊</a>10000个。预期一个STAR币的初始价格是0.002个以太，</p>
-<pre><code>CW = 10000/（0.002*1000*10000） = 0.5</code></pre><h3 id="公式2-价格计算"><a href="#公式2-价格计算" class="headerlink" title="公式2 - 价格计算"></a>公式2 - 价格计算</h3><p>在知道储备金比例的前提下，用户可以通过Bancor协议买卖Smart Token。每次买卖时，价格的计算公式如下：<br><img src="https://img.learnblockchain.cn/2019/15553147727085.jpg" alt="价格的计算公式"></p>
+<pre><code>                CW = 10000/（0.002*1000*10000） = 0.5
+</code></pre><h3 id="公式2-价格计算"><a href="#公式2-价格计算" class="headerlink" title="公式2 - 价格计算"></a>公式2 - 价格计算</h3><p>在知道储备金比例的前提下，用户可以通过Bancor协议买卖Smart Token。每次买卖时，价格的计算公式如下：<br><img src="https://img.learnblockchain.cn/2019/15553147727085.jpg" alt="价格的计算公式"></p>
 <p>当前的价格等于当前的储备金数量除以储备金比例，再除以当前的Smart Token的流通量。还以2.2中讲的STAR币为例，初始时STAR币的总流通量是1000万。如果这时需要买入STAR币，价格是：</p>
-<pre><code>price = 10000/（0.5*1000*10000） = 0.002</code></pre><p>也就是说，买入100万个STAR币，需要支付20000个以太（近似，后面会讲滑价）。买入后的价格变化为：</p>
-<pre><code>price = （10000+20000）/（0.5*（1000+100）*10000） = 0.0054</code></pre><p>也就是说，买入100万个STAR币后，价格从0.002涨到了0.0054。</p>
+<pre><code>                price = 10000/（0.5*1000*10000） = 0.002
+</code></pre><p>也就是说，买入100万个STAR币，需要支付20000个以太（近似，后面会讲滑价）。买入后的价格变化为：</p>
+<pre><code>price = （10000+20000）/（0.5*（1000+100）*10000） = 0.0054
+</code></pre><p>也就是说，买入100万个STAR币后，价格从0.002涨到了0.0054。</p>
 <h3 id="公式3-价格滑价处理"><a href="#公式3-价格滑价处理" class="headerlink" title="公式3 - 价格滑价处理"></a>公式3 - 价格滑价处理</h3><p>用户在每次买卖Smart Token后，价格都会变化。如果只是用2.3中介绍的价格计算公式，用户一次买卖和分几笔小交易买卖的价格不同。Bancor协议进一步定义公式处理滑价问题。买入时，Smart Token的发行计算公式如下：</p>
 <p><img src="https://img.learnblockchain.cn/2019/15553148085508.jpg" alt></p>
 <p>卖出时，储备金的数量计算公式如下：</p>
@@ -553,13 +555,16 @@
 <p><img src="https://img.learnblockchain.cn/2019/15553148557229.jpg" alt></p>
 <p>也就是，真实的价格等于上面两个公式计算的真实的储备金数量变化除以真实的Smart Token的数量变化。</p>
 <p>再举个例子：假设当前一个Smart Token的流通量为1000，储备金的数量为250，储备金比例为50%。也就是说当前的价格是：</p>
-<pre><code>price = 250/（1000*0.5） = 0.5</code></pre><p>一个用户买入10个储备金，该用户收到的Smart Token的数量为：</p>
+<pre><code>    price = 250/（1000*0.5） = 0.5
+</code></pre><p>一个用户买入10个储备金，该用户收到的Smart Token的数量为：</p>
 <p>也就是，真实的价格等于上面两个公式计算的真实的储备金数量变化除以真实的Smart Token的数量变化。</p>
 <p>再举个例子：假设当前一个Smart Token的流通量为1000，储备金的数量为250，储备金比例为50%。也就是说当前的价格是：</p>
-<pre><code>price = 250/（1000*0.5） = 0.5</code></pre><p>一个用户买入10个储备金，该用户收到的Smart Token的数量为：</p>
+<pre><code>    price = 250/（1000*0.5） = 0.5
+</code></pre><p>一个用户买入10个储备金，该用户收到的Smart Token的数量为：</p>
 <p><img src="https://img.learnblockchain.cn/2019/15553148829701.jpg" alt></p>
 <p>也就是说，真实的交易价格为：</p>
-<pre><code>price = 10/19.8 = 0.5051</code></pre><h2 id="深入理解Bancor协议"><a href="#深入理解Bancor协议" class="headerlink" title="深入理解Bancor协议"></a>深入理解Bancor协议</h2><p>储备金比例是Bancor协议中比较重要的参数，体现了Smart Token的储备水平。储备金比例高，价格的波动就低；储备金比例低，价格的波动就高。白皮书中的四张图给出了四个比较典型的储备金比例情况下的，价格波动曲线（Smart Token初始流通量为1000，价格为1）。</p>
+<pre><code>price = 10/19.8 = 0.5051
+</code></pre><h2 id="深入理解Bancor协议"><a href="#深入理解Bancor协议" class="headerlink" title="深入理解Bancor协议"></a>深入理解Bancor协议</h2><p>储备金比例是Bancor协议中比较重要的参数，体现了Smart Token的储备水平。储备金比例高，价格的波动就低；储备金比例低，价格的波动就高。白皮书中的四张图给出了四个比较典型的储备金比例情况下的，价格波动曲线（Smart Token初始流通量为1000，价格为1）。</p>
 <p>CW=100%的情况，储备金和Smart Token的价值相当，Smart Token的价格恒定为1。也就是，在储备金和Smart Token的价值相当的情况下，不论Smart Token的流通量如何变化，Smart Token的价格不变。有多少Smart Token，就有多少储备金。</p>
 <p><img src="https://img.learnblockchain.cn/2019/15553149064731.jpg!/scale/60%" alt></p>
 <p>CW=50%的情况下，储备金的价值是Smart Token价值的一半，买卖的价格和流通量成线性增长。</p>

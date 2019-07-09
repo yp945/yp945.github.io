@@ -514,7 +514,6 @@
         <p><code>Bucket Tree</code>结合了默克尔树和哈希表的特点，如果想要深入了解<code>Bucket Tree</code>就必须掌握默克尔树和哈希表。</p>
 <p><code>Merkle Tree</code>大多用来进行对比验证处理，特别是在分布式环境下进行比对或验证的时候可以大大减少数据传输量和计算的复杂度。 </p>
 <a id="more"></a>
-
 <h2 id="Merkle-默克尔-树结构解析"><a href="#Merkle-默克尔-树结构解析" class="headerlink" title="Merkle(默克尔)树结构解析"></a>Merkle(默克尔)树结构解析</h2><h3 id="Merkle-树特点"><a href="#Merkle-树特点" class="headerlink" title="Merkle 树特点"></a>Merkle 树特点</h3><ul>
 <li>默克尔树是一种树，一般是二叉树，也可以是多叉树；</li>
 <li>默克尔树的叶子节点可以是数据项，也可以是数据项的哈希值；</li>
@@ -526,11 +525,11 @@
 <p>接着将相邻节点的哈希值合并成一个字符串，然后计算这个字符串的哈希值，得到的就是这两个节点父节点的哈希值。</p>
 <p>如果用公式表示的话就是这样：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HASH 0 = Hash（HASH 0-0 + HASH 0-1）</span><br></pre></td></tr></table></figure>
-
 <p>如果树节点的个数是单数，就对它直接进行哈希运算，或者复制一次这个节点的哈希值，凑齐偶数个节点。</p>
 <p>重复上述过程，自底向上就可以构建整个默克尔树了。</p>
 <p>Tips:</p>
-<pre><code>若两颗树的根哈希一直，则这两棵树的结构，节点内容必然相同。</code></pre><h3 id="默克尔树的优势"><a href="#默克尔树的优势" class="headerlink" title="默克尔树的优势"></a><strong>默克尔树的优势</strong></h3><p>当一个节点内容发生变化的时候，仅需要计算从该节点到根路径上所有节点节点的哈希，减少计算量，同时也方便快速定位数据发生变化的位置。</p>
+<pre><code>若两颗树的根哈希一直，则这两棵树的结构，节点内容必然相同。
+</code></pre><h3 id="默克尔树的优势"><a href="#默克尔树的优势" class="headerlink" title="默克尔树的优势"></a><strong>默克尔树的优势</strong></h3><p>当一个节点内容发生变化的时候，仅需要计算从该节点到根路径上所有节点节点的哈希，减少计算量，同时也方便快速定位数据发生变化的位置。</p>
 <h2 id="哈希表"><a href="#哈希表" class="headerlink" title="哈希表"></a><strong>哈希表</strong></h2><p>哈希表也称散列表，根据键（key）快速定位值（value）的存储位置的数据结构。</p>
 <h2 id="Bucket-Tree"><a href="#Bucket-Tree" class="headerlink" title="Bucket Tree"></a><strong>Bucket Tree</strong></h2><p>Bucket Tree拓展了哈希表的概念，引入了一个桶（bucket），也就是哈希桶。</p>
 <p>其结构如下图所示:</p>

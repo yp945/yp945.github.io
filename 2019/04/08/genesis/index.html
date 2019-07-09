@@ -108,7 +108,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://img.learnblockchain.cn/2019/04/07_20190407101509.png">
 <meta property="og:image" content="https://img.learnblockchain.cn/2019/04/07_WX20190407-103229@2x.png">
-<meta property="og:image" content="https://img.learnblockchain.cn/2019/04/07_%E5%AE%89%E8%A3%85%E5%88%9B%E4%B8%96%E5%8C%BA%E5%9D%97.png">
+<meta property="og:image" content="https://img.learnblockchain.cn/2019/04/07_安装创世区块.png">
 <meta property="og:updated_time" content="2019-07-05T08:13:55.306Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="以太坊创世区块与链配置载入分析">
@@ -514,10 +514,8 @@
         <p>创世区块作为第零个区块，其他区块直接或间接引用到创世区块。因此节点启动之初必须载入正确的创世区块信息，且不得任意修改。</p>
 <p>以太坊允许通过创世配置文件来初始化创世区块，也可使用选择使用内置的多个网络环境的创世配置。默认使用以太坊主网创世配置。</p>
 <a id="more"></a>
-
 <h2 id="创世配置文件"><a href="#创世配置文件" class="headerlink" title="创世配置文件"></a>创世配置文件</h2><p>如果你需要搭建<a href="https://learnblockchain.cn/2017/11/20/whatiseth/" target="_blank" rel="noopener">以太坊</a>私有链，那么了解创世配置是必须的，否则你大可不关心创世配置。下面是一份 JSON 格式的创世配置示例：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"config"</span>: &#123;</span><br><span class="line">        <span class="attr">"chainId"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"homesteadBlock"</span>: <span class="number">1150000</span>,</span><br><span class="line">        <span class="attr">"daoForkBlock"</span>: <span class="number">1920000</span>,</span><br><span class="line">        <span class="attr">"daoForkSupport"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">"eip150Block"</span>: <span class="number">2463000</span>,</span><br><span class="line">        <span class="attr">"eip150Hash"</span>: <span class="string">"0x2086799aeebeae135c246c65021c82b4e15a2c451340993aacfd2751886514f0"</span>,</span><br><span class="line">        <span class="attr">"eip155Block"</span>: <span class="number">2675000</span>,</span><br><span class="line">        <span class="attr">"eip158Block"</span>: <span class="number">2675000</span>,</span><br><span class="line">        <span class="attr">"byzantiumBlock"</span>: <span class="number">4370000</span>,</span><br><span class="line">        <span class="attr">"constantinopleBlock"</span>: <span class="number">7280000</span>,</span><br><span class="line">        <span class="attr">"petersburgBlock"</span>: <span class="number">7280000</span>,</span><br><span class="line">        <span class="attr">"ethash"</span>: &#123;&#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"nonce"</span>: <span class="string">"0x42"</span>,</span><br><span class="line">    <span class="attr">"timestamp"</span>: <span class="string">"0x0"</span>,</span><br><span class="line">    <span class="attr">"extraData"</span>: <span class="string">"0x11bbe8db4e347b4e8c937c1c8370e4b5ed33adb3db69cbdb7a38e1e50b1b82fa"</span>,</span><br><span class="line">    <span class="attr">"gasLimit"</span>: <span class="string">"0x1388"</span>,</span><br><span class="line">    <span class="attr">"difficulty"</span>: <span class="string">"0x400000000"</span>,</span><br><span class="line">    <span class="attr">"mixHash"</span>: <span class="string">"0x0000000000000000000000000000000000000000000000000000000000000000"</span>,</span><br><span class="line">    <span class="attr">"coinbase"</span>: <span class="string">"0x0000000000000000000000000000000000000000"</span>,</span><br><span class="line">    <span class="attr">"number"</span>: <span class="string">"0x0"</span>,</span><br><span class="line">    <span class="attr">"gasUsed"</span>: <span class="string">"0x0"</span>,</span><br><span class="line">    <span class="attr">"parentHash"</span>: <span class="string">"0x0000000000000000000000000000000000000000000000000000000000000000"</span>,</span><br><span class="line">    <span class="attr">"alloc"</span>: &#123;</span><br><span class="line">        <span class="attr">"000d836201318ec6899a67540690382780743280"</span>: &#123;</span><br><span class="line">            <span class="attr">"balance"</span>: <span class="string">"0xad78ebc5ac6200000"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"001762430ea9c3a26e5749afdb70da5f78ddbb8c"</span>: &#123;</span><br><span class="line">            <span class="attr">"balance"</span>: <span class="string">"0xad78ebc5ac6200000"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>根据配置用途可分为三大类：</p>
 <ol>
 <li>链配置<br><code>config</code>项是定义链配置，会影响共识协议，虽然链配置对创世影响不大，但新区块的出块规则均依赖链配置。</li>
@@ -535,42 +533,101 @@
 </ol>
 <h3 id="自定义创世"><a href="#自定义创世" class="headerlink" title="自定义创世"></a>自定义创世</h3><p>如果你计划部署以太坊私有网络或者一个独立的测试环境，那么需要自定义创世，并初始化它。为了统一沟通，推荐先在用户根目录创建一个文件夹 <code>deepeth</code>，以做为《以太坊设计与实现》电子书学习工作目录。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir <span class="variable">$HOME</span>/deepeth &amp;&amp; <span class="built_in">cd</span> <span class="variable">$HOME</span>/deepeth</span><br></pre></td></tr></table></figure>
-
 <p>再准备两个以太坊账户，以便在创世时存入资产。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">geth --datadir <span class="variable">$HOME</span>/deepeth account new</span><br></pre></td></tr></table></figure>
-
 <p>因为是学习使用，推荐使用统一密码 <code>foobar</code>，执行两次命令，创建好两个账户。这里使用 <code>--datadir</code> 参数指定以太坊运行时数据存放目录，是让大家将数据统一存放在一个本课程学习文件夹中。</p>
 <p>再将下面配置内容保存到 <code>$HOME/deepeth/genesis.json</code> 文件，其中 <code>alloc</code> 项替换成刚刚创建的两个以太坊账户地址。</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"config"</span>: &#123;</span><br><span class="line">        <span class="attr">"chainId"</span>: <span class="number">8888</span>,</span><br><span class="line">        <span class="attr">"homesteadBlock"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"daoForkBlock"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"daoForkSupport"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">"eip150Block"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"eip155Block"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"eip158Block"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"byzantiumBlock"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"constantinopleBlock"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"petersburgBlock"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"ethash"</span>: &#123;&#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"nonce"</span>: <span class="string">"0x42"</span>,</span><br><span class="line">    <span class="attr">"timestamp"</span>: <span class="string">"0x0"</span>,</span><br><span class="line">    <span class="attr">"extraData"</span>: <span class="string">"0x11bbe8db4e347b4e8c937c1c8370e4b5ed33adb3db69cbdb7a38e1e50b1b82fa"</span>,</span><br><span class="line">    <span class="attr">"gasLimit"</span>: <span class="string">"0x1388"</span>,</span><br><span class="line">    <span class="attr">"difficulty"</span>: <span class="string">"0x1"</span>,</span><br><span class="line">    <span class="attr">"alloc"</span>: &#123;</span><br><span class="line">        <span class="attr">"093f59f1d91017d30d8c2caa78feb5beb0d2cfaf"</span>: &#123;</span><br><span class="line">            <span class="attr">"balance"</span>: <span class="string">"0xffffffffffffffff"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"ddf7202cbe0aaed1c2d5c4ef05e386501a054406"</span>: &#123;</span><br><span class="line">            <span class="attr">"balance"</span>: <span class="string">"0xffffffffffffffff"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>然后，执行 geth 子命令 init 初始化创世区块。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">geth  --datadir <span class="variable">$HOME</span>/deepeth init genesis.json</span><br></pre></td></tr></table></figure>
-
 <p>执行成功后，便可启动该私有链：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">geth --maxpeers 0 --datadir <span class="variable">$HOME</span>/deepeth  console</span><br></pre></td></tr></table></figure>
-
 <p>执行如下命令，可以查看到前面创建的两个账户，均已有资产：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">eth.getBalance(eth.accounts[<span class="number">0</span>])</span><br><span class="line"><span class="comment">// 18446744073709551615</span></span><br><span class="line">eth.getBalance(eth.accounts[<span class="number">1</span>])</span><br><span class="line"><span class="comment">// 18446744073709551615</span></span><br></pre></td></tr></table></figure>
-
 <p>至此，我们已完成创世定制版。</p>
 <h3 id="内置的创世配置"><a href="#内置的创世配置" class="headerlink" title="内置的创世配置"></a>内置的创世配置</h3><p>上面我已完成自定义创世，但以太坊作为去中心平台，需要许多节点一起参与。仅仅为了测试，多个节点来搭建私有链比较麻烦。如果希望和别人一起联调，或者需要在测试网络中测试DAPP时，该怎么办呢？那么，可使用以太坊测试网络。以太坊公开的测试网络有 5 个，目前仍在运行的有 4 个，具体见下表格。</p>
-<p>|测试网|共识机制|出块间隔|提供方|上线时间|备注|状态|<br>|—|—|—|—|—|—|—|—|<br>| Morden | PoW || 以太坊官方 |2015.7|因难度炸弹被迫退役 |stopped|<br>|<a href="https://ropsten.etherscan.io" target="_blank" rel="noopener">Ropsten</a> |PoW |30秒|以太坊官方|2016.11|接替Morden| running|<br>|<a href="https://kovan.etherscan.io/" target="_blank" rel="noopener">Kovan</a> | PoA | 4秒|以太坊钱包Parity开发团队| 2017.3 |不支持geth| running |<br>|<a href="https://rinkeby.etherscan.io/" target="_blank" rel="noopener">Rinkeby</a> | PoA |15秒| 以太坊官方| 2017.4|最常用，只支持geth | running|<br>|<a href="https://sokol-explorer.poa.network/" target="_blank" rel="noopener">Sokol</a> | PoA |5秒| 以太坊官方POA.network团队| 2017.12|不支持geth | running|<br>|<a href="https://goerli.net/" target="_blank" rel="noopener">Görli</a> | PoA | 15秒| 以太坊柏林社区 | 2018.9| 首个以太坊2.0实验场| running|</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>测试网</th>
+<th>共识机制</th>
+<th>出块间隔</th>
+<th>提供方</th>
+<th>上线时间</th>
+<th>备注</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Morden</td>
+<td>PoW</td>
+<td></td>
+<td>以太坊官方</td>
+<td>2015.7</td>
+<td>因难度炸弹被迫退役</td>
+<td>stopped</td>
+</tr>
+<tr>
+<td><a href="https://ropsten.etherscan.io" target="_blank" rel="noopener">Ropsten</a></td>
+<td>PoW</td>
+<td>30秒</td>
+<td>以太坊官方</td>
+<td>2016.11</td>
+<td>接替Morden</td>
+<td>running</td>
+</tr>
+<tr>
+<td><a href="https://kovan.etherscan.io/" target="_blank" rel="noopener">Kovan</a></td>
+<td>PoA</td>
+<td>4秒</td>
+<td>以太坊钱包Parity开发团队</td>
+<td>2017.3</td>
+<td>不支持geth</td>
+<td>running</td>
+</tr>
+<tr>
+<td><a href="https://rinkeby.etherscan.io/" target="_blank" rel="noopener">Rinkeby</a></td>
+<td>PoA</td>
+<td>15秒</td>
+<td>以太坊官方</td>
+<td>2017.4</td>
+<td>最常用，只支持geth</td>
+<td>running</td>
+</tr>
+<tr>
+<td><a href="https://sokol-explorer.poa.network/" target="_blank" rel="noopener">Sokol</a></td>
+<td>PoA</td>
+<td>5秒</td>
+<td>以太坊官方POA.network团队</td>
+<td>2017.12</td>
+<td>不支持geth</td>
+<td>running</td>
+</tr>
+<tr>
+<td><a href="https://goerli.net/" target="_blank" rel="noopener">Görli</a></td>
+<td>PoA</td>
+<td>15秒</td>
+<td>以太坊柏林社区</td>
+<td>2018.9</td>
+<td>首个以太坊2.0实验场</td>
+<td>running</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>支持 geth 的3个测试网络的创世配置已内置在以太坊代码中，具体见 <code>core/genesis.go</code> 文件：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// DefaultTestnetGenesisBlock returns the Ropsten network genesis block.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DefaultTestnetGenesisBlock</span><span class="params">()</span> *<span class="title">Genesis</span></span>&#123;&#125;</span><br><span class="line"><span class="comment">// DefaultRinkebyGenesisBlock returns the Rinkeby network genesis block.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DefaultRinkebyGenesisBlock</span><span class="params">()</span> *<span class="title">Genesis</span></span></span><br><span class="line"><span class="function">// <span class="title">DefaultGoerliGenesisBlock</span> <span class="title">returns</span> <span class="title">the</span> <span class="title">G</span>ö<span class="title">rli</span> <span class="title">network</span> <span class="title">genesis</span> <span class="title">block</span>.</span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">DefaultGoerliGenesisBlock</span><span class="params">()</span> *<span class="title">Genesis</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-
 <p>当然不会缺以太坊主网创世配置，也是 geth 运行的默认配置。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// DefaultGenesisBlock returns the Ethereum main net genesis block.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DefaultGenesisBlock</span><span class="params">()</span> *<span class="title">Genesis</span></span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-
 <p>如果你不想自定义创世配置文件用于开发测试，那么以太坊也提供一份专用于本地开发的配置。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// DeveloperGenesisBlock returns the 'geth --dev' genesis block. Note, this must</span></span><br><span class="line"><span class="comment">// be seeded with the</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DeveloperGenesisBlock</span><span class="params">(period <span class="keyword">uint64</span>, faucet common.Address)</span> *<span class="title">Genesis</span></span></span><br></pre></td></tr></table></figure>
-
 <p>运行 <code>geth --dev console</code> 可临时运行使用。但如果需要长期使用此模式，则需要指定 <code>datadir</code>。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">geth --dev --datadir <span class="variable">$HOME</span>/deepeth/dev console</span><br></pre></td></tr></table></figure>
-
 <p>首次运行 dev 模式会自动创建一个空密码的账户，并开启挖矿。当有新交易时，将立刻打包出块。</p>
 <h2 id="geth-创世区块加载流程"><a href="#geth-创世区块加载流程" class="headerlink" title="geth 创世区块加载流程"></a>geth 创世区块加载流程</h2><p>在运行 geth 时需根据配置文件加载创世配置以及创世区块，并校验其合法性。如果配置信息随意变更，易引起共识校验不通过等问题。只有在加载并检查通过时，才能继续运行程序。</p>
-<img src="https://img.learnblockchain.cn/2019/04/07_20190407101509.png" width="400px" alt="创世加载流程"> 
-
+<p><img src="https://img.learnblockchain.cn/2019/04/07_20190407101509.png" width="400px" alt="创世加载流程"> </p>
 <p>上图是一个简要流程，下面分别讲解“加载创世配置”和“安装创世区块”两个子流程。</p>
 <h3 id="加载创世配置"><a href="#加载创世配置" class="headerlink" title="加载创世配置"></a>加载创世配置</h3><p>应使用哪种创世配置，由用户在启动 geth 时决定。下图是创世配置选择流程图：<br><img src="https://img.learnblockchain.cn/2019/04/07_WX20190407-103229@2x.png" alt="以太坊创世配置选择流程图"><br>通过 geth 命令参数可选择不同网络配置，可以通过 <code>networkid</code> 选择，也可使用网络名称启用。</p>
 <ol>
@@ -593,33 +650,26 @@
 </ol>
 <p>geth 启动时根据不同参数选择加载不同网络配置，并对应不同网络环境。如果不做任何选择，虽然在此不会做出选择，但在后面流程中会默认使用主网配置。</p>
 <h3 id="安装创世区块"><a href="#安装创世区块" class="headerlink" title="安装创世区块"></a>安装创世区块</h3><p>上面已初步选择创世配置，而这一步则根据配置加载或者初始化创世单元。下图是处理流程：</p>
-<p><img src="https://img.learnblockchain.cn/2019/04/07_%E5%AE%89%E8%A3%85%E5%88%9B%E4%B8%96%E5%8C%BA%E5%9D%97.png" alt="安装创世区块"></p>
+<p><img src="https://img.learnblockchain.cn/2019/04/07_安装创世区块.png" alt="安装创世区块"></p>
 <p>首先，需要从数据库中根据区块高度 0 读取创世区块哈希。如果不存在则说明本地属于第一次启动，直接使用运行时创世配置来构建创世区块。属于首次，还需要存储创世区块和链配置。</p>
 <p>如果存在，则需要使用运行时创世配置构建创世区块并和本次已存储的创世区块哈希进行对比。一旦不一致，则返回错误，不得继续。</p>
 <p>随后，还需要检查链配置。先从数据库获取链配置，如果不存在，则无需校验直接使用运行时链配置。否则，需要检查运行时链配置是否正确，只有正确时才能替换更新。但有一个例外：主网配置不得随意更改，由代码控制而非人为指定。</p>
 <p>总的来说，以太坊默认使用主网配置，只有在首次运行时才创建和存储创世区块，其他时候仅仅用于校验。而链配置除主网外则在规则下可随时变更。</p>
 <h2 id="构建创建区块"><a href="#构建创建区块" class="headerlink" title="构建创建区块"></a>构建创建区块</h2><p>上面我们已知晓总体流程，这里再细说下以太坊是如何根据创世配置生成创世区块。核心代码位于 <code>core/genesis.go:229</code>。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(g *Genesis)</span> <span class="title">ToBlock</span><span class="params">(db ethdb.Database)</span> *<span class="title">types</span>.<span class="title">Block</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> db == <span class="literal">nil</span> &#123;</span><br><span class="line">        db = rawdb.NewMemoryDatabase()</span><br><span class="line">    &#125;</span><br><span class="line">    statedb, _ := state.New(common.Hash&#123;&#125;, state.NewDatabase(db))<span class="comment">//❶</span></span><br><span class="line">    <span class="keyword">for</span> addr, account := <span class="keyword">range</span> g.Alloc &#123; <span class="comment">//❷</span></span><br><span class="line">        statedb.AddBalance(addr, account.Balance)</span><br><span class="line">        statedb.SetCode(addr, account.Code)</span><br><span class="line">        statedb.SetNonce(addr, account.Nonce)</span><br><span class="line">        <span class="keyword">for</span> key, value := <span class="keyword">range</span> account.Storage &#123;</span><br><span class="line">            statedb.SetState(addr, key, value)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    root := statedb.IntermediateRoot(<span class="literal">false</span>)<span class="comment">//❸</span></span><br><span class="line">    head := &amp;types.Header&#123;<span class="comment">//❹</span></span><br><span class="line">        Number:     <span class="built_in">new</span>(big.Int).SetUint64(g.Number),</span><br><span class="line">        Nonce:      types.EncodeNonce(g.Nonce),</span><br><span class="line">        Time:       g.Timestamp,</span><br><span class="line">        ParentHash: g.ParentHash,</span><br><span class="line">        Extra:      g.ExtraData,</span><br><span class="line">        GasLimit:   g.GasLimit,</span><br><span class="line">        GasUsed:    g.GasUsed,</span><br><span class="line">        Difficulty: g.Difficulty,</span><br><span class="line">        MixDigest:  g.Mixhash,</span><br><span class="line">        Coinbase:   g.Coinbase,</span><br><span class="line">        Root:       root,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//❺</span></span><br><span class="line">    <span class="keyword">if</span> g.GasLimit == <span class="number">0</span> &#123;</span><br><span class="line">        head.GasLimit = params.GenesisGasLimit</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> g.Difficulty == <span class="literal">nil</span> &#123;</span><br><span class="line">        head.Difficulty = params.GenesisDifficulty</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    statedb.Commit(<span class="literal">false</span>)<span class="comment">//❻</span></span><br><span class="line">    statedb.Database().TrieDB().Commit(root, <span class="literal">true</span>)<span class="comment">//❼</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> types.NewBlock(head, <span class="literal">nil</span>, <span class="literal">nil</span>, <span class="literal">nil</span>)<span class="comment">//❽</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>上面代码是根据创世配置生成创世区块的代码逻辑，细节如下：</p>
 <ul>
-<li><p>❶ 创世区块无父块，从零初始化全新的 <code>state</code>（后续文章会详细讲解 <code>state</code>对象）。</p>
-</li>
+<li>❶ 创世区块无父块，从零初始化全新的 <code>state</code>（后续文章会详细讲解 <code>state</code>对象）。</li>
 <li><p>❷ 遍历配置中 <code>Alloc</code> 项账户集合数据，直接写入 state 中。<br>  这里不单可以设置 <code>balance</code>，还可以设置 <code>code</code>、<code>nonce</code> 以及任意多个 <code>storage</code> 数据。<br>  意味着创世时便可以直接部署<a href="https://learnblockchain.cn/2018/01/04/understanding-smart-contracts/" target="_blank" rel="noopener">智能合约</a>。例如下面配置则在创世时部署了一个名为<code>093f59f1d91017d30d8c2caa78feb5beb0d2cfaf</code> 的智能合约。</p>
   <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">"alloc": &#123;</span><br><span class="line">        "093f59f1d91017d30d8c2caa78feb5beb0d2cfaf": &#123;</span><br><span class="line">            "balance": "0xffffffffffffffff",</span><br><span class="line">            "nonce": "0x3",</span><br><span class="line">            "code":"0x606060",</span><br><span class="line">            "storage":&#123;</span><br><span class="line">            "11bbe8db4e347b4e8c937c1c8370e4b5ed33adb3db69cbdb7a38e1e50b1b82fa":"1234ff"</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>❸ 将账户数据写入 state 后，便可以计算出 state 数据的默克尔树的根值，称之为 <code>StateRoot</code>。<br>  此值记录在区块头 <code>Root</code> 字段中。</p>
 </li>
-<li><p>❹ 创世配置的一部分配置，则直接映射到区块头中，完成创世区块头的构建。</p>
-</li>
-<li><p>❺ 因为 <code>GasLimit</code> 和 <code>Difficulty</code> 直接影响到下一个区块出块处理。<br>  因此未设置时使用默认配置(Difficulty=131072，GasLimit=4712388)。</p>
-</li>
-<li><p>❻ 提交 state，将 state 数据提交到底层的内存 trie 数据中。</p>
-</li>
-<li><p>❼ 将内存 trie 数据更新到 db 中。<br>这是多余的一步，因为提交到数据库是由外部进行，这里只需要负责生成区块。</p>
-</li>
-<li><p>❽ 利用区块头创建区块，且区块中无交易记录。</p>
-</li>
+<li>❹ 创世配置的一部分配置，则直接映射到区块头中，完成创世区块头的构建。</li>
+<li>❺ 因为 <code>GasLimit</code> 和 <code>Difficulty</code> 直接影响到下一个区块出块处理。<br>  因此未设置时使用默认配置(Difficulty=131072，GasLimit=4712388)。</li>
+<li>❻ 提交 state，将 state 数据提交到底层的内存 trie 数据中。</li>
+<li>❼ 将内存 trie 数据更新到 db 中。<br>这是多余的一步，因为提交到数据库是由外部进行，这里只需要负责生成区块。</li>
+<li>❽ 利用区块头创建区块，且区块中无交易记录。</li>
 </ul>
 <p><a href="https://learnblockchain.cn/" target="_blank" rel="noopener">深入浅出区块链</a> - 系统学习区块链，学区块链都在这里，打造最好的区块链技术博客。</p>
 

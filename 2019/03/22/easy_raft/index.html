@@ -495,7 +495,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
               
-              <span title="本文字数">30k</span>
+              <span title="本文字数">31k</span>
             </span>
           
 
@@ -527,7 +527,6 @@
         <p><strong>摘要</strong></p>
 <p>Raft 是一种为了管理复制日志的一致性算法。它提供了和 Paxos 算法相同的功能和性能，但是它的算法结构和 Paxos 不同，使得 Raft 算法更加容易理解并且更容易构建实际的系统。为了提升可理解性，Raft 将一致性算法分解成了几个关键模块，例如领导人选举、日志复制和安全性。同时它通过实施一个更强的一致性来减少需要考虑的状态的数量。从一个用户研究的结果可以证明，对于学生而言，Raft 算法比 Paxos 算法更加容易学习。Raft 算法还包括一个新的机制来允许集群成员的动态改变，它利用重叠的大多数来保证安全性。</p>
 <a id="more"></a>
-
 <h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h2><p>一致性算法允许一组机器像一个整体一样工作，即使其中一些机器出现故障也能够继续工作下去。正因为如此，一致性算法在构建可信赖的大规模软件系统中扮演着重要的角色。在过去的 10 年里，Paxos  算法统治着一致性算法这一领域：绝大多数的实现都是基于 Paxos 或者受其影响。同时 Paxos 也成为了教学领域里讲解一致性问题时的示例。</p>
 <p>但是不幸的是，尽管有很多工作都在尝试降低它的复杂性，但是 Paxos 算法依然十分难以理解。并且，Paxos 自身的算法结构需要进行大幅的修改才能够应用到实际的系统中。这些都导致了工业界和学术界都对 Paxos 算法感到十分头疼。</p>
 <p>和 Paxos 算法进行过努力之后，我们开始寻找一种新的一致性算法，可以为构建实际的系统和教学提供更好的基础。我们的做法是不寻常的，我们的首要目标是可理解性：我们是否可以在实际系统中定义一个一致性算法，并且能够比 Paxos 算法以一种更加容易的方式来学习。此外，我们希望该算法方便系统构建者的直觉的发展。不仅一个算法能够工作很重要，而且能够显而易见的知道为什么能工作也很重要。</p>
@@ -578,6 +577,7 @@
 </ul>
 <p>在展示一致性算法之后，这一章节会讨论可用性的一些问题和计时在系统的作用。</p>
 <p><strong>状态</strong>：</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -585,7 +585,8 @@
 <th>所有服务器上持久存在的</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>currentTerm</td>
 <td>服务器最后一次知道的任期号（初始化为 0，持续递增）</td>
 </tr>
@@ -597,7 +598,10 @@
 <td>log[]</td>
 <td>日志条目集；每一个条目包含一个用户状态机执行的指令，和收到时的任期号</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -605,7 +609,8 @@
 <th>所有服务器上经常变的</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>commitIndex</td>
 <td>已知的最大的已经被提交的日志条目的索引值</td>
 </tr>
@@ -613,7 +618,10 @@
 <td>lastApplied</td>
 <td>最后被应用到状态机的日志条目索引值（初始化为 0，持续递增）</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -621,7 +629,8 @@
 <th>在领导人里经常改变的 （选举后重新初始化）</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>nextIndex[]</td>
 <td>对于每一个服务器，需要发送给他的下一个日志条目的索引值（初始化为领导人最后索引值加一）</td>
 </tr>
@@ -629,9 +638,12 @@
 <td>matchIndex[]</td>
 <td>对于每一个服务器，已经复制给他的日志的最高索引值</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p><strong>附加日志 RPC</strong>：</p>
 <p>由领导人负责调用来复制日志指令；也会用作heartbeat</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -639,7 +651,8 @@
 <th>解释</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>term</td>
 <td>领导人的任期号</td>
 </tr>
@@ -663,7 +676,10 @@
 <td>leaderCommit</td>
 <td>领导人已经提交的日志的索引值</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -671,7 +687,8 @@
 <th>解释</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>term</td>
 <td>当前的任期号，用于领导人去更新自己</td>
 </tr>
@@ -679,7 +696,9 @@
 <td>success</td>
 <td>跟随者包含了匹配上 prevLogIndex 和 prevLogTerm 的日志时为真</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>接收者实现：</p>
 <ol>
 <li>如果 <code>term &lt; currentTerm</code> 就返回 false （5.1 节）</li>
@@ -690,6 +709,7 @@
 </ol>
 <p><strong>请求投票 RPC</strong>：</p>
 <p>由候选人负责调用用来征集选票（5.2 节）</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -697,7 +717,8 @@
 <th>解释</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>term</td>
 <td>候选人的任期号</td>
 </tr>
@@ -713,7 +734,10 @@
 <td>lastLogTerm</td>
 <td>候选人最后日志条目的任期号</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -721,7 +745,8 @@
 <th>解释</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>term</td>
 <td>当前任期号，以便于候选人去更新自己的任期号</td>
 </tr>
@@ -729,7 +754,9 @@
 <td>voteGranted</td>
 <td>候选人赢得了此张选票时为真</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p>接收者实现：</p>
 <ol>
 <li>如果<code>term &lt; currentTerm</code>返回 false （5.2 节）</li>
@@ -774,6 +801,7 @@
 <blockquote>
 <p>图 2：一个关于 Raft 一致性算法的浓缩总结（不包括成员变换和日志压缩）。</p>
 </blockquote>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -781,7 +809,8 @@
 <th>解释</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>选举安全特性</td>
 <td>对于一个给定的任期号，最多只会有一个领导人被选举出来（5.2 节）</td>
 </tr>
@@ -801,7 +830,9 @@
 <td>状态机安全特性</td>
 <td>如果一个领导人已经在给定的索引值位置的日志条目应用到状态机中，那么其他任何的服务器在这个索引位置不会提交一个不同的日志（5.4.3 节）</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p><img src="https://img.learnblockchain.cn/2019/raft-3.png!wl" alt="图 3 "></p>
 <blockquote>
 <p>图 3：Raft 在任何时候都保证以上的各个特性。</p>
@@ -920,6 +951,7 @@
 <p>尽管通常服务器都是独立的创建快照，但是领导人必须偶尔的发送快照给一些落后的跟随者。这通常发生在当领导人已经丢弃了下一条需要发送给跟随者的日志条目的时候。幸运的是这种情况不是常规操作：一个与领导人保持同步的跟随者通常都会有这个条目。然而一个运行非常缓慢的跟随者或者新加入集群的服务器（第 6 节）将不会有这个条目。这时让这个跟随者更新到最新的状态的方式就是通过网络把快照发送给他们。</p>
 <p><strong>安装快照 RPC</strong>：</p>
 <p>由领导人调用以将快照的分块发送给跟随者。领导者总是按顺序发送分块。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -927,7 +959,8 @@
 <th>解释</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>term</td>
 <td>领导人的任期号</td>
 </tr>
@@ -955,7 +988,10 @@
 <td>done</td>
 <td>如果这是最后一个分块则为 true</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -963,11 +999,14 @@
 <th>解释</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>term</td>
 <td>当前任期号（currentTerm），便于领导人更新自己</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p><strong>接收者实现</strong>：</p>
 <ol>
 <li>如果<code>term &lt; currentTerm</code>就立即回复</li>
@@ -996,6 +1035,7 @@
 <p>这一节会从三个方面来评估 Raft 算法：可理解性、正确性和性能。</p>
 <h3 id="9-1-可理解性"><a href="#9-1-可理解性" class="headerlink" title="9.1 可理解性"></a>9.1 可理解性</h3><p>为了和 Paxos 比较 Raft 算法的可理解能力，我们针对高层次的本科生和研究生，在斯坦福大学的高级操作系统课程和加州大学伯克利分校的分布式计算课程上，进行了一次学习的实验。我们分别拍了针对 Raft 和 Paxos 的视频课程，并准备了相应的小测验。Raft 的视频讲课覆盖了这篇论文的所有内容除了日志压缩；Paxos 讲课包含了足够的资料来创建一个等价的复制状态机，包括单决策 Paxos，多决策 Paxos，重新配置和一些实际系统需要的性能优化（例如领导人选举）。小测验测试一些对算法的基本理解和解释一些边角的示例。每个学生都是看完第一个视频，回答相应的测试，再看第二个视频，回答相应的测试。大约有一半的学生先进行 Paxos 部分，然后另一半先进行 Raft 部分，这是为了说明两者从第一部分的算法学习中获得的表现和经验的差异。我们计算参加人员的每一个小测验的得分来看参与者是否在 Raft 算法上更加容易理解。</p>
 <p>我们尽可能的使得 Paxos 和 Raft 的比较更加公平。这个实验偏爱 Paxos 表现在两个方面：43 个参加者中有 15 个人在之前有一些  Paxos 的经验，并且 Paxos 的视频要长 14%。如表格 1 总结的那样，我们采取了一些措施来减轻这种潜在的偏见。我们所有的材料都可供审查。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -1004,7 +1044,8 @@
 <th>可供查看的材料</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>相同的讲课质量</td>
 <td>两者使用同一个讲师。Paxos 使用的是现在很多大学里经常使用的。Paxos 会长 14%。</td>
 <td>视频</td>
@@ -1019,7 +1060,9 @@
 <td>使用评价量规。随机顺序打分，两个测验交替进行。</td>
 <td>评价量规（rubric）</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <blockquote>
 <p>表 1：考虑到可能会存在的偏见，对于每种情况的解决方法，和相应的材料。</p>
 </blockquote>
