@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://yp945.github.io/"/>
-  <updated>2019-07-09T09:44:23.696Z</updated>
+  <updated>2019-07-05T08:13:55.279Z</updated>
   <id>https://yp945.github.io/</id>
   
   <author>
@@ -15,22 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>test</title>
-    <link href="https://yp945.github.io/2019/07/09/test/"/>
-    <id>https://yp945.github.io/2019/07/09/test/</id>
-    <published>2019-07-09T09:10:04.000Z</published>
-    <updated>2019-07-09T09:44:23.696Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;今天笔者给大家介绍一个博客搭建系统&lt;/p&gt;
-    
-    </summary>
-    
-    
-  </entry>
   
   <entry>
     <title>Libra 源码分析：Libra 的准入控制(AC)模块</title>
@@ -443,6 +427,33 @@
       <category term="Maker" scheme="https://yp945.github.io/tags/Maker/"/>
     
       <category term="Compound" scheme="https://yp945.github.io/tags/Compound/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>零知识证明 - Groth16算法介绍</title>
+    <link href="https://yp945.github.io/2019/05/27/groth16/"/>
+    <id>https://yp945.github.io/2019/05/27/groth16/</id>
+    <published>2019-05-27T07:10:54.000Z</published>
+    <updated>2019-07-05T08:13:55.333Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;看zk-SNARK的文章或者资料的时候，经常会碰到一些算法名称，比如Groth16，GGPR13等等。这些名称是由算法提出的作者名称或者名称首字母以及相应的年份组成。Groth16，是由Jens &lt;strong&gt;Groth&lt;/strong&gt;在20&lt;strong&gt;16&lt;/strong&gt;年提出的算法。GGPR13，是由Rosario &lt;strong&gt;G&lt;/strong&gt;ennaro，Craig &lt;strong&gt;G&lt;/strong&gt;entry，Bryan &lt;strong&gt;P&lt;/strong&gt;arno，Mariana &lt;strong&gt;R&lt;/strong&gt;aykova在20&lt;strong&gt;13&lt;/strong&gt;年提出的算法。&lt;/p&gt;
+&lt;p&gt;零知识证明（&lt;a href=&quot;https://learnblockchain.cn/2019/04/18/learn-zkSNARK/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;zk-SNARK&lt;/a&gt; )，从&lt;a href=&quot;https://learnblockchain.cn/2019/05/07/qsp-qap/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;QSP/QAP&lt;/a&gt;到Groth16，期间也有很多学者专家，提出各种优化（优化计算时间，优化证明的大小，优化电路的尺寸等等）。Groth16提出的算法，具有非常少的证明数据（2/3个证明数据）以及一个表达式验证。&lt;/p&gt;
+&lt;p&gt;Groth16论文（On the Size of Pairing-based Non-interactive Arguments）可在&lt;a href=&quot;https://eprint.iacr.org/2016/260.pdf&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;这里&lt;/a&gt;下载。&lt;/p&gt;
+&lt;p&gt;本文主要从工程应用理解的角度介绍Groth16算法的证明和验证过程。文章中所用的中文字眼可能和行业中不一样，欢迎批评指出。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="基础理论" scheme="https://yp945.github.io/categories/%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/"/>
+    
+    
+      <category term="密码学" scheme="https://yp945.github.io/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/"/>
+    
+      <category term="零知识证明" scheme="https://yp945.github.io/tags/%E9%9B%B6%E7%9F%A5%E8%AF%86%E8%AF%81%E6%98%8E/"/>
+    
+      <category term="Groth16" scheme="https://yp945.github.io/tags/Groth16/"/>
     
   </entry>
   
