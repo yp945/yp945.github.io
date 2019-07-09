@@ -143,33 +143,6 @@
   </entry>
   
   <entry>
-    <title>libra的mempool模块解读-1</title>
-    <link href="http://yoursite.com/2019/07/01/Interpretation-of-libra-mempool-module1/"/>
-    <id>http://yoursite.com/2019/07/01/Interpretation-of-libra-mempool-module1/</id>
-    <published>2019-07-01T02:23:48.000Z</published>
-    <updated>2019-07-05T08:13:55.281Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;Mempool模块主要用于缓存未打包的合法交易,该模块和比特币,以太坊源码中的TxPool功能等价,只要包含两个功能:&lt;/p&gt;
-&lt;p&gt;1.接收本地收到的Tx并验证&lt;br&gt;2.和其他节点之间互相同步Tx.&lt;br&gt;因为Libra使用的是不会分叉的PBFT共识,所以缓冲池的实现以
-        
-      
-    
-    </summary>
-    
-      <category term="Libra" scheme="http://yoursite.com/categories/Libra/"/>
-    
-    
-      <category term="Libra源码分析" scheme="http://yoursite.com/tags/Libra%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Libra 源码分析：Libra 中数据存储的 Schema</title>
     <link href="http://yoursite.com/2019/06/30/Schema-for-data-storage-in-Libra/"/>
     <id>http://yoursite.com/2019/06/30/Schema-for-data-storage-in-Libra/</id>
@@ -446,6 +419,26 @@
     
     
       <category term="以太坊" scheme="http://yoursite.com/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nervos CKB 加密经济模型</title>
+    <link href="http://yoursite.com/2019/06/02/nervos-ckb/"/>
+    <id>http://yoursite.com/2019/06/02/nervos-ckb/</id>
+    <published>2019-06-02T15:48:34.000Z</published>
+    <updated>2019-07-05T08:13:55.340Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Nervos CKB 加密经济模型是我到目前为止见到的比较有特色的经济模型设计。感觉不只是公链，对任何协议层的经济模型设计都有一定的借鉴意义。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Nervos" scheme="http://yoursite.com/categories/Nervos/"/>
+    
+    
+      <category term="Nervos" scheme="http://yoursite.com/tags/Nervos/"/>
     
   </entry>
   
