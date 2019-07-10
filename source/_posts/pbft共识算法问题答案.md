@@ -1,5 +1,5 @@
 ---
-title: pbft共识
+title: pbft共识算法问题答案
 date: 2019-07-10 10:01:27
 categories:
     - 共识算法
