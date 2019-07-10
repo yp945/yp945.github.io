@@ -8,8 +8,6 @@ tags:
 author: ClimbYang
 ---
 
-<!-- more -->
-
 ### pbft共识算法问题答案
 
 - **pfbt共识为什么至少需要3f+ 1个节点？**
@@ -18,6 +16,8 @@ author: ClimbYang
   $$
   N - f- f > f => N > 3f
   $$
+
+<!-- more -->
 
 - **pbft共识 parpare和commit 阶段为什么收到需要2f+ 1个相同的回复（包括自己的），f + 1个不行吗？**
 
