@@ -46,7 +46,7 @@
     <link href="https://yp945.github.io/2019/07/10/libra-move-paper/"/>
     <id>https://yp945.github.io/2019/07/10/libra-move-paper/</id>
     <published>2019-07-10T08:07:23.000Z</published>
-    <updated>2019-07-10T08:22:48.690Z</updated>
+    <updated>2019-07-10T08:38:29.769Z</updated>
     
     <summary type="html">
     
@@ -70,16 +70,11 @@
     <link href="https://yp945.github.io/2019/07/10/consensus-pbft-QA/"/>
     <id>https://yp945.github.io/2019/07/10/consensus-pbft-QA/</id>
     <published>2019-07-10T02:01:27.000Z</published>
-    <updated>2019-07-10T03:46:34.471Z</updated>
+    <updated>2019-07-10T08:34:42.362Z</updated>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;pbft共识算法问题答案&quot;&gt;&lt;a href=&quot;#pbft共识算法问题答案&quot; class=&quot;headerlink&quot; title=&quot;pbft共识算法问题答案&quot;&gt;&lt;/a&gt;pbft共识算法问题答案&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;pfbt共识为什么至少需要3f+ 1个节点？&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;最坏的情况，系统拜占庭节点为f个，由于消息到达顺序的问题，有可能f个有问题的节点先比f个正常的节点先返回消息，此时又要保证正确的消息比有问题的消息多，所以至少3f+ 1个节点&lt;/p&gt;
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;
-N - f- f &gt; f =&gt; N &gt; 3f&lt;/script&gt;&lt;/li&gt;
-&lt;/ul&gt;
+      &lt;p&gt;本文主要是针对上一篇提出的进行一个详细的解答&lt;/p&gt;
     
     </summary>
     
@@ -95,11 +90,11 @@ N - f- f &gt; f =&gt; N &gt; 3f&lt;/script&gt;&lt;/li&gt;
     <link href="https://yp945.github.io/2019/07/09/consensus-pbft/"/>
     <id>https://yp945.github.io/2019/07/09/consensus-pbft/</id>
     <published>2019-07-09T02:01:27.000Z</published>
-    <updated>2019-07-10T05:36:25.330Z</updated>
+    <updated>2019-07-10T08:28:23.230Z</updated>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;pbft共识算法&quot;&gt;&lt;a href=&quot;#pbft共识算法&quot; class=&quot;headerlink&quot; title=&quot;pbft共识算法&quot;&gt;&lt;/a&gt;pbft共识算法&lt;/h2&gt;&lt;p&gt;PBFT 是 parctical Byzantine Fault Tolerance（实用拜占庭容错算法）的缩写，它是由BFT算法演化出来的， 所有的BFT算法都为了解决一个问题，那就是在一个不可信的网络里，各个节点如何达成共识。这类问题被称为拜占庭将军问题。什么是拜占庭将军问题呢？拜占庭位于如今的土耳其的伊斯坦布尔，是古代东罗马帝国的首都。拜占庭罗马帝国国土辽阔，为了达到防御目的，每块封地都驻扎一支由将军统领的军队，每个军队都分隔很远，将军与将军之间只能靠信差传递消息。 在战争的时候，拜占庭军队内所有将军必需达成一致的共识，决定是否有赢的机会才去攻打敌人的阵营。但是，在军队内有可能存有叛徒和敌军的间谍，左右将军们的决定影响将军们达成一致共识。在已知有将军是叛徒的情况下，其余忠诚的将军如何达成一致协议的问题，这就是拜占庭将军问题。&lt;/p&gt;
+      &lt;p&gt;PBFT 是 parctical Byzantine Fault Tolerance（实用拜占庭容错算法）的缩写，它是由BFT算法演化出来的， 所有的BFT算法都为了解决一个问题，那就是在一个不可信的网络里，各个节点如何达成共识。这类问题被称为拜占庭将军问题。什么是拜占庭将军问题呢？拜占庭位于如今的土耳其的伊斯坦布尔，是古代东罗马帝国的首都。拜占庭罗马帝国国土辽阔，为了达到防御目的，每块封地都驻扎一支由将军统领的军队，每个军队都分隔很远，将军与将军之间只能靠信差传递消息。 在战争的时候，拜占庭军队内所有将军必需达成一致的共识，决定是否有赢的机会才去攻打敌人的阵营。但是，在军队内有可能存有叛徒和敌军的间谍，左右将军们的决定影响将军们达成一致共识。在已知有将军是叛徒的情况下，其余忠诚的将军如何达成一致协议的问题，这就是拜占庭将军问题。&lt;/p&gt;
     
     </summary>
     

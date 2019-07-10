@@ -98,21 +98,21 @@
 
 
 
-  <meta name="description" content="pbft共识算法PBFT 是 parctical Byzantine Fault Tolerance（实用拜占庭容错算法）的缩写，它是由BFT算法演化出来的， 所有的BFT算法都为了解决一个问题，那就是在一个不可信的网络里，各个节点如何达成共识。这类问题被称为拜占庭将军问题。什么是拜占庭将军问题呢？拜占庭位于如今的土耳其的伊斯坦布尔，是古代东罗马帝国的首都。拜占庭罗马帝国国土辽阔，为了达到防御目的">
+  <meta name="description" content="PBFT 是 parctical Byzantine Fault Tolerance（实用拜占庭容错算法）的缩写，它是由BFT算法演化出来的， 所有的BFT算法都为了解决一个问题，那就是在一个不可信的网络里，各个节点如何达成共识。这类问题被称为拜占庭将军问题。什么是拜占庭将军问题呢？拜占庭位于如今的土耳其的伊斯坦布尔，是古代东罗马帝国的首都。拜占庭罗马帝国国土辽阔，为了达到防御目的，每块封地都驻扎">
 <meta name="keywords" content="pbft">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pbft共识算法">
 <meta property="og:url" content="https://yp945.github.io/2019/07/09/consensus-pbft/index.html">
 <meta property="og:site_name" content="ClimbYang的记录">
-<meta property="og:description" content="pbft共识算法PBFT 是 parctical Byzantine Fault Tolerance（实用拜占庭容错算法）的缩写，它是由BFT算法演化出来的， 所有的BFT算法都为了解决一个问题，那就是在一个不可信的网络里，各个节点如何达成共识。这类问题被称为拜占庭将军问题。什么是拜占庭将军问题呢？拜占庭位于如今的土耳其的伊斯坦布尔，是古代东罗马帝国的首都。拜占庭罗马帝国国土辽阔，为了达到防御目的">
+<meta property="og:description" content="PBFT 是 parctical Byzantine Fault Tolerance（实用拜占庭容错算法）的缩写，它是由BFT算法演化出来的， 所有的BFT算法都为了解决一个问题，那就是在一个不可信的网络里，各个节点如何达成共识。这类问题被称为拜占庭将军问题。什么是拜占庭将军问题呢？拜占庭位于如今的土耳其的伊斯坦布尔，是古代东罗马帝国的首都。拜占庭罗马帝国国土辽阔，为了达到防御目的，每块封地都驻扎">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/c26c1fe3ly1g2tq4yvebrj20ir098aa9.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/c26c1fe3ly1g2tw3bij6bj20pu0avwi4.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/c26c1fe3gy1g2vdq8w7fyj20fa05tt9r.jpg">
-<meta property="og:updated_time" content="2019-07-10T05:36:25.330Z">
+<meta property="og:updated_time" content="2019-07-10T08:28:23.230Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pbft共识算法">
-<meta name="twitter:description" content="pbft共识算法PBFT 是 parctical Byzantine Fault Tolerance（实用拜占庭容错算法）的缩写，它是由BFT算法演化出来的， 所有的BFT算法都为了解决一个问题，那就是在一个不可信的网络里，各个节点如何达成共识。这类问题被称为拜占庭将军问题。什么是拜占庭将军问题呢？拜占庭位于如今的土耳其的伊斯坦布尔，是古代东罗马帝国的首都。拜占庭罗马帝国国土辽阔，为了达到防御目的">
+<meta name="twitter:description" content="PBFT 是 parctical Byzantine Fault Tolerance（实用拜占庭容错算法）的缩写，它是由BFT算法演化出来的， 所有的BFT算法都为了解决一个问题，那就是在一个不可信的网络里，各个节点如何达成共识。这类问题被称为拜占庭将军问题。什么是拜占庭将军问题呢？拜占庭位于如今的土耳其的伊斯坦布尔，是古代东罗马帝国的首都。拜占庭罗马帝国国土辽阔，为了达到防御目的，每块封地都驻扎">
 <meta name="twitter:image" content="http://ww1.sinaimg.cn/large/c26c1fe3ly1g2tq4yvebrj20ir098aa9.jpg">
 
 
@@ -435,7 +435,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-07-10 13:36:25" itemprop="dateModified" datetime="2019-07-10T13:36:25+08:00">2019-07-10</time>
+                <time title="修改时间：2019-07-10 16:28:23" itemprop="dateModified" datetime="2019-07-10T16:28:23+08:00">2019-07-10</time>
               </span>
             
           
@@ -523,7 +523,7 @@
       
 
       
-        <h2 id="pbft共识算法"><a href="#pbft共识算法" class="headerlink" title="pbft共识算法"></a>pbft共识算法</h2><p>PBFT 是 parctical Byzantine Fault Tolerance（实用拜占庭容错算法）的缩写，它是由BFT算法演化出来的， 所有的BFT算法都为了解决一个问题，那就是在一个不可信的网络里，各个节点如何达成共识。这类问题被称为拜占庭将军问题。什么是拜占庭将军问题呢？拜占庭位于如今的土耳其的伊斯坦布尔，是古代东罗马帝国的首都。拜占庭罗马帝国国土辽阔，为了达到防御目的，每块封地都驻扎一支由将军统领的军队，每个军队都分隔很远，将军与将军之间只能靠信差传递消息。 在战争的时候，拜占庭军队内所有将军必需达成一致的共识，决定是否有赢的机会才去攻打敌人的阵营。但是，在军队内有可能存有叛徒和敌军的间谍，左右将军们的决定影响将军们达成一致共识。在已知有将军是叛徒的情况下，其余忠诚的将军如何达成一致协议的问题，这就是拜占庭将军问题。</p>
+        <p>PBFT 是 parctical Byzantine Fault Tolerance（实用拜占庭容错算法）的缩写，它是由BFT算法演化出来的， 所有的BFT算法都为了解决一个问题，那就是在一个不可信的网络里，各个节点如何达成共识。这类问题被称为拜占庭将军问题。什么是拜占庭将军问题呢？拜占庭位于如今的土耳其的伊斯坦布尔，是古代东罗马帝国的首都。拜占庭罗马帝国国土辽阔，为了达到防御目的，每块封地都驻扎一支由将军统领的军队，每个军队都分隔很远，将军与将军之间只能靠信差传递消息。 在战争的时候，拜占庭军队内所有将军必需达成一致的共识，决定是否有赢的机会才去攻打敌人的阵营。但是，在军队内有可能存有叛徒和敌军的间谍，左右将军们的决定影响将军们达成一致共识。在已知有将军是叛徒的情况下，其余忠诚的将军如何达成一致协议的问题，这就是拜占庭将军问题。</p>
 <a id="more"></a>
 <p>比特币和以太坊代表的POS，EOS代表的DPOS，这些都是公链的算法，适用于众多节点的情况，通过牺牲CAP理论里面的 一致性来达到可用性。PBFT 本身算法的复杂度为O（n^2）他牺牲了可用性来达到一致性，适用于联盟链节点少的情况。</p>
 <p>下面图片展示了主流的共识算法</p>
@@ -880,7 +880,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pbft共识算法"><span class="nav-number">1.</span> <span class="nav-text">pbft共识算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#请求阶段（REQUEST）"><span class="nav-number">1.1.</span> <span class="nav-text">请求阶段（REQUEST）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预准备阶段（PRE-PREPARE）"><span class="nav-number">1.2.</span> <span class="nav-text">预准备阶段（PRE-PREPARE）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备阶段（PREPARE）"><span class="nav-number">1.3.</span> <span class="nav-text">准备阶段（PREPARE）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Commit阶段"><span class="nav-number">1.4.</span> <span class="nav-text">Commit阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#REPLY-阶段"><span class="nav-number">1.5.</span> <span class="nav-text">REPLY 阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收"><span class="nav-number">1.6.</span> <span class="nav-text">垃圾回收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#viewChange"><span class="nav-number">1.7.</span> <span class="nav-text">viewChange</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-amp-A"><span class="nav-number">1.8.</span> <span class="nav-text">Q&amp;A</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#请求阶段（REQUEST）"><span class="nav-number">1.</span> <span class="nav-text">请求阶段（REQUEST）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预准备阶段（PRE-PREPARE）"><span class="nav-number">2.</span> <span class="nav-text">预准备阶段（PRE-PREPARE）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备阶段（PREPARE）"><span class="nav-number">3.</span> <span class="nav-text">准备阶段（PREPARE）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Commit阶段"><span class="nav-number">4.</span> <span class="nav-text">Commit阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#REPLY-阶段"><span class="nav-number">5.</span> <span class="nav-text">REPLY 阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收"><span class="nav-number">6.</span> <span class="nav-text">垃圾回收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#viewChange"><span class="nav-number">7.</span> <span class="nav-text">viewChange</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-amp-A"><span class="nav-number">8.</span> <span class="nav-text">Q&amp;A</span></a></li></ol></div>
             
 
           </div>

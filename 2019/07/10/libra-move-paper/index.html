@@ -127,7 +127,7 @@
 <meta property="og:image" content="https://s2.ax1x.com/2019/06/21/ZSYMPH.jpg?ynotemdtimestamp=1562746207621">
 <meta property="og:image" content="https://s2.ax1x.com/2019/06/21/ZSYBzn.jpg?ynotemdtimestamp=1562746207621">
 <meta property="og:image" content="https://s2.ax1x.com/2019/06/21/ZStNOx.jpg?ynotemdtimestamp=1562746207621">
-<meta property="og:updated_time" content="2019-07-10T08:22:48.690Z">
+<meta property="og:updated_time" content="2019-07-10T08:38:29.769Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Move:一种可编程资源语言">
 <meta name="twitter:description" content="Move:一种可编程资源语言Abstract. 我们为Libra区块链提供了一种安全灵活的编程语言Move， Move是一种可执行的字节码语言，用于实现自定义事务和智能合约。Move的关键特性是能够使用受linear启发的语义定义自定义资源类型。资源永远不能被复制或者被隐式丢弃，只能在程序的存储位置间移动。这些安全保证由Move的类型系统静态执行，尽管有这些特殊保护，资源仍然是一种普通的程序值，它">
@@ -438,7 +438,7 @@
                 
               
 
-              <time title="创建时间：2019-07-10 16:07:23 / 修改时间：16:22:48" itemprop="dateCreated datePublished" datetime="2019-07-10T16:07:23+08:00">2019-07-10</time>
+              <time title="创建时间：2019-07-10 16:07:23 / 修改时间：16:38:29" itemprop="dateCreated datePublished" datetime="2019-07-10T16:07:23+08:00">2019-07-10</time>
             </span>
           
 
@@ -519,7 +519,7 @@
                 <i class="fa fa-clock-o"></i>
               </span>
               
-              <span title="阅读时长">37 分钟</span>
+              <span title="阅读时长">36 分钟</span>
             </span>
           
 
@@ -540,7 +540,7 @@
       
         <h2 id="Move-一种可编程资源语言"><a href="#Move-一种可编程资源语言" class="headerlink" title="Move:一种可编程资源语言"></a>Move:一种可编程资源语言</h2><p><strong>Abstract</strong>. 我们为Libra区块链提供了一种安全灵活的编程语言Move， Move是一种可执行的字节码语言，用于实现自定义事务和智能合约。Move的关键特性是能够使用受linear启发的语义定义自定义资源类型。资源永远不能被复制或者被隐式丢弃，只能在程序的存储位置间移动。这些安全保证由Move的类型系统静态执行，尽管有这些特殊保护，资源仍然是一种普通的程序值，它们可以存储在数据结构中作为参数传递给处理逻辑，等等。资源优先是一种很普遍的观念。程序员不仅可以实现安全的数字资产，还可以编写正确的业务用于包装资产和强制访问控制策略的逻辑。Move的安全性和表达性使我们能够在Move中实现Libra协议的重要部分，包括Libra Coin，事务处理和验证器管理.</p>
 <a id="more"></a>
-<h3 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h3><p>互联网和移动宽带的出现连接了全球数十亿人，为他们提供了获取知识、免费通信以及一系列更低成本、更便捷的服务。这种互联互通也使更多的人能够进入金融生态系统。然而，尽管取得了这些进展，对那些最需要金融服务的人来说，获得金融服务的机会仍然有限。</p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>互联网和移动宽带的出现连接了全球数十亿人，为他们提供了获取知识、免费通信以及一系列更低成本、更便捷的服务。这种互联互通也使更多的人能够进入金融生态系统。然而，尽管取得了这些进展，对那些最需要金融服务的人来说，获得金融服务的机会仍然有限。</p>
 <p>Libra的任务是改变这种状况。在本文中，我们提出了一种新的编程语言Move，用于在Libra协议中实现自定义事务逻辑和智能合约。为介绍Move，我们:</p>
 <ol>
 <li>描述在区块链上表示数字资产的挑战 (第二节).</li>
@@ -554,8 +554,8 @@
 <li>不熟悉区块链系统的编程语言研究人员。我们鼓励这些读者从头到尾阅读这篇文章，但是我们警告说，我们有时可能在没有为不熟悉的读者提供足够上下文的情况下引用区块链概念。</li>
 <li>区块链开发人员可能不熟悉编程语言的研究，但有兴趣学习移动语言。我们鼓励观众从这里开始(第三节)。我们注意，第5、第6部分和附录A中包含一些编程语言术语和形式化，这些术语和形式化可能是不熟悉的。</li>
 </ul>
-<h3 id="2-在区块链上管理数字资产"><a href="#2-在区块链上管理数字资产" class="headerlink" title="2.在区块链上管理数字资产"></a>2.在区块链上管理数字资产</h3><p>我们将从抽象层次简要解释区块链开始，以帮助读者理解像Move这样的“区块链编程语言”所扮演的角色。本讨论有意省略了区块链系统的许多重要细节，以便集中讨论与语言角度相关的特性。</p>
-<h4 id="2-1-区块链的抽象视图"><a href="#2-1-区块链的抽象视图" class="headerlink" title="2.1 区块链的抽象视图"></a>2.1 区块链的抽象视图</h4><p>区块链是一个复制状态机。系统中的复制器称为验证器。系统用户向验证器发送事务。每个验证器都了解如何执行事务，以便将其内部状态机从当前状态转换到新状态.</p>
+<h3 id="在区块链上管理数字资产"><a href="#在区块链上管理数字资产" class="headerlink" title="在区块链上管理数字资产"></a>在区块链上管理数字资产</h3><p>我们将从抽象层次简要解释区块链开始，以帮助读者理解像Move这样的“区块链编程语言”所扮演的角色。本讨论有意省略了区块链系统的许多重要细节，以便集中讨论与语言角度相关的特性。</p>
+<h4 id="区块链的抽象视图"><a href="#区块链的抽象视图" class="headerlink" title="区块链的抽象视图"></a>区块链的抽象视图</h4><p>区块链是一个复制状态机。系统中的复制器称为验证器。系统用户向验证器发送事务。每个验证器都了解如何执行事务，以便将其内部状态机从当前状态转换到新状态.</p>
 <p>验证器利用它们对事务执行的共享理解，遵循一致协议来集体定义和维护复制状态。如果</p>
 <ul>
 <li>验证器从相同的初始状态开始，</li>
@@ -564,7 +564,7 @@
 </ul>
 <p>然后验证器还将对下一个状态达成一致。反复应用此方案允许验证器处理事务，同时继续就当前状态达成一致。</p>
 <p>注意，协商一致协议和状态转换组件对彼此的实现细节并不敏感。只要协商一致协议确保事务之间的总顺序和状态转换方案是确定的，组件就可以和谐地交互。</p>
-<h4 id="2-2-在开放系统中编码数字资产"><a href="#2-2-在开放系统中编码数字资产" class="headerlink" title="2.2 在开放系统中编码数字资产"></a>2.2 在开放系统中编码数字资产</h4><p>像Move这样的区块链编程语言的作用是决定如何表示转换和状态。为了支持丰富的金融基础设施，Libra的区块链状态必须能够在给定的时间点对数字资产的所有者进行编码。此外，状态转换应该允许资产的转移。</p>
+<h4 id="在开放系统中编码数字资产"><a href="#在开放系统中编码数字资产" class="headerlink" title="在开放系统中编码数字资产"></a>在开放系统中编码数字资产</h4><p>像Move这样的区块链编程语言的作用是决定如何表示转换和状态。为了支持丰富的金融基础设施，Libra的区块链状态必须能够在给定的时间点对数字资产的所有者进行编码。此外，状态转换应该允许资产的转移。</p>
 <p>在区块链编程语言的设计中必须考虑另一个因素。与其他公共区块链一样，Libra区块链是一个开放的系统,任何人都可以查看当前的区块链状态或将事务提交给验证器(即，建议状态转换)。传统上，管理数字资产的软件(如银行软件)是在一个封闭的系统中运行的，具有特殊管理控制.所有参与者地位平等。参与者可以提出任何她喜欢的状态转换，但是系统不应该允许所有的状态转换。例如，Alice可以自由地提出一个转移Bob拥有的资产的状态转换。状态转换函数必须能够识别此状态转换无效并拒绝它.</p>
 <p>在一个开放的软件系统中，选择转换和状态的表示形式来编码数字资产的所有权是很有挑战性的。特别是，物理资产有两个属性很难在数字资产中编码</p>
 <ul>
@@ -584,7 +584,7 @@
 <p><img src="http://ww1.sinaimg.cn/large/c26c1fe3gy1g47lmd0zx1j20od04r3z2.jpg?ynotemdtimestamp=1562746207621" alt="img"></p>
 <p>这个方案要求Alice用她的私钥签署事务脚本。我们写𝑆𝐾(𝑚)签署消息𝑚使用私钥与公钥𝐾配对。评价规则使用verify_sig函数对Alice的检查签名公钥𝐾𝑎。如果没有验证签名，则不执行更新。这个新规则通过使用数字签名的不可伪造性来防止Alice从她自己的账户以外的任何账户借记StrawCoin，从而解决了之前提议的问题.</p>
 <p>另外，请注意，在第一个strawman原型中实际上不需要评估规则——提议的状态更新直接应用于键值存储。但是，随着我们对这些建议的深入研究，在执行更新的先决条件和更新本身之间出现了明显的分离,评估规则通过评估脚本来决定是否执行更新以及执行什么更新。这种分离是基本的，因为执行访问控制和稀缺性策略不可避免地需要某种形式的评估——用户提出状态更改必须执行计算以确定状态更改是否符合策略。在一个开放的系统中，不能信任参与者执行策略并向状态提交直接更新(如第一个建议中所述)。相反，访问控制策略必须由评估规则在链上强制执行.</p>
-<h4 id="2-3-现有的区块链语言"><a href="#2-3-现有的区块链语言" class="headerlink" title="2.3 现有的区块链语言"></a>2.3 现有的区块链语言</h4><p>StrawCoin是一种玩具语言，但它试图捕捉比特币脚本的本质和和Ethereum虚拟机字节码语言(尤其是后者)。虽然这些语言比StrawCoin更复杂，但它们面临许多相同的问题:</p>
+<h4 id="现有的区块链语言"><a href="#现有的区块链语言" class="headerlink" title="现有的区块链语言"></a>现有的区块链语言</h4><p>StrawCoin是一种玩具语言，但它试图捕捉比特币脚本的本质和和Ethereum虚拟机字节码语言(尤其是后者)。虽然这些语言比StrawCoin更复杂，但它们面临许多相同的问题:</p>
 <ol>
 <li><strong>资产的间接表示</strong>。资产使用整数编码，但整数值与资产不同。实际上，没有表示的类型或值在 Bitcoin/Ether/ StrawCoin 中， 这使得编写使用资产的程序变得非常困难，并且容易出错。诸如将资产传入/传出过程或将资产存储在数据结构中的模式需要特殊的语言支持。</li>
 <li><strong>稀缺性是不可扩展的</strong>。语言只代表一种稀缺资产。此外，稀缺性保护直接硬编码在语言语义中。希望创建自定义资产的程序员必须在没有语言支持的情况下仔细地重新实现稀缺性。</li>
@@ -594,15 +594,15 @@
 <p>然而比特币脚本的表达能力从根本上是有限的。程序员不能定义自定义数据类型(因此也不能定义自定义资产)或过程，而且语言也不完整。合作各方可以通过复杂的多事务协议或通过“彩色硬币”非正式地定义自定义资产来执行更丰富的计算。然而，这些方案的工作原理是将复杂性推到语言之外，因此不支持真正的可扩展性。</p>
 <p><strong>Ethereum Virtual Machine bytecode</strong> 。 Ethereum是一个开创性的系统，演示了如何使用区块链系统不仅仅用于支付。Ethereum虚拟机(EVM)字节码程序员可以发布与ether之类的资产交互的智能合约，并使用图灵完备语言定义新资产。EVM支持比特币脚本所不能支持的东西，例如用户定义的过程、虚拟调用、循环和数据结构。</p>
 <p>然而，EVM的的表现为代价高昂的编程错误打开了大门。就像StrawCoin是一种ether货币，在语言中具有特殊的地位，它的实现方式强调了稀缺性,但是定制资产的实现者(例如，通过ERC20标准)不继承这些保护(如第(2)所述)-他们必须小心不要引入允许复制、重用或丢失资产的bug。这是具有挑战性的，因为结合了间接表示问题中描述,以及EVM的高度动态行为。特别是，将ether转移到智能合约涉及到动态分派，这导致了一类新的bug，称为可重入性漏洞。引人注目的漏洞，如DAO攻击和Parity Wallet攻击，已经允许攻击者窃取价值数百万美元的加密货币。</p>
-<h3 id="3-Move设计目标"><a href="#3-Move设计目标" class="headerlink" title="3 Move设计目标"></a>3 Move设计目标</h3><p>Libra的使命是使一个简单的全球货币和金融基础设施，使数十亿人的受益。Move语言的设计目的是提供一个安全的、可编程的基础，在此基础上可以构建这个愿景。Move必须能够以精确、可理解和可验证的方式表达Libra的货币和治理规则。从长远来看，Move必须能够编码构成金融基础设施的丰富多样的资产和相应的业务逻辑。</p>
+<h3 id="Move设计目标"><a href="#Move设计目标" class="headerlink" title="Move设计目标"></a>Move设计目标</h3><p>Libra的使命是使一个简单的全球货币和金融基础设施，使数十亿人的受益。Move语言的设计目的是提供一个安全的、可编程的基础，在此基础上可以构建这个愿景。Move必须能够以精确、可理解和可验证的方式表达Libra的货币和治理规则。从长远来看，Move必须能够编码构成金融基础设施的丰富多样的资产和相应的业务逻辑。</p>
 <p>为了满足这些需求，我们设计Move时考虑了四个关键目标:头等资产、灵活性、安全性和可验证性</p>
-<h4 id="3-1-资源是头等公民"><a href="#3-1-资源是头等公民" class="headerlink" title="3.1 资源是头等公民"></a>3.1 资源是头等公民</h4><p>区块链系统允许用户编写与数字资产直接交互的程序。正如我们在第2.2节中讨论的，数字资产具有特殊的特性，这些特性将它们与传统编程中使用的值(如布尔值、整数和字符串)区分开来。使用资产进行编程的健壮而优雅的方法需要保持这些特征的表示形式。</p>
+<h4 id="资源是头等公民"><a href="#资源是头等公民" class="headerlink" title="资源是头等公民"></a>资源是头等公民</h4><p>区块链系统允许用户编写与数字资产直接交互的程序。正如我们在第2.2节中讨论的，数字资产具有特殊的特性，这些特性将它们与传统编程中使用的值(如布尔值、整数和字符串)区分开来。使用资产进行编程的健壮而优雅的方法需要保持这些特征的表示形式。</p>
 <p>Move的关键特性是能够使用线性逻辑激发的语义定义自定义资源类型:资源永远不能复制或隐式丢弃，只能在程序存储位置之间移动。这些安全保证由Move的类型系统静态执行。尽管有这些特殊的保护，资源仍然是普通的程序值——它们可以存储在数据结构中，作为参数传递给过程，等等。资源放在第一位置是一个非常普遍的概念，程序员不仅可以使用它来实现安全的数字资产，还可以用它来编写正确的业务逻辑来包装资产和执行访问控制策略。</p>
 <p>Libra coin本身就是一种普通的Move资源，在语言中没有特殊的地位。由于Libra coin代表Libra 储备管理的真实世界资产，因此Move必须允许创建资源(例如，当新的真实世界资产进入Libra储备时)、修改(例如，当数字资产更改所有权时)和销毁(例如，当支持数字资产的物理资产被出售时)。Move程序员可以使用模块保护对这些关键操作的访问。Move模块类似于其他区块链语言中的智能合约。模块声明资源类型和过程，这些类型和过程编码用于创建、销毁和更新其声明的资源的规则。模块可以调用其他模块声明的过程并使用其他模块声明的类型。然而，模块强制执行强数据抽象——类型在其声明模块内部是透明的，而在其外部是不透明的。此外，对资源类型T的关键操作只能在定义T的模块中执行。</p>
-<h4 id="3-2-灵活性"><a href="#3-2-灵活性" class="headerlink" title="3.2 灵活性"></a>3.2 灵活性</h4><p>Move通过事务脚本为Libra增加了灵活性。每个Libra事务都包含一个事务脚本，该脚本实际上是事务的主要过程。事务脚本是一个包含任意移动代码的过程，允许定制事务。一个脚本可以调用发布在区块链中的多个模块的过程，并对结果执行本地计算。这意味着脚本可以执行表达性的一次性行为(例如向一组特定的接收者付费)或可重用行为(通过调用封装可重用逻辑的单个过程)。</p>
+<h4 id="灵活性"><a href="#灵活性" class="headerlink" title="灵活性"></a>灵活性</h4><p>Move通过事务脚本为Libra增加了灵活性。每个Libra事务都包含一个事务脚本，该脚本实际上是事务的主要过程。事务脚本是一个包含任意移动代码的过程，允许定制事务。一个脚本可以调用发布在区块链中的多个模块的过程，并对结果执行本地计算。这意味着脚本可以执行表达性的一次性行为(例如向一组特定的接收者付费)或可重用行为(通过调用封装可重用逻辑的单个过程)。</p>
 <p>通过安全而灵活的代码组合，Move模块提供了一种不同的灵活性。在高层次上，Move中modules/resources/procedures 之间的关系类似于面向对象编程中的类/对象/方法之间的关系。然而，有一些重要的区别——一个Move模块可以声明多个资源类型(或零资源类型)，而Move过程没有self或这个值的概念。Move模块与ml风格的模块的限定版本最为相似。</p>
-<h4 id="3-3-安全性"><a href="#3-3-安全性" class="headerlink" title="3.3 安全性"></a>3.3 安全性</h4><p>Move必须拒绝不满足关键属性(如资源安全性、类型安全性和内存安全性)的程序。我们如何选择一个可执行的表示，以确保每一个在区块链上执行的程序满足这些性质?两种可能的方法是:(a)使用带有检查这些属性的编译器的高级编程语言，或者(b)使用低级非类型化程序集并在运行时执行这些安全检查。Move采取的方法介于这两个极端之间。Move的可执行格式是一种类型字节码，它比assembly级别高，但比source language 级别低。在链上检查资源、类型和内存安全性，然后由字节码解释器直接执行。此选项允许Move提供通常与源语言关联的安全保证，但不需要将源编译器添加到可信计算基础中，也不需要将编译成本添加到事务执行的关键路径中。</p>
-<h4 id="3-4-可验证性"><a href="#3-4-可验证性" class="headerlink" title="3.4 可验证性"></a>3.4 可验证性</h4><p>理想情况下，我们将通过链上字节码分析或运行时检查检查Move程序的每个安全属性。不幸的是，这是不可行的。我们必须仔细权衡安全保证的重要性和通用性，以及使用链上验证来执行安全保证的计算成本和增加的协议复杂性。</p>
+<h4 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h4><p>Move必须拒绝不满足关键属性(如资源安全性、类型安全性和内存安全性)的程序。我们如何选择一个可执行的表示，以确保每一个在区块链上执行的程序满足这些性质?两种可能的方法是:(a)使用带有检查这些属性的编译器的高级编程语言，或者(b)使用低级非类型化程序集并在运行时执行这些安全检查。Move采取的方法介于这两个极端之间。Move的可执行格式是一种类型字节码，它比assembly级别高，但比source language 级别低。在链上检查资源、类型和内存安全性，然后由字节码解释器直接执行。此选项允许Move提供通常与源语言关联的安全保证，但不需要将源编译器添加到可信计算基础中，也不需要将编译成本添加到事务执行的关键路径中。</p>
+<h4 id="可验证性"><a href="#可验证性" class="headerlink" title="可验证性"></a>可验证性</h4><p>理想情况下，我们将通过链上字节码分析或运行时检查检查Move程序的每个安全属性。不幸的是，这是不可行的。我们必须仔细权衡安全保证的重要性和通用性，以及使用链上验证来执行安全保证的计算成本和增加的协议复杂性。</p>
 <p>我们的方法是尽可能多地执行关键安全特性的轻量级链上验证，但是设计Move语言来支持高级的离线静态验证工具。我们做了几个设计决定，使得Move比大多数通用语言更适合静态验证:</p>
 <ol>
 <li><strong>没有动态调用</strong>。可以静态地确定每个调用站点的目标。这使得验证工具可以很容易地精确地推断过程调用的效果，而无需执行复杂的调用图构造分析。</li>
@@ -610,9 +610,9 @@
 <li><strong>模块化</strong> 。 Move模块执行数据抽象并本地化资源上的关键操作。模块启用的封装与Move类型系统强制实施的保护相结合，确保为模块类型建立的属性不会被模块外部的代码违反。我们希望通过这种设计，可以在不考虑其客户机的情况下单独查看模块，从而对重要的模块不变量进行详尽的功能验证。</li>
 </ol>
 <p>静态验证工具可以利用Move的这些属性来准确有效地检查运行时是否没有出现故障(例如整数溢出)，以及重要的特定于程序的功能正确性属性(例如，锁定在支付通道中的资源最终可以由参与者声明)。我们将在第7节中分享关于功能验证计划的更多细节。</p>
-<h3 id="4-Move概述"><a href="#4-Move概述" class="headerlink" title="4. Move概述"></a>4. Move概述</h3><p>我们将介绍Move的基础知识，方法是遍历简单对等支付中涉及的事务脚本和模块。该模块是实际Libra Coin实现的简化版本。示例事务脚本演示了模块外部恶意或粗心的程序员不能违反模块资源的关键安全不变量。示例模块展示了如何实现一个利用强大的数据抽象来建立和维护这些不变量的资源。</p>
+<h3 id="Move概述"><a href="#Move概述" class="headerlink" title="Move概述"></a>Move概述</h3><p>我们将介绍Move的基础知识，方法是遍历简单对等支付中涉及的事务脚本和模块。该模块是实际Libra Coin实现的简化版本。示例事务脚本演示了模块外部恶意或粗心的程序员不能违反模块资源的关键安全不变量。示例模块展示了如何实现一个利用强大的数据抽象来建立和维护这些不变量的资源。</p>
 <p>本节中的代码片段是用Move中间代码(IR)编写的。Move IR的级别足够高，可以编写人类可读的代码，但又足够低，可以直接转换来Move字节码。我们提供 Move IR代码，因为基于堆栈的Move字节码更难以读取，而且我们目前正在设计一种Move源代码语言(请参阅第七节）我们注意到，在执行代码之前，Move类型系统提供的所有安全保证都在字节码级别进行检查。</p>
-<h4 id="4-1-点对点支付交易脚本"><a href="#4-1-点对点支付交易脚本" class="headerlink" title="4.1 点对点支付交易脚本"></a>4.1 点对点支付交易脚本</h4><p><img src="http://ww1.sinaimg.cn/large/c26c1fe3gy1g47r3k6ky8j20pn0343z4.jpg?ynotemdtimestamp=1562746207621" alt="img"></p>
+<h4 id="点对点支付交易脚本"><a href="#点对点支付交易脚本" class="headerlink" title="点对点支付交易脚本"></a>点对点支付交易脚本</h4><p><img src="http://ww1.sinaimg.cn/large/c26c1fe3gy1g47r3k6ky8j20pn0343z4.jpg?ynotemdtimestamp=1562746207621" alt="img"></p>
 <p>此脚本接受两个输入:付款接收方的帐户地址和表示要转移到接收方的Coin数量的无符号整数。执行此脚本的效果很简单: amount数量的Coin将从<code>sender</code>转移到<code>payee</code>。这需要两个步骤。在第一步中，发送方从存储在<code>0x0.Currency</code>的模块调用一个名为抽出<code>withdraw_from_sender</code>的过程 ,正如我们将在第4.2节中解释的那样,</p>
 <p><code>0x0</code>是存储在模块里的帐户地址，<code>Currency</code>是模块的名称。这个过程返回的值coin是一个资源值，其类型为<code>0x0.Currency.Coin</code> ,在第二步中，发送方通过将coin资源值移动到<code>0x0.Currency</code> 的 deposit过程， 将资金转移到<code>payee</code>。</p>
 <p>这个例子很有趣，因为它非常微妙。Move的类型系统将拒绝相同代码中可能导致不良行为的小变体。特别是，类型系统确保资源永远不会被复制、重用或丢失。例如，类型系统会拒绝以下三个对脚本的更改:</p>
@@ -621,7 +621,7 @@
 <p><strong>通过两次编写move(coin)来重用货币</strong> 添加 <code>0x0.Currency.deposit(copy(some_other_payee), move(coin))</code>这一行在以上的例子会让投币人“花”两次Coin，第一次花在收款人身上，第二次花在其他收款人身上。这种不受欢迎的行为对于物理资产是不可能的， 幸运的是，此举将被拒绝。变量coin在第一次移动后不可用，第二次移动将触发一个字节码验证错误。</p>
 <p><strong>忘记move(coin)而丢失货币</strong> 。 Move语言实现了线性的资源，这些资源必须被精确地移动一次。未能move资源(例如，删除上面示例中包含move(coin)的行)将触发字节码验证错误。这可以防止程序员意外地(或有意地)丢失对资源的跟踪。这些担保超出了纸币等实物资产所能提供的范围。</p>
 <p>我们使用“资源安全”这个术语来描述移动资源永远不会被复制、重用或丢失的保证。这些保证非常强大，因为Move程序员可以实现同样享受这些保护的自定义资源。正如我们在3.1节中提到的，即使是Libra货币也被实现为自定义资源，在Move语言中没有特殊的地位。</p>
-<h4 id="4-2-Currency模块"><a href="#4-2-Currency模块" class="headerlink" title="4.2 Currency模块"></a>4.2 Currency模块</h4><p>在本节中，我们将展示上面示例中使用的Currency模块的实现如何利用资源安全性来实现安全的可替换资产。我们将首先解释一下运行move代码的区块链环境</p>
+<h4 id="Currency模块"><a href="#Currency模块" class="headerlink" title="Currency模块"></a>Currency模块</h4><p>在本节中，我们将展示上面示例中使用的Currency模块的实现如何利用资源安全性来实现安全的可替换资产。我们将首先解释一下运行move代码的区块链环境</p>
 <p><strong>入门：</strong> <strong>Move执行模型</strong> 正如我们在第3.2节中解释的，Move有两种不同的程序:事务脚本(如第4.1节中概述的示例)和模块(如货币模块，我们很快就会讲到 类似于示例的事务脚本包含在每个用户提交的事务和模块的调用过程中，以更新全局状态。执行事务脚本是全有或全无的——要么执行成功完成，脚本执行的所有写操作都提交到全局存储，要么执行终止时出现错误(例如，由于断言失败或耗尽gas错误)，什么也不提交。事务脚本是一段一次性使用的代码——在执行之后，其他事务脚本或模块不能再次调用它。</p>
 <p>相反，模块是一段以全局状态发布的长生命周期代码。模块名称<code>0x0.Currency</code>。上面示例中使用的货币包含发布模块代码的帐户地址<code>0x0</code>。全局状态结构为从帐户地址到帐户的映射。</p>
 <p><img src="http://ww1.sinaimg.cn/large/c26c1fe3gy1g47qgxlm00j20qm09hq3x.jpg?ynotemdtimestamp=1562746207621" alt="img"></p>
@@ -655,7 +655,7 @@
 <p>与所有内置模块一样，<code>BorrowGlobal&lt;Coin&gt;</code>只能在声明的模块中调用Coin。如果<code>Currency</code>模块没有公开一个返回<code>BorrowGlobal</code>结果的过程，则<code>Currency</code>模块之外的代码无法获得对全局存储中发布的Coin资源的引用。</p>
 <p>在降低事务发送方的Coin资源的值之前，该过程断言硬币的值大于或等于使用<code>RejectUnless</code>指令输入的正式金额。这可以确保发送者不能取比她多的钱。如果该检查失败，当前事务脚本的执行将停止，它执行的任何操作都不会应用到全局状态。</p>
 <p>最后，该过程按数量减少发送方硬币的价值，并使用<code>Pack</code>(Pack module builtin)创建一个新的Coin资源。<code>Pack&lt;T&gt;</code>创建了一个T类型的新资源，就像<code>Unpack&lt;T&gt;</code>一样，<code>Pack&lt;T&gt;</code>只能在资源T的声明模块中调用。在这里，<code>Pack</code>用于创建一个类型为Coin的资源new_coin并将其移动到调用方。调用者现在拥有这个Coin资源，可以将它移动到任何她喜欢的地方。在第4.1节的示例事务脚本中，调用者选择将Coin存入收款人的帐户。</p>
-<h3 id="5-Move语言"><a href="#5-Move语言" class="headerlink" title="5 Move语言"></a>5 Move语言</h3><p>在本节中，我们将介绍Move语言、字节码验证器和虚拟机的半形式化描述。附录A详细地列出了所有这些组件，但没有附带任何文字。我们这里的讨论将使用附录中的摘录，并偶尔引用其中定义的符号。</p>
+<h3 id="Move语言"><a href="#Move语言" class="headerlink" title="Move语言"></a>Move语言</h3><p>在本节中，我们将介绍Move语言、字节码验证器和虚拟机的半形式化描述。附录A详细地列出了所有这些组件，但没有附带任何文字。我们这里的讨论将使用附录中的摘录，并偶尔引用其中定义的符号。</p>
 <p><img src="http://ww1.sinaimg.cn/large/c26c1fe3gy1g48luo08b5j20kg03bt8v.jpg?ynotemdtimestamp=1562746207621" alt="img"></p>
 <p>Move的目标是使程序员能够定义全局区块链状态，并安全地实现更新全局状态的操作。正如我们在第4.2节中所解释的，全局状态被组织为从地址到帐户的部分映射。帐户同时包含资源数据值和模块代码值。帐户中的不同资源必须具有不同的标识符。帐户中的不同模块必须有不同的名称。</p>
 <p><img src="http://ww1.sinaimg.cn/large/c26c1fe3gy1g48lx35jbqj20kc04xq3e.jpg?ynotemdtimestamp=1562746207621" alt="img"></p>
@@ -675,7 +675,7 @@
 <p>区块链状态由一个事务脚本更新，该脚本可以调用当前发布在帐户下的任何模块的公共过程。事务脚本只是一个没有关联模块的过程声明。</p>
 <p>一个过程可以由它的模块标识符和它的签名唯一地标识。调用字节码指令需要一个惟一的过程ID作为输入。这确保了Move中的所有过程调用都是静态确定的——没有函数指针或虚拟调用。此外，模块之间的依赖关系通过构造是非循环的。模块只能依赖于线性事务历史中较早发布的模块。无循环模块依赖关系图和缺乏动态分派的组合强制执行一个强执行不变量:属于模块中的过程的所有堆栈帧必须是连续的。因此，在Move模块中没有与Ethereum智能合约的可重入性问题等价的问题。</p>
 <p>在本节的其余部分中，我们将介绍字节码操作及其语义(第5.1节)，并描述字节码验证器在允许执行或存储模块代码之前执行的静态分析(第5.2节)。</p>
-<h4 id="5-1-字节码解释器"><a href="#5-1-字节码解释器" class="headerlink" title="5.1 字节码解释器"></a>5.1 字节码解释器</h4><p><img src="http://ww1.sinaimg.cn/large/c26c1fe3gy1g48r48oebsj20ie04l3yz.jpg?ynotemdtimestamp=1562746207621" alt="img"></p>
+<h4 id="字节码解释器"><a href="#字节码解释器" class="headerlink" title="字节码解释器"></a>字节码解释器</h4><p><img src="http://ww1.sinaimg.cn/large/c26c1fe3gy1g48r48oebsj20ie04l3yz.jpg?ynotemdtimestamp=1562746207621" alt="img"></p>
 <p>Move字节码指令由基于堆栈的解释器执行，类似于公共语言运行时和Java虚拟机。一条指令从堆栈中使用操作数并将结果推入堆栈。指令也可以从当前过程的局部变量(包括形式参数)中移动和复制值。</p>
 <p>字节码解释器支持过程调用。传递给被调用方的输入值和返回给调用方的输出值也通过堆栈进行通信。首先，调用者将参数推送到堆栈上的过程。接下来，调用者调用<code>Call</code>指令，该指令为被调用者创建一个新的调用堆栈帧，并将推入的值加载到被调用者的本地变量中。最后，字节码解释器开始执行被调用过程的字节码指令。</p>
 <p>字节码的执行通过按顺序执行操作来进行，除非有分支操作导致跳转到当前过程中静态确定的偏移量。当被调用方希望返回时，它将返回值推入堆栈并调用<code>Return</code>指令。控制返回给调用者，调用者将查找堆栈上的输出值。</p>
@@ -691,7 +691,7 @@
 <li>特定区块链的内置操作，如获取事务脚本的发送方地址和创建新帐户。</li>
 </ul>
 <p>附录A给出了完整的Move字节码指令列表。Move还提供了诸如sha3之类的密码原语，但是这些原语是作为标准库中的模块实现的，而不是作为字节码指令实现的。在这些标准库模块中，过程被声明为<code>native</code>的，处理过程由Move VM提供。只有VM可以定义新的navite过程，这意味着这些密码原语可以作为普通的字节码指令实现。但是，navite过程非常方便，因为VM可以依赖现有的机制来调用过程，而不是为每个密码原语重新实现调用约定。</p>
-<h4 id="5-2-字节码验证器"><a href="#5-2-字节码验证器" class="headerlink" title="5.2 字节码验证器"></a>5.2 字节码验证器</h4><p><img src="http://ww1.sinaimg.cn/large/c26c1fe3gy1g48s6e9msgj20hr03imxd.jpg?ynotemdtimestamp=1562746207621" alt="img"></p>
+<h4 id="字节码验证器"><a href="#字节码验证器" class="headerlink" title="字节码验证器"></a>字节码验证器</h4><p><img src="http://ww1.sinaimg.cn/large/c26c1fe3gy1g48s6e9msgj20hr03imxd.jpg?ynotemdtimestamp=1562746207621" alt="img"></p>
 <p>字节码验证器的目标是为提交给发布的任何模块和提交给执行的任何事务脚本静态地强制执行安全属性。如果不通过字节码验证器，就不能发布或执行任何Move程序。</p>
 <p>字节码验证器强制执行任何格式良好的Move程序都必须具备的一般安全特性。我们的目标是在未来的工作中为特定于程序的属性开发一个单独的离线验证器(见第7节)。</p>
 <p>Move模块或事务脚本的二进制格式编码实体表的集合，如常量、类型签名、结构定义和过程定义。验证人进行的检查分为三类:</p>
@@ -726,13 +726,13 @@
 <li>结构声明(名称和类型):</li>
 <li>过程签名(名称、可见性、形式参数类型和返回类型)。</li>
 </ul>
-<h3 id="6-Move虚拟机-：把所有的东西都放一起"><a href="#6-Move虚拟机-：把所有的东西都放一起" class="headerlink" title="6 Move虚拟机 ：把所有的东西都放一起"></a>6 Move虚拟机 ：把所有的东西都放一起</h3><p><img src="https://s2.ax1x.com/2019/06/21/ZSMDYt.png?ynotemdtimestamp=1562746207621" alt="ZSMDYt.png"></p>
+<h3 id="Move虚拟机-：把所有的东西都放一起"><a href="#Move虚拟机-：把所有的东西都放一起" class="headerlink" title="Move虚拟机 ：把所有的东西都放一起"></a>Move虚拟机 ：把所有的东西都放一起</h3><p><img src="https://s2.ax1x.com/2019/06/21/ZSMDYt.png?ynotemdtimestamp=1562746207621" alt="ZSMDYt.png"></p>
 <p>Move虚拟机的作用是执行一个区块𝐵从全球的交易状态Σ并产生一个事务影响𝐸代表修改全局状态。影响𝐸可以应用于Σ生成状态Σ′作为区块𝐵的执行的结果。将效果与实际状态更新分离，允许VM在执行失败的情况下实现事务语义。</p>
 <p>直观地说，事务效果表示对帐户子集的全局状态的更新。事务效果具有与全局状态相同的结构:它是一个从帐户地址到帐户的部分映射，其中包含Move模块和资源值的规范化序列化表示。规范化序列化实现了从Move模块或资源到字节数组的与语言无关的1-1 function。</p>
 <p>为了从状态Σ𝑖−1执行区块𝐵, VM从B中获取一个事务𝑇𝑖 。执行它并产生产生影响𝐸𝑖。,然后应用𝐸𝑖到Σ𝑖−1上去生产状态Σ𝑖，用作区块中生产一个交易的初始状态。整个块的effect有序组合构成了区块的effects。</p>
 <p>每个事务都根据工作流进行处理，工作流包括验证事务中的字节码和检查事务发送方的签名等步骤。</p>
 <p>现在，块中的事务由VM按顺序执行，但是Move语言被设计为支持并行执行。原则上,执行一个事务可以产生一系列的读取以及一组写𝐸影响。块中的每个事务都可以推测地并行执行，只有当其读/写集与块中的另一个事务冲突时才可以重新执行。检查冲突非常简单，因为Move的树内存模型允许我们使用全局内存单元的访问路径惟一地标识它。如果虚拟机性能成为Libra区块链的瓶颈，我们将在未来探索投机性的执行方案。</p>
-<h3 id="7-move下一步做什么"><a href="#7-move下一步做什么" class="headerlink" title="7 move下一步做什么"></a>7 move下一步做什么</h3><p>到目前为止，我们已经设计并实现了Move的以下组件:</p>
+<h3 id="move下一步做什么"><a href="#move下一步做什么" class="headerlink" title="move下一步做什么"></a>move下一步做什么</h3><p>到目前为止，我们已经设计并实现了Move的以下组件:</p>
 <ul>
 <li>一个适合区块链执行的编程模型。</li>
 <li>一种适合这种可编程模型的字节码语言</li>
@@ -1037,7 +1037,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Move-一种可编程资源语言"><span class="nav-number">1.</span> <span class="nav-text">Move:一种可编程资源语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-介绍"><span class="nav-number">1.1.</span> <span class="nav-text">1. 介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-在区块链上管理数字资产"><span class="nav-number">1.2.</span> <span class="nav-text">2.在区块链上管理数字资产</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-区块链的抽象视图"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 区块链的抽象视图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-在开放系统中编码数字资产"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 在开放系统中编码数字资产</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-现有的区块链语言"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 现有的区块链语言</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Move设计目标"><span class="nav-number">1.3.</span> <span class="nav-text">3 Move设计目标</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-资源是头等公民"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 资源是头等公民</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-灵活性"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 灵活性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-安全性"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 安全性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-可验证性"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 可验证性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Move概述"><span class="nav-number">1.4.</span> <span class="nav-text">4. Move概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-点对点支付交易脚本"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 点对点支付交易脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-Currency模块"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 Currency模块</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Move语言"><span class="nav-number">1.5.</span> <span class="nav-text">5 Move语言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-字节码解释器"><span class="nav-number">1.5.1.</span> <span class="nav-text">5.1 字节码解释器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-字节码验证器"><span class="nav-number">1.5.2.</span> <span class="nav-text">5.2 字节码验证器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Move虚拟机-：把所有的东西都放一起"><span class="nav-number">1.6.</span> <span class="nav-text">6 Move虚拟机 ：把所有的东西都放一起</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-move下一步做什么"><span class="nav-number">1.7.</span> <span class="nav-text">7 move下一步做什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#附录"><span class="nav-number">1.8.</span> <span class="nav-text">附录</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Move-一种可编程资源语言"><span class="nav-number">1.</span> <span class="nav-text">Move:一种可编程资源语言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在区块链上管理数字资产"><span class="nav-number">1.2.</span> <span class="nav-text">在区块链上管理数字资产</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#区块链的抽象视图"><span class="nav-number">1.2.1.</span> <span class="nav-text">区块链的抽象视图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在开放系统中编码数字资产"><span class="nav-number">1.2.2.</span> <span class="nav-text">在开放系统中编码数字资产</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#现有的区块链语言"><span class="nav-number">1.2.3.</span> <span class="nav-text">现有的区块链语言</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Move设计目标"><span class="nav-number">1.3.</span> <span class="nav-text">Move设计目标</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#资源是头等公民"><span class="nav-number">1.3.1.</span> <span class="nav-text">资源是头等公民</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#灵活性"><span class="nav-number">1.3.2.</span> <span class="nav-text">灵活性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安全性"><span class="nav-number">1.3.3.</span> <span class="nav-text">安全性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可验证性"><span class="nav-number">1.3.4.</span> <span class="nav-text">可验证性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Move概述"><span class="nav-number">1.4.</span> <span class="nav-text">Move概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#点对点支付交易脚本"><span class="nav-number">1.4.1.</span> <span class="nav-text">点对点支付交易脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Currency模块"><span class="nav-number">1.4.2.</span> <span class="nav-text">Currency模块</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Move语言"><span class="nav-number">1.5.</span> <span class="nav-text">Move语言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字节码解释器"><span class="nav-number">1.5.1.</span> <span class="nav-text">字节码解释器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字节码验证器"><span class="nav-number">1.5.2.</span> <span class="nav-text">字节码验证器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Move虚拟机-：把所有的东西都放一起"><span class="nav-number">1.6.</span> <span class="nav-text">Move虚拟机 ：把所有的东西都放一起</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#move下一步做什么"><span class="nav-number">1.7.</span> <span class="nav-text">move下一步做什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#附录"><span class="nav-number">1.8.</span> <span class="nav-text">附录</span></a></li></ol></li></ol></div>
             
 
           </div>
