@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://yp945.github.io/"/>
-  <updated>2019-07-10T03:46:34.471Z</updated>
+  <updated>2019-07-10T08:11:42.144Z</updated>
   <id>https://yp945.github.io/</id>
   
   <author>
@@ -17,9 +17,40 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>libr-moveIR-exampleCode</title>
+    <link href="https://yp945.github.io/2019/07/10/libr-moveIR-exampleCode/"/>
+    <id>https://yp945.github.io/2019/07/10/libr-moveIR-exampleCode/</id>
+    <published>2019-07-10T08:07:54.000Z</published>
+    <updated>2019-07-10T08:11:42.144Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h3 id=&quot;Move-IR-示例代码解读&quot;&gt;&lt;a href=&quot;#Move-IR-示例代码解读&quot; class=&quot;headerlink&quot; title=&quot;Move IR 示例代码解读&quot;&gt;&lt;/a&gt;Move IR
+        
+      
+    
+    </summary>
+    
+      <category term="libra" scheme="https://yp945.github.io/categories/libra/"/>
+    
+      <category term="move语言" scheme="https://yp945.github.io/categories/libra/move%E8%AF%AD%E8%A8%80/"/>
+    
+    
+      <category term="libra" scheme="https://yp945.github.io/tags/libra/"/>
+    
+      <category term="move语言" scheme="https://yp945.github.io/tags/move%E8%AF%AD%E8%A8%80/"/>
+    
+  </entry>
+  
+  <entry>
     <title>pbft共识算法问题答案</title>
-    <link href="https://yp945.github.io/2019/07/10/pbft%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95%E9%97%AE%E9%A2%98%E7%AD%94%E6%A1%88/"/>
-    <id>https://yp945.github.io/2019/07/10/pbft共识算法问题答案/</id>
+    <link href="https://yp945.github.io/2019/07/10/consensus-pbft-QA/"/>
+    <id>https://yp945.github.io/2019/07/10/consensus-pbft-QA/</id>
     <published>2019-07-10T02:01:27.000Z</published>
     <updated>2019-07-10T03:46:34.471Z</updated>
     
@@ -43,8 +74,8 @@ N - f- f &gt; f =&gt; N &gt; 3f&lt;/script&gt;&lt;/li&gt;
   
   <entry>
     <title>pbft共识算法</title>
-    <link href="https://yp945.github.io/2019/07/09/pbft%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/"/>
-    <id>https://yp945.github.io/2019/07/09/pbft共识算法/</id>
+    <link href="https://yp945.github.io/2019/07/09/consensus-pbft/"/>
+    <id>https://yp945.github.io/2019/07/09/consensus-pbft/</id>
     <published>2019-07-09T02:01:27.000Z</published>
     <updated>2019-07-10T05:36:25.330Z</updated>
     
