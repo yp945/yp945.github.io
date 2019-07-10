@@ -42,6 +42,30 @@
   </entry>
   
   <entry>
+    <title>Move:一种可编程资源语言</title>
+    <link href="https://yp945.github.io/2019/07/10/libra-move-paper/"/>
+    <id>https://yp945.github.io/2019/07/10/libra-move-paper/</id>
+    <published>2019-07-10T08:07:23.000Z</published>
+    <updated>2019-07-10T08:22:48.690Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Move-一种可编程资源语言&quot;&gt;&lt;a href=&quot;#Move-一种可编程资源语言&quot; class=&quot;headerlink&quot; title=&quot;Move:一种可编程资源语言&quot;&gt;&lt;/a&gt;Move:一种可编程资源语言&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Abstract&lt;/strong&gt;. 我们为Libra区块链提供了一种安全灵活的编程语言Move， Move是一种可执行的字节码语言，用于实现自定义事务和智能合约。Move的关键特性是能够使用受linear启发的语义定义自定义资源类型。资源永远不能被复制或者被隐式丢弃，只能在程序的存储位置间移动。这些安全保证由Move的类型系统静态执行，尽管有这些特殊保护，资源仍然是一种普通的程序值，它们可以存储在数据结构中作为参数传递给处理逻辑，等等。资源优先是一种很普遍的观念。程序员不仅可以实现安全的数字资产，还可以编写正确的业务用于包装资产和强制访问控制策略的逻辑。Move的安全性和表达性使我们能够在Move中实现Libra协议的重要部分，包括Libra Coin，事务处理和验证器管理.&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="libra" scheme="https://yp945.github.io/categories/libra/"/>
+    
+      <category term="move语言" scheme="https://yp945.github.io/categories/libra/move%E8%AF%AD%E8%A8%80/"/>
+    
+    
+      <category term="libra" scheme="https://yp945.github.io/tags/libra/"/>
+    
+      <category term="move语言" scheme="https://yp945.github.io/tags/move%E8%AF%AD%E8%A8%80/"/>
+    
+  </entry>
+  
+  <entry>
     <title>pbft共识算法问题答案</title>
     <link href="https://yp945.github.io/2019/07/10/consensus-pbft-QA/"/>
     <id>https://yp945.github.io/2019/07/10/consensus-pbft-QA/</id>
