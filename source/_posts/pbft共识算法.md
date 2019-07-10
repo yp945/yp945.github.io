@@ -3,9 +3,9 @@
 title: pbft共识
 date: 2019-07-10 10:01:27
 categories: 
-    -共识算法
+    - 共识算法
 tags:
-    -pbft
+    - pbft
 author: ClimbYang
 ---
 
