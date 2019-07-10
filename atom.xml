@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://yp945.github.io/"/>
-  <updated>2019-07-10T02:10:32.331Z</updated>
+  <updated>2019-07-10T02:14:45.968Z</updated>
   <id>https://yp945.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://yp945.github.io/2019/07/10/pbft%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95%E9%97%AE%E9%A2%98%E7%AD%94%E6%A1%88/"/>
     <id>https://yp945.github.io/2019/07/10/pbft共识算法问题答案/</id>
     <published>2019-07-10T02:01:27.000Z</published>
-    <updated>2019-07-10T02:10:32.331Z</updated>
+    <updated>2019-07-10T02:14:45.968Z</updated>
     
     <summary type="html">
     
@@ -46,7 +46,7 @@ N - f- f &gt; f =&gt; N &gt; 3f&lt;/script&gt;&lt;/li&gt;
     <link href="https://yp945.github.io/2019/07/10/pbft%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/"/>
     <id>https://yp945.github.io/2019/07/10/pbft共识算法/</id>
     <published>2019-07-10T02:01:27.000Z</published>
-    <updated>2019-07-10T02:09:19.040Z</updated>
+    <updated>2019-07-10T02:14:26.828Z</updated>
     
     <summary type="html">
     
@@ -54,10 +54,10 @@ N - f- f &gt; f =&gt; N &gt; 3f&lt;/script&gt;&lt;/li&gt;
     
     </summary>
     
-      <category term="-共识算法" scheme="https://yp945.github.io/categories/%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/"/>
+      <category term="共识算法" scheme="https://yp945.github.io/categories/%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/"/>
     
     
-      <category term="-pbft" scheme="https://yp945.github.io/tags/pbft/"/>
+      <category term="pbft" scheme="https://yp945.github.io/tags/pbft/"/>
     
   </entry>
   
