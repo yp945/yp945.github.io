@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://yp945.github.io/"/>
-  <updated>2019-07-10T02:05:00.777Z</updated>
+  <updated>2019-07-10T02:10:32.331Z</updated>
   <id>https://yp945.github.io/</id>
   
   <author>
@@ -21,18 +21,16 @@
     <link href="https://yp945.github.io/2019/07/10/pbft%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95%E9%97%AE%E9%A2%98%E7%AD%94%E6%A1%88/"/>
     <id>https://yp945.github.io/2019/07/10/pbft共识算法问题答案/</id>
     <published>2019-07-10T02:01:27.000Z</published>
-    <updated>2019-07-10T02:05:00.777Z</updated>
+    <updated>2019-07-10T02:10:32.331Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-&lt;h3 id=&quot;pbft共识算法问题答案&quot;&gt;&lt;a href=&quot;#pbft共识算法问题答案&quot; class=&quot;headerlink&quot;
-        
-      
+      &lt;h3 id=&quot;pbft共识算法问题答案&quot;&gt;&lt;a href=&quot;#pbft共识算法问题答案&quot; class=&quot;headerlink&quot; title=&quot;pbft共识算法问题答案&quot;&gt;&lt;/a&gt;pbft共识算法问题答案&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;pfbt共识为什么至少需要3f+ 1个节点？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;最坏的情况，系统拜占庭节点为f个，由于消息到达顺序的问题，有可能f个有问题的节点先比f个正常的节点先返回消息，此时又要保证正确的消息比有问题的消息多，所以至少3f+ 1个节点&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;
+N - f- f &gt; f =&gt; N &gt; 3f&lt;/script&gt;&lt;/li&gt;
+&lt;/ul&gt;
     
     </summary>
     
@@ -48,18 +46,11 @@
     <link href="https://yp945.github.io/2019/07/10/pbft%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95/"/>
     <id>https://yp945.github.io/2019/07/10/pbft共识算法/</id>
     <published>2019-07-10T02:01:27.000Z</published>
-    <updated>2019-07-10T02:05:25.550Z</updated>
+    <updated>2019-07-10T02:09:19.040Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-&lt;h2 id=&quot;pbft-共识算法&quot;&gt;&lt;a href=&quot;#pbft-共识算法&quot; class=&quot;headerlink&quot; title=&quot;pbft 共识算法&quot;&gt;&lt;/a&gt;pbft 共识算法&lt;/h2&gt;&lt;p&gt;PBFT 是 parctical
-        
-      
+      &lt;h2 id=&quot;pbft-共识算法&quot;&gt;&lt;a href=&quot;#pbft-共识算法&quot; class=&quot;headerlink&quot; title=&quot;pbft 共识算法&quot;&gt;&lt;/a&gt;pbft 共识算法&lt;/h2&gt;&lt;p&gt;PBFT 是 parctical Byzantine Fault Tolerance（实用拜占庭容错算法）的缩写，它是由BFT算法演化出来的， 所有的BFT算法都为了解决一个问题，那就是在一个不可信的网络里，各个节点如何达成共识。这类问题被称为拜占庭将军问题。什么是拜占庭将军问题呢？拜占庭位于如今的土耳其的伊斯坦布尔，是古代东罗马帝国的首都。拜占庭罗马帝国国土辽阔，为了达到防御目的，每块封地都驻扎一支由将军统领的军队，每个军队都分隔很远，将军与将军之间只能靠信差传递消息。 在战争的时候，拜占庭军队内所有将军必需达成一致的共识，决定是否有赢的机会才去攻打敌人的阵营。但是，在军队内有可能存有叛徒和敌军的间谍，左右将军们的决定影响将军们达成一致共识。在已知有将军是叛徒的情况下，其余忠诚的将军如何达成一致协议的问题，这就是拜占庭将军问题。&lt;/p&gt;
     
     </summary>
     

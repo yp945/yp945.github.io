@@ -98,19 +98,19 @@
 
 
 
-  <meta name="description" content="pbft共识算法问题答案 pfbt共识为什么至少需要3f+ 1个节点？ 最坏的情况，系统拜占庭节点为f个，由于消息到达顺序的问题，有可能f个有问题的节点先比f个正常的节点先返回消息，此时又要保证正确的消息比有问题的消息多，所以至少3f+ 1个节点  N - f- f &amp;gt; f =&amp;gt; N &amp;gt; 3f pbft共识 parpare和commit 阶段为什么收到需要2f+ 1个相同的回复（包括自己的），f">
+  <meta name="description" content="pbft共识算法问题答案 pfbt共识为什么至少需要3f+ 1个节点？ 最坏的情况，系统拜占庭节点为f个，由于消息到达顺序的问题，有可能f个有问题的节点先比f个正常的节点先返回消息，此时又要保证正确的消息比有问题的消息多，所以至少3f+ 1个节点  N - f- f &amp;gt; f =&amp;gt; N &amp;gt; 3f">
 <meta name="keywords" content="pbft">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pbft共识">
 <meta property="og:url" content="https://yp945.github.io/2019/07/10/pbft共识算法问题答案/index.html">
 <meta property="og:site_name" content="ClimbYang的记录">
-<meta property="og:description" content="pbft共识算法问题答案 pfbt共识为什么至少需要3f+ 1个节点？ 最坏的情况，系统拜占庭节点为f个，由于消息到达顺序的问题，有可能f个有问题的节点先比f个正常的节点先返回消息，此时又要保证正确的消息比有问题的消息多，所以至少3f+ 1个节点  N - f- f &amp;gt; f =&amp;gt; N &amp;gt; 3f pbft共识 parpare和commit 阶段为什么收到需要2f+ 1个相同的回复（包括自己的），f">
+<meta property="og:description" content="pbft共识算法问题答案 pfbt共识为什么至少需要3f+ 1个节点？ 最坏的情况，系统拜占庭节点为f个，由于消息到达顺序的问题，有可能f个有问题的节点先比f个正常的节点先返回消息，此时又要保证正确的消息比有问题的消息多，所以至少3f+ 1个节点  N - f- f &amp;gt; f =&amp;gt; N &amp;gt; 3f">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/c26c1fe3gy1g2yw43eqxfj20kd0f2win.jpg">
-<meta property="og:updated_time" content="2019-07-10T02:05:00.777Z">
+<meta property="og:updated_time" content="2019-07-10T02:10:32.331Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pbft共识">
-<meta name="twitter:description" content="pbft共识算法问题答案 pfbt共识为什么至少需要3f+ 1个节点？ 最坏的情况，系统拜占庭节点为f个，由于消息到达顺序的问题，有可能f个有问题的节点先比f个正常的节点先返回消息，此时又要保证正确的消息比有问题的消息多，所以至少3f+ 1个节点  N - f- f &amp;gt; f =&amp;gt; N &amp;gt; 3f pbft共识 parpare和commit 阶段为什么收到需要2f+ 1个相同的回复（包括自己的），f">
+<meta name="twitter:description" content="pbft共识算法问题答案 pfbt共识为什么至少需要3f+ 1个节点？ 最坏的情况，系统拜占庭节点为f个，由于消息到达顺序的问题，有可能f个有问题的节点先比f个正常的节点先返回消息，此时又要保证正确的消息比有问题的消息多，所以至少3f+ 1个节点  N - f- f &amp;gt; f =&amp;gt; N &amp;gt; 3f">
 <meta name="twitter:image" content="http://ww1.sinaimg.cn/large/c26c1fe3gy1g2yw43eqxfj20kd0f2win.jpg">
 
 
@@ -418,7 +418,7 @@
                 
               
 
-              <time title="创建时间：2019-07-10 10:01:27 / 修改时间：10:05:00" itemprop="dateCreated datePublished" datetime="2019-07-10T10:01:27+08:00">2019-07-10</time>
+              <time title="创建时间：2019-07-10 10:01:27 / 修改时间：10:10:32" itemprop="dateCreated datePublished" datetime="2019-07-10T10:01:27+08:00">2019-07-10</time>
             </span>
           
 
@@ -499,12 +499,14 @@
       
 
       
-        <a id="more"></a>
-<h3 id="pbft共识算法问题答案"><a href="#pbft共识算法问题答案" class="headerlink" title="pbft共识算法问题答案"></a>pbft共识算法问题答案</h3><ul>
+        <h3 id="pbft共识算法问题答案"><a href="#pbft共识算法问题答案" class="headerlink" title="pbft共识算法问题答案"></a>pbft共识算法问题答案</h3><ul>
 <li><p><strong>pfbt共识为什么至少需要3f+ 1个节点？</strong></p>
 <p>最坏的情况，系统拜占庭节点为f个，由于消息到达顺序的问题，有可能f个有问题的节点先比f个正常的节点先返回消息，此时又要保证正确的消息比有问题的消息多，所以至少3f+ 1个节点</p>
 <script type="math/tex; mode=display">
 N - f- f > f => N > 3f</script></li>
+</ul>
+<a id="more"></a>
+<ul>
 <li><p><strong>pbft共识 parpare和commit 阶段为什么收到需要2f+ 1个相同的回复（包括自己的），f + 1个不行吗？</strong></p>
 <p>某副本收到了f+ 1相同的消息反馈,如果这个f+ 1个反馈中包含faulty 节点，此时消息是不能作数的，因为faulty可能会发送错误消息给不同的节点，所以需要必须要2f+1个相同的反馈确认才能保证f+1个non-faulty节点正常，这时候即便f个faulty节点给不同人发不同消息也没关系，f+1个non-faulty节点已经形成了统一战线，他们在人数上已经多于那些墙头草了，可以达成一致了。</p>
 </li>
