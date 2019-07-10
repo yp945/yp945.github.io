@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://yp945.github.io/"/>
-  <updated>2019-07-10T08:11:42.144Z</updated>
+  <updated>2019-07-10T08:17:01.769Z</updated>
   <id>https://yp945.github.io/</id>
   
   <author>
@@ -17,22 +17,16 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>libr-moveIR-exampleCode</title>
-    <link href="https://yp945.github.io/2019/07/10/libr-moveIR-exampleCode/"/>
-    <id>https://yp945.github.io/2019/07/10/libr-moveIR-exampleCode/</id>
+    <title>Move IR 示例代码解读</title>
+    <link href="https://yp945.github.io/2019/07/10/libra-moveIR-exampleCode/"/>
+    <id>https://yp945.github.io/2019/07/10/libra-moveIR-exampleCode/</id>
     <published>2019-07-10T08:07:54.000Z</published>
-    <updated>2019-07-10T08:11:42.144Z</updated>
+    <updated>2019-07-10T08:17:01.769Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-&lt;h3 id=&quot;Move-IR-示例代码解读&quot;&gt;&lt;a href=&quot;#Move-IR-示例代码解读&quot; class=&quot;headerlink&quot; title=&quot;Move IR 示例代码解读&quot;&gt;&lt;/a&gt;Move IR
-        
-      
+      &lt;h3 id=&quot;Move-IR-示例代码解读&quot;&gt;&lt;a href=&quot;#Move-IR-示例代码解读&quot; class=&quot;headerlink&quot; title=&quot;Move IR 示例代码解读&quot;&gt;&lt;/a&gt;Move IR 示例代码解读&lt;/h3&gt;&lt;p&gt;本节描述如何在Move中间表示(IR)中编写事务脚本和模块。IR是即将到来的Move源代码语言的早期(且不稳定)先驱。Move IR是一个覆盖于Move字节码之上的薄薄的语法层，用于测试字节码验证器和虚拟机，它对开发人员不是特别友好。它的级别足够高，可以编写人类可读的代码，但又足够低，可以直接编译以移动字节码。&lt;/p&gt;
+&lt;p&gt;接下来，我将展示一些Move IR片段。关于如何在本地编译、运行和修改这些示例来学习。&lt;code&gt;libra/language/README.md&lt;/code&gt; and &lt;code&gt;libra/language/compiler/README.md&lt;/code&gt;解释了如何做到这一点。&lt;br&gt;
     
     </summary>
     
