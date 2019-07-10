@@ -448,6 +448,18 @@
           
             
             
+              
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/07/10/pbft共识算法问题答案/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/07/10/pbft共识算法问题答案/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -645,6 +657,18 @@ N - f- f > f => N > 3f</script></li>
 
           
             
+            
+              
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/07/09/pbft共识算法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/07/09/pbft共识算法/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -1048,6 +1072,32 @@ N - f- f > f => N > 3f</script></li>
   
 
   
+  
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: true,
+    appId: 'KT7dYbutKTXGzEevy5QjY79j-gzGzoHsz',
+    appKey: 'ia69e2Ysj9djrRycqiTx86mE',
+    placeholder: '留言区',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
 
 
 
