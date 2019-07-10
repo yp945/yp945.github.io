@@ -1,5 +1,5 @@
 ---
-title: libr-moveIR-exampleCode
+title: Move IR 示例代码解读
 date: 2019-07-10 16:07:54
 categories:
 	- libra
@@ -10,14 +10,12 @@ tags:
 author: ClimbYang
 ---
 
-<!-- more -->
-
 ### Move IR 示例代码解读
 
 本节描述如何在Move中间表示(IR)中编写事务脚本和模块。IR是即将到来的Move源代码语言的早期(且不稳定)先驱。Move IR是一个覆盖于Move字节码之上的薄薄的语法层，用于测试字节码验证器和虚拟机，它对开发人员不是特别友好。它的级别足够高，可以编写人类可读的代码，但又足够低，可以直接编译以移动字节码。
 
 接下来，我将展示一些Move IR片段。关于如何在本地编译、运行和修改这些示例来学习。`libra/language/README.md` and `libra/language/compiler/README.md`解释了如何做到这一点。
-
+<!-- more -->
 #### 编写事务脚本
 
 正如我们在Move事务脚本中解释的那样，用户编写事务脚本来请求对Libra区块链的全局存储的更新。几乎在任何事务脚本中都会出现两个重要的构建块:`LibraAccount.T`和`LibraCoin.T`。LibraAccount是模块的名称，T是该模块声明的资源的名称。这是一个通用的命名约定;模块声明的“main”类型通常命名为T。
