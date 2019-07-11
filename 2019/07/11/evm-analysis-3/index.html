@@ -98,17 +98,18 @@
 
 
 
-  <meta name="description" content="记录学习编程的点滴">
-<meta name="keywords" content="blockchain">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ClimbYang的记录">
-<meta property="og:url" content="https://yp945.github.io/categories/共识算法/index.html">
+  <meta name="description" content="上一篇我们介绍了创建合约的交易是如何执行的，这一篇我们分析普通交易是如何在evm里面被执行的">
+<meta name="keywords" content="ethereum,evm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="evm源码分析第三篇">
+<meta property="og:url" content="https://yp945.github.io/2019/07/11/evm-analysis-3/index.html">
 <meta property="og:site_name" content="ClimbYang的记录">
-<meta property="og:description" content="记录学习编程的点滴">
+<meta property="og:description" content="上一篇我们介绍了创建合约的交易是如何执行的，这一篇我们分析普通交易是如何在evm里面被执行的">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-11T02:08:54.793Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ClimbYang的记录">
-<meta name="twitter:description" content="记录学习编程的点滴">
+<meta name="twitter:title" content="evm源码分析第三篇">
+<meta name="twitter:description" content="上一篇我们介绍了创建合约的交易是如何执行的，这一篇我们分析普通交易是如何在evm里面被执行的">
 
 
 
@@ -118,7 +119,7 @@
 
   
   
-  <link rel="canonical" href="https://yp945.github.io/categories/共识算法/">
+  <link rel="canonical" href="https://yp945.github.io/2019/07/11/evm-analysis-3/">
 
 
 
@@ -128,7 +129,7 @@
   };
 </script>
 
-  <title>分类: 共识算法 | ClimbYang的记录</title>
+  <title>evm源码分析第三篇 | ClimbYang的记录</title>
   
 
 
@@ -176,7 +177,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
     
         <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -266,7 +267,7 @@
         
         
           
-          <li class="menu-item menu-item-categories menu-item-active">
+          <li class="menu-item menu-item-categories">
 
     
     
@@ -352,109 +353,311 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>共识算法<small>分类</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yp945.github.io/2019/07/11/evm-analysis-3/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ClimbYang">
+      <meta itemprop="description" content="记录学习编程的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ClimbYang的记录">
+    </span>
+
+    
+      <header class="post-header">
+
         
-          <a class="post-title-link" href="/2019/07/10/consensus-pbft-QA/" itemprop="url">
-            
-              <span itemprop="name">pbft共识算法问题答案</span>
-            
-          </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">evm源码分析第三篇
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-10T10:01:27+08:00" content="2019-07-10">
-          07-10
-        </time>
-      </div>
+              
+            
+          </h1>
+        
 
-    </header>
-  </article>
+        <div class="post-meta">
 
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-11 09:35:08 / 修改时间：10:08:54" itemprop="dateCreated datePublished" datetime="2019-07-11T09:35:08+08:00">2019-07-11</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ethereum/" itemprop="url" rel="index"><span itemprop="name">ethereum</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ethereum/evm/" itemprop="url" rel="index"><span itemprop="name">evm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/07/11/evm-analysis-3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/07/11/evm-analysis-3/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+              <span title="本文字数">2.1k</span>
+            </span>
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+              <span title="阅读时长">4 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/07/09/consensus-pbft/" itemprop="url">
-            
-              <span itemprop="name">pbft共识算法</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-09T10:01:27+08:00" content="2019-07-09">
-          07-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
+        <p>上一篇我们介绍了创建合约的交易是如何执行的，这一篇我们分析普通交易是如何在evm里面被执行的</p>
+<a id="more"></a>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> contractCreation &#123;</span><br><span class="line">   ret, _, st.gas, vmerr = evm.Create(sender, st.data, st.gas, st.value)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   <span class="comment">// Increment the nonce for the next transaction</span></span><br><span class="line">   st.state.SetNonce(msg.From(), st.state.GetNonce(sender.Address())+<span class="number">1</span>)</span><br><span class="line">   ret, st.gas, vmerr = evm.Call(sender, st.to(), st.data, st.gas, st.value)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果是普通的交易，则会把调用方nonce+1 然后 执行evm.call。</p>
+<p>evm.call方法和evm.create方法大致相同，我们来说说不一样的地方。<br>call方法调用的是一个存在的合约地址的合约，所以不用创建合约账户。如果call方法发现本地也没有合约接收方的账户，则需要创建一个接收方的账户，并更新本地状态数据库。</p>
+<p>call 方法或者create方法执行完毕，则会调用st.refundGas()方法计算需要退还的gas.</p>
+<p>在拜占庭版本的黄皮书规范中，只有<code>SELFDESTRUCT</code>和<code>SSTORE</code>(当将一个非0位置上的数置为0时候）这两个<code>opcode</code>会触发refund。单个交易执行结束时，累计refund的gas量不能超过当前交易执行上下文的消耗的<code>gasUsed</code>的一半。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(st *StateTransition)</span> <span class="title">refundGas</span><span class="params">()</span></span> &#123;</span><br><span class="line">   <span class="comment">// Apply refund counter, capped to half of the used gas.</span></span><br><span class="line">   refund := st.gasUsed() / <span class="number">2</span></span><br><span class="line">   <span class="keyword">if</span> refund &gt; st.state.GetRefund() &#123;</span><br><span class="line">      refund = st.state.GetRefund()</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//st.gs 代表交易完成还剩下的gas值</span></span><br><span class="line">   st.gas += refund</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Return ETH for remaining gas, exchanged at the original rate.</span></span><br><span class="line">   remaining := <span class="built_in">new</span>(big.Int).Mul(<span class="built_in">new</span>(big.Int).SetUint64(st.gas), st.gasPrice)</span><br><span class="line">   st.state.AddBalance(st.msg.From(), remaining)</span><br><span class="line">	</span><br><span class="line">   <span class="comment">//gas pool 默认初始值为区块gas limit, 每执行一次交易，将会从gas pool中减去st.msg.Gas(), </span></span><br><span class="line">   <span class="comment">//既然产生了remaining， 那肯定也需要将这些值加回到原来的gas pool.</span></span><br><span class="line">   <span class="comment">// Also return remaining gas to the block gas counter so it is</span></span><br><span class="line">   <span class="comment">// available for the next transaction.</span></span><br><span class="line">   st.gp.AddGas(st.gas)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后实际退回给交易发起者的gas为：remaining = gas执行交易剩余 + 累计refund  </p>
+<p>这里引用一篇博客的介绍这个<a href="https://blog.csdn.net/KeenCryp/article/details/86586132" target="_blank" rel="noopener">gas refund 机制</a></p>
+<p> 最后计算合约产生的gas总数，加入到矿工账户，作为矿工收入。</p>
+<p>最后我们回到第一节的ApplyTransaction（）函数上，这时候还有最后一步就是更新state root了。</p>
+<p>接下来填充receipt的各项值，然后返回。</p>
+<p>总结一下 交易流程到EVM执行大致流程如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">The State Transitioning Model</span><br><span class="line"></span><br><span class="line">A state transition is a change made when a transaction is applied to the current world state</span><br><span class="line">The state transitioning model does all the necessary work to work out a valid new state root.</span><br><span class="line"></span><br><span class="line">1) Nonce handling</span><br><span class="line">2) Pre pay gas</span><br><span class="line">3) Create a new state object if the recipient is \0*32</span><br><span class="line">4) Value transfer</span><br><span class="line">== If contract creation ==</span><br><span class="line">  4a) Attempt to run transaction data</span><br><span class="line">  4b) If valid, use result as code for the new state object</span><br><span class="line">== end ==</span><br><span class="line">5) Run Script section</span><br><span class="line">6) Derive new state root</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
 
       
     </div>
 
+    
+      
+
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\07\11\evm-analysis-2\" rel="bookmark">evm源码分析第二篇</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\07\11\evm-analysis-1\" rel="bookmark">evm源码分析第一篇</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+   <li class="post-copyright-title">
+    <strong>本文标题：</strong>evm源码分析第三篇</li>
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ClimbYang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://yp945.github.io/2019/07/11/evm-analysis-3/" title="evm源码分析第三篇">https://yp945.github.io/2019/07/11/evm-analysis-3/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/ethereum/" rel="tag"># ethereum</a>
+          
+            <a href="/tags/evm/" rel="tag"># evm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/11/evm-analysis-2/" rel="next" title="evm源码分析第二篇">
+                <i class="fa fa-chevron-left"></i> evm源码分析第二篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
+
+
+  </div>
+  
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
 
   
 
 
-
-          </div>
-          
 
         </div>
         
@@ -759,6 +962,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
 
   
 
@@ -800,6 +1007,8 @@
 
 
 
+
+  
 
 
   

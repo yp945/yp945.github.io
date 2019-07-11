@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://yp945.github.io/"/>
-  <updated>2019-07-10T08:17:01.769Z</updated>
+  <updated>2019-07-11T02:08:54.793Z</updated>
   <id>https://yp945.github.io/</id>
   
   <author>
@@ -15,6 +15,78 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>evm源码分析第三篇</title>
+    <link href="https://yp945.github.io/2019/07/11/evm-analysis-3/"/>
+    <id>https://yp945.github.io/2019/07/11/evm-analysis-3/</id>
+    <published>2019-07-11T01:35:08.000Z</published>
+    <updated>2019-07-11T02:08:54.793Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;上一篇我们介绍了创建合约的交易是如何执行的，这一篇我们分析普通交易是如何在evm里面被执行的&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="ethereum" scheme="https://yp945.github.io/categories/ethereum/"/>
+    
+      <category term="evm" scheme="https://yp945.github.io/categories/ethereum/evm/"/>
+    
+    
+      <category term="ethereum" scheme="https://yp945.github.io/tags/ethereum/"/>
+    
+      <category term="evm" scheme="https://yp945.github.io/tags/evm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>evm源码分析第二篇</title>
+    <link href="https://yp945.github.io/2019/07/11/evm-analysis-2/"/>
+    <id>https://yp945.github.io/2019/07/11/evm-analysis-2/</id>
+    <published>2019-07-11T01:35:08.000Z</published>
+    <updated>2019-07-11T02:08:36.138Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这一篇我们主要分析交易是如何被evm解释器解释执行的。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="ethereum" scheme="https://yp945.github.io/categories/ethereum/"/>
+    
+      <category term="evm" scheme="https://yp945.github.io/categories/ethereum/evm/"/>
+    
+    
+      <category term="ethereum" scheme="https://yp945.github.io/tags/ethereum/"/>
+    
+      <category term="evm" scheme="https://yp945.github.io/tags/evm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>evm源码分析第一篇</title>
+    <link href="https://yp945.github.io/2019/07/11/evm-analysis-1/"/>
+    <id>https://yp945.github.io/2019/07/11/evm-analysis-1/</id>
+    <published>2019-07-11T01:35:08.000Z</published>
+    <updated>2019-07-11T02:08:47.107Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;evm源码分析分为3篇去讲解，所有的代码解析基于以太坊&lt;code&gt;go-ethereum-1.8.23-release&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="ethereum" scheme="https://yp945.github.io/categories/ethereum/"/>
+    
+      <category term="evm" scheme="https://yp945.github.io/categories/ethereum/evm/"/>
+    
+    
+      <category term="ethereum" scheme="https://yp945.github.io/tags/ethereum/"/>
+    
+      <category term="evm" scheme="https://yp945.github.io/tags/evm/"/>
+    
+  </entry>
   
   <entry>
     <title>Move IR 示例代码解读</title>

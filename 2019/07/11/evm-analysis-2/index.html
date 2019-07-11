@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.2.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="这一篇我们主要分析交易是如何被evm解释器解释执行的。">
+<meta name="keywords" content="ethereum,evm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="evm源码分析第二篇">
+<meta property="og:url" content="https://yp945.github.io/2019/07/11/evm-analysis-2/index.html">
+<meta property="og:site_name" content="ClimbYang的记录">
+<meta property="og:description" content="这一篇我们主要分析交易是如何被evm解释器解释执行的。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/c26c1fe3gy1g26y17xrepj20f804adfv.jpg">
+<meta property="og:updated_time" content="2019-07-11T02:08:36.138Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="evm源码分析第二篇">
+<meta name="twitter:description" content="这一篇我们主要分析交易是如何被evm解释器解释执行的。">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/c26c1fe3gy1g26y17xrepj20f804adfv.jpg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ClimbYang的记录" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://yp945.github.io/2019/07/11/evm-analysis-2/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>evm源码分析第二篇 | ClimbYang的记录</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    
+        <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ClimbYang的记录</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">blockchain</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yp945.github.io/2019/07/11/evm-analysis-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ClimbYang">
+      <meta itemprop="description" content="记录学习编程的点滴">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ClimbYang的记录">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">evm源码分析第二篇
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+
+          
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-07-11 09:35:08 / 修改时间：10:08:36" itemprop="dateCreated datePublished" datetime="2019-07-11T09:35:08+08:00">2019-07-11</time>
+            </span>
+          
+
+          
+            
+
+            
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ethereum/" itemprop="url" rel="index"><span itemprop="name">ethereum</span></a></span>
+
+                
+                
+                  ，
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ethereum/evm/" itemprop="url" rel="index"><span itemprop="name">evm</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/07/11/evm-analysis-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/07/11/evm-analysis-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+                 阅读次数： 
+                <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+              </span>
+            </span>
+          
+
+          
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+              
+              <span title="本文字数">11k</span>
+            </span>
+          
+
+          
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+              
+              <span title="阅读时长">21 分钟</span>
+            </span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这一篇我们主要分析交易是如何被evm解释器解释执行的。</p>
+<a id="more"></a>
+<p>首先我们接着上一篇进入create函数</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create creates a new contract using code as deployment code.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(evm *EVM)</span> <span class="title">create</span><span class="params">(caller ContractRef, codeAndHash *codeAndHash, gas <span class="keyword">uint64</span>, value *big.Int, address common.Address)</span> <span class="params">([]<span class="keyword">byte</span>, common.Address, <span class="keyword">uint64</span>, error)</span></span> &#123;</span><br><span class="line">   <span class="comment">// Depth check execution. Fail if we're trying to execute above the</span></span><br><span class="line">   <span class="comment">// limit.</span></span><br><span class="line">   <span class="keyword">if</span> evm.depth &gt; <span class="keyword">int</span>(params.CallCreateDepth) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">nil</span>, common.Address&#123;&#125;, gas, ErrDepth</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> !evm.CanTransfer(evm.StateDB, caller.Address(), value) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">nil</span>, common.Address&#123;&#125;, gas, ErrInsufficientBalance</span><br><span class="line">   &#125;</span><br><span class="line">   nonce := evm.StateDB.GetNonce(caller.Address())</span><br><span class="line">   evm.StateDB.SetNonce(caller.Address(), nonce+<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Ensure there's no existing contract already at the designated address</span></span><br><span class="line">   contractHash := evm.StateDB.GetCodeHash(address)</span><br><span class="line">   <span class="keyword">if</span> evm.StateDB.GetNonce(address) != <span class="number">0</span> || (contractHash != (common.Hash&#123;&#125;) &amp;&amp; contractHash != emptyCodeHash) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">nil</span>, common.Address&#123;&#125;, <span class="number">0</span>, ErrContractAddressCollision</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// Create a new account on the state</span></span><br><span class="line">   snapshot := evm.StateDB.Snapshot()</span><br><span class="line">   evm.StateDB.CreateAccount(address)</span><br><span class="line">   <span class="keyword">if</span> evm.ChainConfig().IsEIP158(evm.BlockNumber) &#123;</span><br><span class="line">      evm.StateDB.SetNonce(address, <span class="number">1</span>)</span><br><span class="line">   &#125;</span><br><span class="line">   evm.Transfer(evm.StateDB, caller.Address(), address, value)</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Initialise a new contract and set the code that is to be used by the EVM.</span></span><br><span class="line">   <span class="comment">// The contract is a scoped environment for this execution context only.</span></span><br><span class="line">   contract := NewContract(caller, AccountRef(address), value, gas)</span><br><span class="line">   contract.SetCodeOptionalHash(&amp;address, codeAndHash)</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> evm.vmConfig.NoRecursion &amp;&amp; evm.depth &gt; <span class="number">0</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">nil</span>, address, gas, <span class="literal">nil</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> evm.vmConfig.Debug &amp;&amp; evm.depth == <span class="number">0</span> &#123;</span><br><span class="line">      evm.vmConfig.Tracer.CaptureStart(caller.Address(), address, <span class="literal">true</span>, codeAndHash.code, gas, value)</span><br><span class="line">   &#125;</span><br><span class="line">   start := time.Now()</span><br><span class="line"></span><br><span class="line">   ret, err := run(evm, contract, <span class="literal">nil</span>, <span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line">   <span class="comment">// check whether the max code size has been exceeded</span></span><br><span class="line">   maxCodeSizeExceeded := evm.ChainConfig().IsEIP158(evm.BlockNumber) &amp;&amp; <span class="built_in">len</span>(ret) &gt; params.MaxCodeSize</span><br><span class="line">   <span class="comment">// if the contract creation ran successfully and no errors were returned</span></span><br><span class="line">   <span class="comment">// calculate the gas required to store the code. If the code could not</span></span><br><span class="line">   <span class="comment">// be stored due to not enough gas set an error and let it be handled</span></span><br><span class="line">   <span class="comment">// by the error checking condition below.</span></span><br><span class="line">   <span class="keyword">if</span> err == <span class="literal">nil</span> &amp;&amp; !maxCodeSizeExceeded &#123;</span><br><span class="line">      createDataGas := <span class="keyword">uint64</span>(<span class="built_in">len</span>(ret)) * params.CreateDataGas</span><br><span class="line">      <span class="keyword">if</span> contract.UseGas(createDataGas) &#123;</span><br><span class="line">         evm.StateDB.SetCode(address, ret)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         err = ErrCodeStoreOutOfGas</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>1.1 判断evm执行栈深度不能超过1024，</p>
+<p>1.2 发送方持有的以太坊数量大于此次合约交易金额。</p>
+<p>1.3 获取合约调用者账户nonce，然后将nonce+1存入stateDB</p>
+<p>1.4 根据合约地址获取合约hash值</p>
+<p>1.5 记录一个状态快照，用来失败回滚。</p>
+<p>1.6 为这个合约地址创建一个合约账户，并为这个合约账户设置nonce值为1</p>
+<p>1.5 产生以太坊资产转移，发送方地址账户金额减value值，合约账户的金额加value值。</p>
+<p>1.6 根据发送方地址和合约地址，以及金额value 值和gas，合约代码和代码hash值，创建一个合约对象</p>
+<p>1.7 设置合约对象的bytecode, bytecodehash和 合约地址</p>
+<p>1.8 run方法来执行合约，内部调用evm的解析器来执行合约指令，如果是预编译好的合约，则预编译执行合约就行</p>
+<p>接下来主要看run方法是如何执行合约的</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// run runs the given contract and takes care of running precompiles with a fallback to the byte code interpreter.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">run</span><span class="params">(evm *EVM, contract *Contract, input []<span class="keyword">byte</span>, readOnly <span class="keyword">bool</span>)</span> <span class="params">([]<span class="keyword">byte</span>, error)</span></span> &#123;</span><br><span class="line">   <span class="keyword">if</span> contract.CodeAddr != <span class="literal">nil</span> &#123;</span><br><span class="line">      precompiles := PrecompiledContractsHomestead</span><br><span class="line">      <span class="keyword">if</span> evm.ChainConfig().IsByzantium(evm.BlockNumber) &#123;</span><br><span class="line">         precompiles = PrecompiledContractsByzantium</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> p := precompiles[*contract.CodeAddr]; p != <span class="literal">nil</span> &#123;</span><br><span class="line">         <span class="keyword">return</span> RunPrecompiledContract(p, input, contract)</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">for</span> _, interpreter := <span class="keyword">range</span> evm.interpreters &#123;</span><br><span class="line">      <span class="keyword">if</span> interpreter.CanRun(contract.Code) &#123;</span><br><span class="line">         <span class="keyword">if</span> evm.interpreter != interpreter &#123;</span><br><span class="line">            <span class="comment">// Ensure that the interpreter pointer is set back</span></span><br><span class="line">            <span class="comment">// to its current value upon return.</span></span><br><span class="line">            <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">(i Interpreter)</span></span> &#123;</span><br><span class="line">               evm.interpreter = i</span><br><span class="line">            &#125;(evm.interpreter)</span><br><span class="line">            evm.interpreter = interpreter</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> interpreter.Run(contract, input, readOnly)</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> <span class="literal">nil</span>, ErrNoCompatibleInterpreter</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>run方法来执行合约，内部调用evm的解析器来执行合约指令，如果是预编译好的合约，则执行预编译合约就行。</p>
+<p>这一部分我们看可以看到evm里面是用一个解释器数组合单独的解释器来存储解释器对象的，这可能是为了后面方便扩展多个解释器，因为从目前的代码来看，就使用了一个解释器。</p>
+<p>选择好解释器后接下来就是具体解释字节码的过程了</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 循环解释执行合约代码的inpput data, 如果执行没有错误产生，则返回执行结果，</span></span><br><span class="line"><span class="comment">// 有一点非常重要，那就是如果执行过程中有任何错误，那将会被认为是一个revert并且消耗所有gas的操作，除非是一个errExecutionReverted，那将以为这是一个revert并且保持所有gas退回操作。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(in *EVMInterpreter)</span> <span class="title">Run</span><span class="params">(contract *Contract, input []<span class="keyword">byte</span>, readOnly <span class="keyword">bool</span>)</span> <span class="params">(ret []<span class="keyword">byte</span>, err error)</span></span> &#123;</span><br><span class="line">   <span class="keyword">if</span> in.intPool == <span class="literal">nil</span> &#123;</span><br><span class="line">      in.intPool = poolOfIntPools.get()</span><br><span class="line">      <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">         poolOfIntPools.put(in.intPool)</span><br><span class="line">         in.intPool = <span class="literal">nil</span></span><br><span class="line">      &#125;()</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Increment the call depth which is restricted to 1024</span></span><br><span class="line">   in.evm.depth++</span><br><span class="line">   <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; in.evm.depth-- &#125;()</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Make sure the readOnly is only set if we aren't in readOnly yet.</span></span><br><span class="line">   <span class="comment">// This makes also sure that the readOnly flag isn't removed for child calls.</span></span><br><span class="line">   <span class="keyword">if</span> readOnly &amp;&amp; !in.readOnly &#123;</span><br><span class="line">      in.readOnly = <span class="literal">true</span></span><br><span class="line">      <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; in.readOnly = <span class="literal">false</span> &#125;()</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Reset the previous call's return data. It's unimportant to preserve the old buffer</span></span><br><span class="line">   <span class="comment">// as every returning call will return new data anyway.</span></span><br><span class="line">   in.returnData = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// Don't bother with the execution if there's no code.</span></span><br><span class="line">   <span class="keyword">if</span> <span class="built_in">len</span>(contract.Code) == <span class="number">0</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">nil</span>, <span class="literal">nil</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">var</span> (</span><br><span class="line">      op    OpCode        <span class="comment">// current opcode</span></span><br><span class="line">      mem   = NewMemory() <span class="comment">// bound memory</span></span><br><span class="line">      stack = newstack()  <span class="comment">// local stack</span></span><br><span class="line">      <span class="comment">// For optimisation reason we're using uint64 as the program counter.</span></span><br><span class="line">      <span class="comment">// It's theoretically possible to go above 2^64. The YP defines the PC</span></span><br><span class="line">      <span class="comment">// to be uint256. Practically much less so feasible.</span></span><br><span class="line">      pc   = <span class="keyword">uint64</span>(<span class="number">0</span>) <span class="comment">// program counter</span></span><br><span class="line">      cost <span class="keyword">uint64</span></span><br><span class="line">      <span class="comment">// copies used by tracer</span></span><br><span class="line">      pcCopy  <span class="keyword">uint64</span> <span class="comment">// needed for the deferred Tracer</span></span><br><span class="line">      gasCopy <span class="keyword">uint64</span> <span class="comment">// for Tracer to log gas remaining before execution</span></span><br><span class="line">      logged  <span class="keyword">bool</span>   <span class="comment">// deferred Tracer should ignore already logged steps</span></span><br><span class="line">      res     []<span class="keyword">byte</span> <span class="comment">// result of the opcode execution function</span></span><br><span class="line">   )</span><br><span class="line">   contract.Input = input</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Reclaim the stack as an int pool when the execution stops</span></span><br><span class="line">   <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; in.intPool.put(stack.data...) &#125;()</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> in.cfg.Debug &#123;</span><br><span class="line">      <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">         <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> !logged &#123;</span><br><span class="line">               in.cfg.Tracer.CaptureState(in.evm, pcCopy, op, gasCopy, cost, mem, stack, contract, in.evm.depth, err)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               in.cfg.Tracer.CaptureFault(in.evm, pcCopy, op, gasCopy, cost, mem, stack, contract, in.evm.depth, err)</span><br><span class="line">            &#125;</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;()</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 解释器循环执行指定，当遇到STOP RETURN 或者合约自毁 或者 当执行过程中遇到错误的时候，</span></span><br><span class="line">   <span class="comment">// 直到所有指令被执行结束，循环才会停止</span></span><br><span class="line">   <span class="keyword">for</span> atomic.LoadInt32(&amp;in.evm.abort) == <span class="number">0</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> in.cfg.Debug &#123;</span><br><span class="line">         <span class="comment">// Capture pre-execution values for tracing.</span></span><br><span class="line">         logged, pcCopy, gasCopy = <span class="literal">false</span>, pc, contract.Gas</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Get the operation from the jump table and validate the stack to ensure there are</span></span><br><span class="line">      <span class="comment">// enough stack items available to perform the operation.</span></span><br><span class="line">      op = contract.GetOp(pc)</span><br><span class="line">      operation := in.cfg.JumpTable[op]</span><br><span class="line">      <span class="keyword">if</span> !operation.valid &#123;</span><br><span class="line">         <span class="keyword">return</span> <span class="literal">nil</span>, fmt.Errorf(<span class="string">"invalid opcode 0x%x"</span>, <span class="keyword">int</span>(op))</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> err = operation.validateStack(stack); err != <span class="literal">nil</span> &#123;</span><br><span class="line">         <span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// If the operation is valid, enforce and write restrictions</span></span><br><span class="line">      <span class="keyword">if</span> err = in.EnforceRestrictions(op, operation, stack); err != <span class="literal">nil</span> &#123;</span><br><span class="line">         <span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">var</span> memorySize <span class="keyword">uint64</span></span><br><span class="line">      <span class="comment">// calculate the new memory size and expand the memory to fit</span></span><br><span class="line">      <span class="comment">// the operation</span></span><br><span class="line">      <span class="keyword">if</span> operation.memorySize != <span class="literal">nil</span> &#123;</span><br><span class="line">         memSize, overflow := bigUint64(operation.memorySize(stack))</span><br><span class="line">         <span class="keyword">if</span> overflow &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nil</span>, errGasUintOverflow</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="comment">// memory is expanded in words of 32 bytes. Gas</span></span><br><span class="line">         <span class="comment">// is also calculated in words.</span></span><br><span class="line">         <span class="keyword">if</span> memorySize, overflow = math.SafeMul(toWordSize(memSize), <span class="number">32</span>); overflow &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">nil</span>, errGasUintOverflow</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// consume the gas and return an error if not enough gas is available.</span></span><br><span class="line">      <span class="comment">// cost is explicitly set so that the capture state defer method can get the proper cost</span></span><br><span class="line">      cost, err = operation.gasCost(in.gasTable, in.evm, contract, stack, mem, memorySize)</span><br><span class="line">      <span class="keyword">if</span> err != <span class="literal">nil</span> || !contract.UseGas(cost) &#123;</span><br><span class="line">         <span class="keyword">return</span> <span class="literal">nil</span>, ErrOutOfGas</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> memorySize &gt; <span class="number">0</span> &#123;</span><br><span class="line">         mem.Resize(memorySize)</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> in.cfg.Debug &#123;</span><br><span class="line">         in.cfg.Tracer.CaptureState(in.evm, pc, op, gasCopy, cost, mem, stack, contract, in.evm.depth, err)</span><br><span class="line">         logged = <span class="literal">true</span></span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// execute the operation</span></span><br><span class="line">      res, err = operation.execute(&amp;pc, in, contract, mem, stack)</span><br><span class="line">      <span class="comment">// verifyPool is a build flag. Pool verification makes sure the integrity</span></span><br><span class="line">      <span class="comment">// of the integer pool by comparing values to a default value.</span></span><br><span class="line">      <span class="keyword">if</span> verifyPool &#123;</span><br><span class="line">         verifyIntegerPool(in.intPool)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// if the operation clears the return data (e.g. it has returning data)</span></span><br><span class="line">      <span class="comment">// set the last return to the result of the operation.</span></span><br><span class="line">      <span class="keyword">if</span> operation.returns &#123;</span><br><span class="line">         in.returnData = res</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">switch</span> &#123;</span><br><span class="line">      <span class="keyword">case</span> err != <span class="literal">nil</span>:</span><br><span class="line">         <span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">      <span class="keyword">case</span> operation.reverts:</span><br><span class="line">         <span class="keyword">return</span> res, errExecutionReverted</span><br><span class="line">      <span class="keyword">case</span> operation.halts:</span><br><span class="line">         <span class="keyword">return</span> res, <span class="literal">nil</span></span><br><span class="line">      <span class="keyword">case</span> !operation.jumps:</span><br><span class="line">         pc++</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> <span class="literal">nil</span>, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是执行的主要过程代码，接收三个参数，contract对象， input（因为是一个合约调用的交易，所以这里为nil）readonly 标志位，这个标志位只有在staticcall的时候是true的，其他的调用都是false;</p>
+<p>接下来我们逐步分析执行过程</p>
+<ol>
+<li><p>判断解释器的intPool为nil，则先创建一个intPool,然后将新创建的intPool放入poolOfIntPools</p>
+</li>
+<li><p>evm 调用堆栈+1</p>
+</li>
+<li><p>解释器循环执行指定，当遇到STOP RETURN 或者合约自毁 或者 当执行过程中遇到错误的时候， 直到所有指令被执行结束，循环才会停止。</p>
+<p>3.1 循环首先获取当前pc 计数器， 然后从jumptable里面拿出要执行的opcode, opcode是以太坊虚拟机指令，一共不超过256个，正好一个byte大小能装下。下面展示了一个 sha3的opteration</p>
+<p><img src="http://ww1.sinaimg.cn/large/c26c1fe3gy1g26y17xrepj20f804adfv.jpg" alt></p>
+</li>
+</ol>
+<p>​    execute表示指令对应的执行方法<br>​    gasCost表示执行这个指令需要消耗的gas<br>​    validateStack计算是不是解析器栈溢出<br>​    memorySize用于计算operation的占用内存大小</p>
+<p>   3.2 根据不同的指令，指令的memorysize等，调用operation.gasCost()方法计算执行operation指令需要消耗的gas。</p>
+<p>   3.3 调用operation.execute(&amp;pc, in.evm, contract, mem, stack)执行指令对应的方法。</p>
+<p>   3.4 operation.reverts值是true或者operation.halts值是true的指令，会跳出主循环，否则继续遍历下个op。</p>
+<p>   3.5 operation指令集里面有4个特殊的指令LOG0，LOG1，LOG2，LOG3，它们的指令执行方法makeLog()会产生日志数据，日志内容包括EVM解析栈内容，指令内存数据，区块信息，合约信息等。这些日志数据会写入到tx的Receipt的logs里面，并存入本地levleldb数据库。</p>
+<p>至此创建一个合约的交易大致分析完成。具体的每个opcode的执行以及每个opcode消耗gas都需要对应不同的执行再去详细的了解，这一点可以通过跑测试用例，然后一步一步debug下去，就可以大致了解整个流程了。</p>
+<p>下一篇我们会分析一个普通的交易是如何执行的，也就是toAddress不为0的情况</p>
+
+      
+    </div>
+
+    
+      
+
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\07\11\evm-analysis-3\" rel="bookmark">evm源码分析第三篇</a></div>
+      
+    </li>
+  
+    <li class="popular-posts-item">
+      
+      
+      <div class="popular-posts-title"><a href="\2019\07\11\evm-analysis-1\" rel="bookmark">evm源码分析第一篇</a></div>
+      
+    </li>
+  
+  </ul>
+
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+   <li class="post-copyright-title">
+    <strong>本文标题：</strong>evm源码分析第二篇</li>
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>ClimbYang</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://yp945.github.io/2019/07/11/evm-analysis-2/" title="evm源码分析第二篇">https://yp945.github.io/2019/07/11/evm-analysis-2/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-ND</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/ethereum/" rel="tag"># ethereum</a>
+          
+            <a href="/tags/evm/" rel="tag"># evm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/11/evm-analysis-1/" rel="next" title="evm源码分析第一篇">
+                <i class="fa fa-chevron-left"></i> evm源码分析第一篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/11/evm-analysis-3/" rel="prev" title="evm源码分析第三篇">
+                evm源码分析第三篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+  
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ClimbYang</p>
+              <div class="site-description motion-element" itemprop="description">记录学习编程的点滴</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/yp945" title="GitHub &rarr; https://github.com/yp945" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:pan107104@outlook.com" title="E-Mail &rarr; mailto:pan107104@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ClimbYang</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动</div>
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.2.0"></script>
+
+  <script src="/js/motion.js?v=7.2.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.2.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.2.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.2.0"></script>
+<script src="/js/post-details.js?v=7.2.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.2.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'KT7dYbutKTXGzEevy5QjY79j-gzGzoHsz',
+    appKey: 'ia69e2Ysj9djrRycqiTx86mE',
+    placeholder: '留言区',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+
+  
+<script>
+if ($('body').find('pre.mermaid').length) {
+  $.ajax({
+    type: 'GET',
+    url: '//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js',
+    dataType: 'script',
+    cache: true,
+    success: function() {
+      mermaid.initialize({
+        theme: 'forest',
+        logLevel: 3,
+        flowchart: { curve: 'linear' },
+        gantt: { axisFormat: '%m/%d/%Y' },
+        sequence: { actorMargin: 50 }
+      });
+    }
+  });
+}
+</script>
+
+
+  
+
+  
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+  <script>
+    
+    
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
